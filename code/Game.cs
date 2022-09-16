@@ -26,9 +26,6 @@ public partial class Game : Sandbox.Game
 		if ( IsClient )
 			_ = new UI.Hud();
 
-		if ( Host.IsDedicatedServer )
-			LoadBannedClients();
-
 		LoadResources();
 	}
 
@@ -126,12 +123,6 @@ public partial class Game : Sandbox.Game
 	public override void PostLevelLoaded()
 	{
 		ForceStateChange( new WaitingState() );
-	}
-
-	public override void Shutdown()
-	{
-		if ( Host.IsDedicatedServer )
-			FileSystem.Data.WriteJson( BanFilePath, BannedClients );
 	}
 
 	[Event.Tick]

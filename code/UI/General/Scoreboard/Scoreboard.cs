@@ -11,15 +11,10 @@ public class Scoreboard : Panel
 	private readonly Dictionary<Client, ScoreboardEntry> _entries = new();
 	private readonly Dictionary<LifeState, ScoreboardGroup> _scoreboardGroups = new();
 
-	private Panel Container { get; init; }
 	private Panel Content { get; init; }
 
-	public Scoreboard( Panel parent, Panel buttons ) : base()
+	public Scoreboard()
 	{
-		Parent = parent;
-
-		Container.AddChild( buttons );
-
 		AddScoreboardGroup( LifeState.Alive );
 		AddScoreboardGroup( LifeState.Dead );
 	}
@@ -113,7 +108,12 @@ public class Scoreboard : Panel
 	private ScoreboardGroup GetScoreboardGroup( Client client )
 	{
 		var player = client.Pawn as Player;
-
 		return _scoreboardGroups[player.LifeState];
+	}
+
+	[Event.BuildInput]
+	private void MenuInput( InputBuilder input )
+	{
+		this.Enabled( input.Down( InputButton.Score ) );
 	}
 }

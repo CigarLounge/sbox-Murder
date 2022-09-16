@@ -25,8 +25,8 @@ public class Hud : RootPanel
 		AddChild<VoiceChatDisplay>();
 		AddChild<RoundTimer>();
 		AddChild<VoiceList>();
+		AddChild<Scoreboard>();
 		AddChild<FullScreenHintMenu>();
-		AddChild<TabMenus>();
 		AddChild<CarriableHint>();
 		AddChild<DamageIndicator>();
 	}

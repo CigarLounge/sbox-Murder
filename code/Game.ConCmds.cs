@@ -86,8 +86,25 @@ public partial class Game
 			return;
 
 		client.SetValue( Strings.HasRockedTheVote, true );
-		Game.Current.RTVCount += 1;
+		Current.RTVCount += 1;
 
 		UI.ChatBox.AddInfo( To.Everyone, $"{client.Name} has rocked the vote! ({Game.Current.RTVCount}/{MathF.Round( Client.All.Count * Game.RTVThreshold )})" );
+	}
+
+	[ConCmd.Admin( Name = "murder_kick", Help = "Kick the client with the following steam id." )]
+	public static void KickPlayer( string rawSteamId )
+	{
+		var steamId = long.Parse( rawSteamId );
+
+		foreach ( var client in Client.All )
+		{
+			if ( client.PlayerId == steamId )
+				continue;
+
+			client.Kick();
+			return;
+		}
+
+		Log.Warning( $"Unable to find player with steam id {rawSteamId}" );
 	}
 }

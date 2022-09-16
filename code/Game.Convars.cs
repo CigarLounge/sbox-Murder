@@ -4,11 +4,6 @@ namespace Murder;
 
 public partial class Game
 {
-	#region Logging
-	[ConVar.Server( "murder_logger_enabled", Help = "Whether or not the logger will save event data to a file.", Saved = true )]
-	public static bool LoggerEnabled { get; set; }
-	#endregion
-
 	#region Round
 	[ConVar.Server( "murder_preround_time", Help = "The length of the preround time.", Saved = true )]
 	public static int PreRoundTime { get; set; } = 20;
