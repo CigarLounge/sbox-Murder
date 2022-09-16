@@ -1,0 +1,58 @@
+$form-control-height: 24px !default;
+$switch-padding: 6px !default;
+
+.checkbox
+{
+	cursor: pointer;
+	flex-shrink: 0;
+
+    > .label
+    {
+        margin-left: 5px;
+        align-items: center;
+    }
+
+	> .checkmark
+	{
+		border: 0px solid $primary;
+		border-radius: 100px;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
+		color: rgb(255, 255, 255);
+		padding: $switch-padding;
+		padding-right: 30px;
+		padding-left: $switch-padding;
+		transition: all 0.2s ease-out;
+		background-color: rgb(61, 61, 61);
+        color: $secondary;
+
+        width: 55px;
+        height: 28px;
+        content: "circle";
+        font-size: 28px;
+
+		> .handle
+		{
+			width: 20px;
+			height: 20px;
+			border-radius: 100px;
+		}
+	}
+
+	&.checked
+	{
+        height: 28px;
+
+		> .checkmark
+		{
+			background-color: #fdc418;
+			padding-left: 34px;
+			padding-right: $switch-padding;
+
+            width: 55px;
+            content: "circle";
+            font-size: 28px;
+		}
+	}
+}

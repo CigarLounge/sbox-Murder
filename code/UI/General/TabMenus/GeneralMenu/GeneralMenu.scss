@@ -1,0 +1,20 @@
+@import "/ui/Hud.scss";
+
+GeneralMenu 
+{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    width: 45%;
+    opacity: 1;
+    flex-direction: column;
+    transition: bottom 0.2s ease-out;
+    
+    .background-panel
+    {
+        pointer-events: all;
+        height: 550px;
+        padding: 25px;
+        flex-direction: column;
+    }
+}
