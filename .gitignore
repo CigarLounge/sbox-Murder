@@ -1,0 +1,32 @@
+code/obj
+code/Properties
+.intermediate
+_bakeresourcecache
+tools_asset_info.bin
+tools_thumbnail_cache.bin
+*.los
+
+# Generated assets
+*.generated.*
+
+# Uncompiled models/sounds/textures
+*.vanmgrph
+*.vmdl
+*.vmat
+*.wav
+*.mp3
+*.dmx
+*.fbx
+*.obj
+*.vtx
+*.vvd
+*.mdl
+*.tga
+*.phy
+weapons/**/*.png
+materials/**/*.png
+models/**/*.png
+
+# vscode
+.vscode
+*/.vs/*
