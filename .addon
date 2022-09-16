@@ -1,8 +1,8 @@
 {
-  "Title": "Deception",
+  "Title": "Murder",
   "Type": "game",
-  "Org": "local",
-  "Ident": "deception",
+  "Org": "matt",
+  "Ident": "murder",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
