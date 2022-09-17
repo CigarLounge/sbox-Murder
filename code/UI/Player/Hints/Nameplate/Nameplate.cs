@@ -6,7 +6,7 @@ namespace Murder.UI;
 [UseTemplate]
 public class Nameplate : EntityHintPanel
 {
-	public readonly Player _player;
+	private readonly Player _player;
 
 	private Label Name { get; init; }
 
