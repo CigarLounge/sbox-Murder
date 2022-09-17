@@ -28,19 +28,14 @@ public partial class Game
 		if ( !player.IsValid() )
 			return;
 
-		var itemInfo = GameResource.GetInfo<ItemInfo>( itemName );
-		if ( itemInfo is null )
-		{
-			Log.Error( $"{itemName} isn't a valid Item!" );
-			return;
-		}
-
-		if ( itemInfo is CarriableInfo )
-			player.Inventory.Add( TypeLibrary.Create<Carriable>( itemInfo.ClassName ) );
+		if ( itemName == "revolver" )
+			player.SetCarriable( new Revolver() );
+		else if ( itemName == "knife" )
+			player.SetCarriable( new Knife() );
 	}
 
 	[ConCmd.Admin( Name = "murder_setrole" )]
-	public static void SetRole( string roleName )
+	public static void SetRole( Role role )
 	{
 		if ( Game.Current.State is not InProgress )
 			return;
@@ -49,14 +44,7 @@ public partial class Game
 		if ( !player.IsValid() )
 			return;
 
-		var roleInfo = GameResource.GetInfo<RoleInfo>( roleName );
-		if ( roleInfo is null )
-		{
-			Log.Error( $"{roleName} isn't a valid Role!" );
-			return;
-		}
-
-		player.SetRole( roleInfo );
+		player.Role = role;
 	}
 
 	[ConCmd.Admin( Name = "murder_force_restart" )]
