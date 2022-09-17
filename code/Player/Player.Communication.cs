@@ -5,7 +5,6 @@ namespace Murder;
 public enum Channel
 {
 	All,
-	Team,
 	Spectator
 }
 

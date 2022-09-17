@@ -6,8 +6,8 @@ namespace Murder.UI;
 [UseTemplate]
 public partial class ChatBox : Panel
 {
-	// private static readonly Color _allChatColor = PlayerStatus.Alive.GetColor();
-	// private static readonly Color _spectatorChatColor = PlayerStatus.Spectator.GetColor();
+	private static readonly Color _allChatColor = Role.Bystander.GetColor();
+	private static readonly Color _spectatorChatColor = new Color32( 252, 219, 56 );
 
 	public static ChatBox Instance { get; private set; }
 
@@ -54,13 +54,10 @@ public partial class ChatBox : Panel
 		switch ( player.CurrentChannel )
 		{
 			case Channel.All:
-				Input.Style.BorderColor = Color.Green;
+				Input.Style.BorderColor = _allChatColor;
 				return;
 			case Channel.Spectator:
-				Input.Style.BorderColor = Color.Green;
-				return;
-			case Channel.Team:
-				Input.Style.BorderColor = player.Role.GetColor();
+				Input.Style.BorderColor = _spectatorChatColor;
 				return;
 		}
 
@@ -121,22 +118,19 @@ public partial class ChatBox : Panel
 		}
 
 		if ( player.CurrentChannel == Channel.All )
-			AddChat( To.Everyone, player.Client.Name, message, player.CurrentChannel, player.Role );
+			AddChat( To.Everyone, player.Client.Name, message, player.CurrentChannel );
 	}
 
 	[ConCmd.Client( "murder_chat_add", CanBeCalledFromServer = true )]
-	public static void AddChat( string name, string message, Channel channel, Role role = Role.None )
+	public static void AddChat( string name, string message, Channel channel )
 	{
 		switch ( channel )
 		{
 			case Channel.All:
-				Instance?.AddEntry( name, message, role.GetColor() );
-				return;
-			case Channel.Team:
-				Instance?.AddEntry( $"(TEAM) {name}", message, role.GetColor() );
+				Instance?.AddEntry( name, message, _allChatColor );
 				return;
 			case Channel.Spectator:
-				Instance?.AddEntry( name, message, Color.Yellow );
+				Instance?.AddEntry( name, message, _spectatorChatColor );
 				return;
 		}
 	}

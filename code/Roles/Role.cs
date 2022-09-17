@@ -26,8 +26,8 @@ public static class RoleExtensions
 		return role switch
 		{
 			Role.None => Color.White,
-			Role.Bystander => Color.Blue,
-			Role.Murderer => Color.Red,
+			Role.Bystander => new Color32( 85, 212, 255 ),
+			Role.Murderer => new Color32( 255, 56, 56 ),
 			_ => Color.White
 		};
 	}
