@@ -11,7 +11,7 @@ public partial class Player : AnimatedEntity
 	[Net]
 	public string SteamName { get; private set; }
 
-	public Inventory Inventory { get; private init; }
+	public Carriable Carriable { get; private set; }
 
 	public CameraMode Camera
 	{
@@ -38,10 +38,7 @@ public partial class Player : AnimatedEntity
 		_avatarClothes = new( ClothingContainer.Clothing );
 	}
 
-	public Player()
-	{
-		Inventory = new( this );
-	}
+	public Player() { }
 
 	public override void Spawn()
 	{
@@ -153,9 +150,10 @@ public partial class Player : AnimatedEntity
 			if ( ActiveCarriable.IsValid() && _lastKnownCarriable.IsValid() )
 				(ActiveCarriable, _lastKnownCarriable) = (_lastKnownCarriable, ActiveCarriable);
 		}
-
-		if ( Input.ActiveChild is Carriable carriable )
-			Inventory.SetActive( carriable );
+		else if ( Input.Pressed( InputButton.Slot1 ) )
+			ActiveCarriable = null;
+		else if ( Input.Pressed( InputButton.Slot2 ) )
+			ActiveCarriable ??= Carriable;
 
 		SimulateActiveCarriable();
 
@@ -293,21 +291,8 @@ public partial class Player : AnimatedEntity
 		if ( !IsServer )
 			return;
 
-		switch ( other )
-		{
-			case Carriable carriable:
-			{
-				Inventory.Pickup( carriable );
-				break;
-			}
-		}
-	}
-
-	public void DeleteItems()
-	{
-		ClearAmmo();
-		Inventory.DeleteContents();
-		ClothingContainer.ClearEntities();
+		if ( other is Carriable carriable && Carriable is null )
+			Carriable = carriable;
 	}
 
 	#region ActiveCarriable
@@ -329,7 +314,7 @@ public partial class Player : AnimatedEntity
 		if ( !ActiveCarriable.IsValid() || !ActiveCarriable.IsAuthority )
 			return;
 
-		if ( ActiveCarriable.TimeSinceDeployed > ActiveCarriable.Info.DeployTime )
+		if ( ActiveCarriable.TimeSinceDeployed > ActiveCarriable.DeployTime )
 			ActiveCarriable.Simulate( Client );
 	}
 
@@ -339,18 +324,6 @@ public partial class Player : AnimatedEntity
 		next?.ActiveStart( this );
 	}
 	#endregion
-
-	public override void OnChildAdded( Entity child )
-	{
-		if ( child is Carriable carriable )
-			Inventory.OnChildAdded( carriable );
-	}
-
-	public override void OnChildRemoved( Entity child )
-	{
-		if ( child is Carriable carriable )
-			Inventory.OnChildRemoved( carriable );
-	}
 
 	protected override void OnDestroy()
 	{
