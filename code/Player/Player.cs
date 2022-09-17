@@ -51,7 +51,7 @@ public partial class Player : AnimatedEntity
 		Tags.Add( "solid" );
 
 		SetModel( "models/citizen/citizen.vmdl" );
-		Role = new NoneRole();
+		Role = Role.None;
 
 		Health = 0;
 		LifeState = LifeState.Respawnable;
@@ -72,7 +72,7 @@ public partial class Player : AnimatedEntity
 	{
 		base.ClientSpawn();
 
-		Role = new NoneRole();
+		Role = Role.None;
 	}
 
 	public void Respawn()
@@ -85,7 +85,7 @@ public partial class Player : AnimatedEntity
 		DeleteItems();
 		ResetDamageData();
 		Client.SetValue( Strings.Spectator, IsForcedSpectator );
-		Role = new NoneRole();
+		Role = Role.None;
 
 		Velocity = Vector3.Zero;
 		WaterLevel = 0;
@@ -128,7 +128,7 @@ public partial class Player : AnimatedEntity
 		ResetDamageData();
 
 		if ( !IsLocalPawn )
-			Role = new NoneRole();
+			Role = Role.None;
 		else
 		{
 			CurrentChannel = Channel.All;

@@ -1,20 +1,8 @@
 scoreboardheader
 {
     flex-direction: row;
-    max-height: 100px;
     justify-content: space-between;
-    padding: 30 16 0 16;
-
-    .terry-image
-    {
-        position: absolute;
-        top: -54px;
-        background-image: url("/ui/scoreboard-terry.png");
-        background-repeat: no-repeat;
-        background-size: cover;
-        width: 180px;
-        height: 150px;
-    }
+    padding: 10 16 10 16;
 
     .server-information-panel
     {

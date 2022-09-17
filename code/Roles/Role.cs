@@ -4,17 +4,18 @@ using System.Collections.Generic;
 
 namespace Murder;
 
-public abstract class Role : IEquatable<Role>, IEquatable<string>
+public abstract class Role
 {
 	public static Bystander Bystander { get; private set; }
 	public static Murderer Murderer { get; private set; }
+	public static NoneRole None { get; private set; }
 
 	private static readonly Dictionary<Type, HashSet<Player>> _players = new();
 	public RoleInfo Info { get; private set; }
 	public Color Color => Info.Color;
 	public string Title => Info.Title;
 
-	public Role()
+	protected Role()
 	{
 		Info = GameResource.GetInfo<RoleInfo>( GetType() );
 	}
@@ -23,6 +24,7 @@ public abstract class Role : IEquatable<Role>, IEquatable<string>
 	{
 		Bystander = new Bystander();
 		Murderer = new Murderer();
+		None = new NoneRole();
 	}
 
 	public static IEnumerable<Player> GetPlayers<T>() where T : Role
@@ -51,54 +53,21 @@ public abstract class Role : IEquatable<Role>, IEquatable<string>
 		}
 	}
 
-	public static bool operator ==( Role left, Role right )
+	public override bool Equals( object obj )
 	{
-		if ( left is null )
-		{
-			if ( right is null )
-				return true;
-
-			return false;
-		}
-
-		return left.Equals( right );
-	}
-	public static bool operator !=( Role left, Role right ) => !(left == right);
-
-	public static bool operator ==( Role left, string right )
-	{
-		if ( left is null || right is null )
-			return false;
-
-		return left.Equals( right );
-	}
-	public static bool operator !=( Role left, string right ) => !(left == right);
-
-	public bool Equals( Role other )
-	{
-		if ( other is null )
-			return false;
-
-		if ( ReferenceEquals( this, other ) )
+		if ( ReferenceEquals( this, obj ) )
 			return true;
 
-		return Info == other.Info;
+		if ( obj is null )
+			return false;
+
+		throw new NotImplementedException();
 	}
 
-	public bool Equals( string other )
+	public override int GetHashCode()
 	{
-		if ( Info.Title.Equals( other, StringComparison.OrdinalIgnoreCase ) )
-			return true;
-
-		if ( Info.ClassName.Equals( other, StringComparison.OrdinalIgnoreCase ) )
-			return true;
-
-		return false;
+		throw new NotImplementedException();
 	}
-
-	public override bool Equals( object obj ) => Equals( obj as Role );
-
-	public override int GetHashCode() => Info.ResourceId.GetHashCode();
 
 #if SANDBOX && DEBUG
 	[Event.Hotload]
