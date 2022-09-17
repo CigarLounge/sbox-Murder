@@ -14,6 +14,96 @@
     "MaxPlayers": 64,
     "MinPlayers": 1,
     "GameNetworkType": "Multiplayer",
+    "Collision": {
+      "Defaults": {
+        "solid": "Collide",
+        "trigger": "Trigger",
+        "ladder": "Ignore",
+        "water": "Trigger",
+        "interactable": "Unset",
+        "player": "Unset",
+        "glass": "Unset",
+        "debris": "Ignore"
+      },
+      "Pairs": [
+        {
+          "a": "solid",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "playerclip",
+          "r": "Ignore"
+        },
+        {
+          "a": "solid",
+          "b": "trigger",
+          "r": "Trigger"
+        },
+        {
+          "a": "playerclip",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "player"
+        },
+        {
+          "a": "ladder",
+          "b": "player"
+        },
+        {
+          "a": "interactable",
+          "b": "interactable",
+          "r": "Collide"
+        },
+        {
+          "a": "interactable",
+          "b": "player",
+          "r": "Trigger"
+        },
+        {
+          "a": "player",
+          "b": "player"
+        },
+        {
+          "a": "player",
+          "b": "glass",
+          "r": "Trigger"
+        },
+        {
+          "a": "trigger",
+          "b": "glass",
+          "r": "Ignore"
+        },
+        {
+          "a": "glass",
+          "b": "glass",
+          "r": "Ignore"
+        },
+        {
+          "a": "water",
+          "b": "glass"
+        },
+        {
+          "a": "solid",
+          "b": "debris",
+          "r": "Collide"
+        },
+        {
+          "a": "player",
+          "b": "debris",
+          "r": "Ignore"
+        },
+        {
+          "a": "glass",
+          "b": "debris",
+          "r": "Trigger"
+        }
+      ]
+    },
     "MapSelect": "Unrestricted",
     "MapList": [
       "facepunch.flatgrass"
