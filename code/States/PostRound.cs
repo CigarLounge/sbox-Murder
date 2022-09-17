@@ -3,40 +3,31 @@ using Sandbox;
 
 namespace Murder;
 
-public enum WinType
-{
-	TimeUp,
-	Elimination,
-}
-
 public partial class PostRound : BaseState
 {
 	[Net]
 	public Role WinningRole { get; private set; }
-
-	[Net]
-	public WinType WinType { get; private set; }
 
 	public override string Name { get; } = "Post";
 	public override int Duration => Game.PostRoundTime;
 
 	public PostRound() { }
 
-	public PostRound( Role winningRole, WinType winType )
+	public PostRound( Role winningRole )
 	{
 		WinningRole = winningRole;
-		WinType = winType;
 	}
 
-	public static void Load( Role winningTeam, WinType winType )
+	public static void Load( Role winningTeam )
 	{
-		Game.Current.ForceStateChange( new PostRound( winningTeam, winType ) );
+		Game.Current.ForceStateChange( new PostRound( winningTeam ) );
 	}
 
 	protected override void OnStart()
 	{
 		Game.Current.TotalRoundsPlayed++;
-		// Event.Run( GameEvent.Round.End, WinningTeam, WinType );
+
+		Event.Run( GameEvent.Round.End, WinningRole );
 	}
 
 	protected override void OnTimeUp()

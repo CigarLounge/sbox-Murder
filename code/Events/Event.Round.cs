@@ -22,7 +22,6 @@ public static partial class GameEvent
 		/// Occurs when a round has ended.
 		/// <para><strong>Parameters:</strong></para>
 		/// <para>The <see cref="Role"/> that won the round. </para>
-		/// <para>The <see cref="WinType"/>.</para>
 		/// </summary>
 		public class EndAttribute : EventAttribute
 		{

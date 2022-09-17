@@ -8,22 +8,12 @@ public partial class InProgress : BaseState
 	public List<Player> AlivePlayers { get; set; }
 	public List<Player> Spectators { get; set; }
 
-	/// <summary>
-	/// Unique case where InProgress has a seperate fake timer for Innocents.
-	/// The real timer is only displayed to Traitors as it increments every player death during the round.
-	/// </summary>
-	[Net]
-	public TimeUntil FakeTime { get; private set; }
-	public string FakeTimeFormatted => FakeTime.Relative.TimerString();
-
 	public override string Name { get; } = "In Progress";
 	public override int Duration => Game.InProgressTime;
 
 	public override void OnPlayerKilled( Player player )
 	{
 		base.OnPlayerKilled( player );
-
-		TimeLeft += Game.InProgressSecondsPerDeath;
 
 		AlivePlayers.Remove( player );
 		Spectators.Add( player );
@@ -55,8 +45,6 @@ public partial class InProgress : BaseState
 		if ( !Host.IsServer )
 			return;
 
-		FakeTime = TimeLeft;
-
 		foreach ( var ent in Entity.All )
 		{
 			if ( ent is Corpse corpse )
@@ -64,27 +52,20 @@ public partial class InProgress : BaseState
 		}
 	}
 
-	protected override void OnTimeUp()
-	{
-		PostRound.Load( Role.Murderer, WinType.TimeUp );
-	}
-
 	private Role IsRoundOver()
 	{
-		// TODO: Fix.
-		// List<Role> aliveRoles = new();
+		List<Role> aliveRoles = new();
 
-		// foreach ( var player in AlivePlayers )
-		// {
-		// 	if ( !aliveTeams.Contains( player.Role ) )
-		// 		aliveTeams.Add( player.Team );
-		// }
+		foreach ( var player in AlivePlayers )
+		{
+			if ( !aliveRoles.Contains( player.Role ) )
+				aliveRoles.Add( player.Role );
+		}
 
-		// if ( aliveTeams.Count == 0 )
-		// 	return Team.None;
+		if ( aliveRoles.Count == 0 )
+			return Role.None;
 
-		// return aliveTeams.Count == 1 ? aliveTeams[0] : Team.None;
-		return Role.Murderer;
+		return aliveRoles.Count == 1 ? aliveRoles[0] : Role.None;
 	}
 
 	public override void OnSecond()
@@ -92,23 +73,17 @@ public partial class InProgress : BaseState
 		if ( !Host.IsServer )
 			return;
 
-		if ( Game.PreventWin )
-			TimeLeft += 1f;
-
-		if ( TimeLeft )
-			OnTimeUp();
-
-		// if ( !Utils.HasMinimumPlayers() && IsRoundOver() == Team.None )
-		// 	Game.Current.ForceStateChange( new WaitingState() );
+		if ( !Utils.HasMinimumPlayers() && IsRoundOver() == Role.None )
+			Game.Current.ForceStateChange( new WaitingState() );
 	}
 
 	private bool ChangeRoundIfOver()
 	{
 		var result = IsRoundOver();
 
-		if ( result != Role.Murderer && !Game.PreventWin )
+		if ( result != Role.None && !Game.PreventWin )
 		{
-			PostRound.Load( Role.Murderer, WinType.Elimination );
+			PostRound.Load( result );
 			return true;
 		}
 
