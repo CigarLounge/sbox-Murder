@@ -6,10 +6,10 @@ namespace Murder;
 public partial class Player : AnimatedEntity
 {
 	[Net]
-	public string SteamName { get; private set; }
+	public string AssignedName { get; set; }
 
 	[Net]
-	public string AssignedName { get; private set; }
+	public string SteamName { get; private set; }
 
 	public Inventory Inventory { get; private init; }
 

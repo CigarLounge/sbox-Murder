@@ -19,6 +19,12 @@ public partial class Game : Sandbox.Game
 
 	public int RTVCount { get; set; }
 
+	public static readonly List<string> Names = new() {
+		"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
+		"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
+		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
+	};
+
 	public Game()
 	{
 		Current = this;
