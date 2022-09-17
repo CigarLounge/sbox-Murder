@@ -8,7 +8,7 @@ namespace Murder;
 public partial class Corpse : ModelEntity, IEntityHint, IUse
 {
 	[Net]
-	public Player Player { get; init; }
+	public Player Player { get; private set; }
 
 	public Corpse() { }
 
@@ -62,7 +62,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		base.ClientSpawn();
 
-		TakeDecalsFrom( Owner as ModelEntity );
+		TakeDecalsFrom( Player );
 	}
 
 	private void ApplyForceToBone( Vector3 force, int forceBone )
