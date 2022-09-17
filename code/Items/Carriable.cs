@@ -198,7 +198,9 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	bool IUse.OnUse( Entity user )
 	{
 		var player = (Player)user;
-		player.SetCarriable( this );
+
+		if ( CanCarry( player ) )
+			player.SetCarriable( this );
 
 		return false;
 	}
