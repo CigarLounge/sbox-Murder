@@ -11,8 +11,6 @@ public partial class Player : AnimatedEntity
 	[Net]
 	public string SteamName { get; private set; }
 
-	public Carriable Carriable { get; private set; }
-
 	public CameraMode Camera
 	{
 		get => Components.Get<CameraMode>();
@@ -48,7 +46,6 @@ public partial class Player : AnimatedEntity
 		Tags.Add( "solid" );
 
 		SetModel( "models/citizen/citizen.vmdl" );
-		Role = Role.None;
 
 		Health = 0;
 		LifeState = LifeState.Respawnable;
@@ -65,13 +62,6 @@ public partial class Player : AnimatedEntity
 		Camera = new FreeSpectateCamera();
 	}
 
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		Role = Role.None;
-	}
-
 	public void Respawn()
 	{
 		Host.AssertServer();
@@ -79,7 +69,6 @@ public partial class Player : AnimatedEntity
 		LifeState = LifeState.Respawnable;
 
 		DeleteFlashlight();
-		DeleteItems();
 		ResetDamageData();
 		Client.SetValue( Strings.Spectator, IsForcedSpectator );
 		Role = Role.None;
@@ -165,6 +154,10 @@ public partial class Player : AnimatedEntity
 		if ( IsServer )
 		{
 			CheckAFK();
+
+			if ( Input.Pressed( InputButton.Drop ) )
+				DropCarriable();
+
 			PlayerUse();
 		}
 	}
@@ -292,7 +285,46 @@ public partial class Player : AnimatedEntity
 			return;
 
 		if ( other is Carriable carriable && Carriable is null )
-			Carriable = carriable;
+			SetCarriable( carriable );
+	}
+
+	[Net]
+	public Carriable Carriable { get; private set; }
+
+	public void SetCarriable( Carriable carriable, bool makeActive = false )
+	{
+		if ( Carriable is not null )
+		{
+			ActiveCarriable = null;
+			Carriable.Parent = null;
+			Carriable.OnCarryDrop( this );
+		}
+
+		if ( !carriable?.CanCarry( this ) ?? false )
+			return;
+
+		Carriable = carriable;
+
+		if ( Carriable is not null )
+		{
+			Carriable.SetParent( this, true );
+			Carriable.OnCarryStart( this );
+
+			if ( makeActive )
+				ActiveCarriable = Carriable;
+		}
+	}
+
+	public Carriable DropCarriable()
+	{
+		if ( Carriable is null )
+			return null;
+
+		var dropped = Carriable;
+		SetCarriable( null );
+		dropped.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * 300f;
+
+		return dropped;
 	}
 
 	#region ActiveCarriable
