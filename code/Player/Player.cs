@@ -9,6 +9,9 @@ public partial class Player : AnimatedEntity
 	public string AssignedName { get; set; }
 
 	[Net]
+	public Color32 AssignedColour { get; set; }
+
+	[Net]
 	public string SteamName { get; private set; }
 
 	public CameraMode Camera
@@ -151,7 +154,12 @@ public partial class Player : AnimatedEntity
 			SimulateFlashlight();
 		}
 
-		if ( IsServer )
+		if ( IsClient )
+		{
+			if ( !this.IsAlive() )
+				ChangeSpectateCamera();
+		}
+		else
 		{
 			CheckAFK();
 

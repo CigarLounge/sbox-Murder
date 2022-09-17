@@ -18,5 +18,6 @@ public class Nameplate : EntityHintPanel
 			return;
 
 		Name.Text = _player.AssignedName;
+		Name.Style.FontColor = _player.AssignedColour;
 	}
 }

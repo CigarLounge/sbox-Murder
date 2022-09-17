@@ -82,5 +82,8 @@ public partial class Corpse : ModelEntity, IEntityHint
 
 	float IEntityHint.HintDistance => Player.MaxHintDistance;
 
-	bool IEntityHint.CanHint( Player player ) => Game.Current.State is InProgress or PostRound;
+	UI.EntityHintPanel IEntityHint.DisplayHint( Player player )
+	{
+		return new UI.Nameplate( Player );
+	}
 }
