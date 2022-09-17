@@ -10,19 +10,8 @@ Nameplate
     text-align: center;
     font-weight: 600;
 
-    .name-holder
+    .name
     {
-        justify-content: center;
-        width: 100%;
-
-        .name
-        {
-            font-size: 14px;
-        }
-    }
-
-    .health-status, .karma-status, .tag
-    {
-        font-size: 12px;
+        font-size: 30px;
     }
 }
