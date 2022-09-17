@@ -63,7 +63,7 @@ public partial class Revolver : Carriable
 		ShootEffects();
 		PlaySound( "sounds/weapons/mr96/mr96_fire-1.sound" );
 
-		ShootBullet( 0.05f, 1.5f, 200, 3.0f );
+		ShootBullet( 1.5f, 200, 3.0f );
 	}
 
 	private void Reload()
@@ -87,14 +87,12 @@ public partial class Revolver : Carriable
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
 	}
 
-	protected void ShootBullet( float spread, float force, float damage, float bulletSize )
+	protected void ShootBullet( float force, float damage, float bulletSize )
 	{
 		// Seed rand using the tick, so bullet cones match on client and server
 		Rand.SetSeed( Time.Tick );
 
 		var forward = Owner.EyeRotation.Forward;
-		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
-		forward = forward.Normal;
 
 		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, bulletSize ) )
 		{
