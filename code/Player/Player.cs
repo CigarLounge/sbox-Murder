@@ -162,10 +162,6 @@ public partial class Player : AnimatedEntity
 		else
 		{
 			CheckAFK();
-
-			if ( Input.Pressed( InputButton.Drop ) )
-				DropCarriable();
-
 			PlayerUse();
 		}
 	}
@@ -321,18 +317,6 @@ public partial class Player : AnimatedEntity
 			if ( makeActive )
 				ActiveCarriable = Carriable;
 		}
-	}
-
-	public Carriable DropCarriable()
-	{
-		if ( Carriable is null )
-			return null;
-
-		var dropped = Carriable;
-		SetCarriable( null );
-		dropped.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * 300f;
-
-		return dropped;
 	}
 
 	#region ActiveCarriable
