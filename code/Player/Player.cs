@@ -71,6 +71,7 @@ public partial class Player : AnimatedEntity
 
 		LifeState = LifeState.Respawnable;
 
+		DropCarriable()?.Delete();
 		DeleteFlashlight();
 		ResetDamageData();
 		Client.SetValue( Strings.Spectator, IsForcedSpectator );
@@ -317,6 +318,20 @@ public partial class Player : AnimatedEntity
 			if ( makeActive )
 				ActiveCarriable = Carriable;
 		}
+	}
+
+	public Carriable DropCarriable()
+	{
+		if ( Carriable is null )
+			return null;
+
+		var dropped = Carriable;
+		SetCarriable( null );
+
+		if ( dropped.PhysicsGroup is not null )
+			dropped.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * 300f;
+
+		return dropped;
 	}
 
 	#region ActiveCarriable

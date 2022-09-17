@@ -37,6 +37,9 @@ public partial class Player
 	[Net]
 	public TimeSince TimeSinceDeath { get; private set; }
 
+	[Net]
+	public TimeUntil TimeUntilClean { get; private set; }
+
 	public DamageInfo LastDamage { get; private set; }
 
 	public new float Health
@@ -71,7 +74,12 @@ public partial class Player
 		TimeSinceDeath = 0;
 		Client.AddInt( "deaths" );
 
-		LastAttacker?.Client?.AddInt( "kills" ); // TODO: Do we even want to keep track of this?
+		if ( LastAttacker is Player player && Role == player.Role )
+		{
+			player.DropCarriable();
+			player.TimeUntilClean = 20f;
+			player.Client.AddInt( "kills" );
+		}
 
 		Corpse = new Corpse( this );
 		RemoveAllDecals();
@@ -81,6 +89,7 @@ public partial class Player
 		EnableDrawing = false;
 		EnableTouch = false;
 
+		SetCarriable( null );
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
