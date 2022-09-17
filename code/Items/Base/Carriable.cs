@@ -2,23 +2,6 @@ using Sandbox;
 
 namespace Murder;
 
-public enum SlotType
-{
-	Primary,
-	Secondary,
-	Melee
-}
-
-public enum HoldType
-{
-	None,
-	Pistol,
-	Rifle,
-	Shotgun,
-	Carry,
-	Fists
-}
-
 [Title( "Carriable" ), Icon( "luggage" )]
 public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 {
@@ -36,8 +19,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	public virtual float DeployTime => 0;
 	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
-	public virtual HoldType HoldType => HoldType.None;
-	public virtual SlotType Slot => SlotType.Primary;
 	public BaseViewModel ViewModelEntity { get; protected set; }
 	public virtual string ViewModelPath { get; }
 	public virtual string WorldModelPath { get; }
@@ -45,7 +26,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// <summary>
 	/// Return the entity we should be spawning particles from.
 	/// </summary>
-	public virtual ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
+	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
 
 	/// <summary>
 	/// The text that will show up in the inventory slot.
@@ -118,7 +99,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		return true;
 	}
 
-	public virtual void OnCarryStart( Player carrier )
+	public void OnCarryStart( Player carrier )
 	{
 		if ( !IsServer )
 			return;
@@ -128,7 +109,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableDrawing = false;
 	}
 
-	public virtual void OnCarryDrop( Player dropper )
+	public void OnCarryDrop( Player dropper )
 	{
 		PreviousOwner = dropper;
 
@@ -151,7 +132,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public virtual void SimulateAnimator( PawnAnimator animator )
 	{
-		animator.SetAnimParameter( "holdtype", (int)HoldType );
 		animator.SetAnimParameter( "aim_body_weight", 1.0f );
 		animator.SetAnimParameter( "holdtype_handedness", 0 );
 	}
@@ -223,7 +203,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	bool IUse.OnUse( Entity user )
 	{
 		var player = (Player)user;
-		player.Inventory.OnUse( this );
+		player.SetCarriable( this );
 
 		return false;
 	}
