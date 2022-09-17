@@ -1,9 +1,7 @@
 using Sandbox;
-using System.Collections.Generic;
 
 namespace Murder;
 
-// TODO: Probably don't need any of this role stuff anymore.
 public partial class Player
 {
 	private Role _role;
@@ -40,7 +38,10 @@ public partial class Player
 
 	public void SetRole( RoleInfo roleInfo )
 	{
-		Role = TypeLibrary.Create<Role>( roleInfo.ClassName );
+		if ( roleInfo == Role.Bystander.Info )
+			Role = Role.Bystander;
+		else if ( roleInfo == Role.Murderer.Info )
+			Role = Role.Murderer;
 	}
 
 	[ClientRpc]

@@ -49,20 +49,4 @@ public partial class Game
 	[ConVar.Server( "murder_afk_kick", Help = "Kick any players that get marked AFK.", Saved = true )]
 	public static bool KickAFKPlayers { get; set; }
 	#endregion
-
-	#region Voice Chat
-	[ConVar.Replicated( "murder_proximity_chat", Saved = true ), Change( nameof( UpdateVoiceChat ) )]
-	public static bool ProximityChat { get; set; }
-
-	public static void UpdateVoiceChat( bool oldValue, bool newValue )
-	{
-		foreach ( var client in Client.All )
-		{
-			if ( !client.Pawn.IsAlive() )
-				continue;
-
-			client.VoiceStereo = newValue;
-		}
-	}
-	#endregion
 }

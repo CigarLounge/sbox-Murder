@@ -6,6 +6,9 @@ namespace Murder;
 
 public abstract class Role : IEquatable<Role>, IEquatable<string>
 {
+	public static Bystander Bystander { get; private set; }
+	public static Murderer Murderer { get; private set; }
+
 	private static readonly Dictionary<Type, HashSet<Player>> _players = new();
 	public RoleInfo Info { get; private set; }
 	public Color Color => Info.Color;
@@ -14,6 +17,12 @@ public abstract class Role : IEquatable<Role>, IEquatable<string>
 	public Role()
 	{
 		Info = GameResource.GetInfo<RoleInfo>( GetType() );
+	}
+
+	public static void Init()
+	{
+		Bystander = new Bystander();
+		Murderer = new Murderer();
 	}
 
 	public static IEnumerable<Player> GetPlayers<T>() where T : Role

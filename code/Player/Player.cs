@@ -5,6 +5,12 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
+	[Net]
+	public string SteamName { get; private set; }
+
+	[Net]
+	public string AssignedName { get; private set; }
+
 	public Inventory Inventory { get; private init; }
 
 	public CameraMode Camera
@@ -21,19 +27,12 @@ public partial class Player : AnimatedEntity
 		}
 	}
 
-	/// <summary>
-	/// The score gained during a single round. This gets added to the actual score
-	/// at the end of a round.
-	/// </summary>
-	public int RoundScore { get; set; }
-
 	public Corpse Corpse { get; set; }
-
-	public const float DropVelocity = 300;
 
 	public Player( Client client ) : this()
 	{
 		client.Pawn = this;
+		SteamName = client.Name;
 
 		ClothingContainer.LoadFromClient( client );
 		_avatarClothes = new( ClothingContainer.Clothing );
@@ -94,7 +93,7 @@ public partial class Player : AnimatedEntity
 		if ( !IsForcedSpectator )
 		{
 			Health = MaxHealth;
-			Client.VoiceStereo = Game.ProximityChat;
+			Client.VoiceStereo = true;
 			LifeState = LifeState.Alive;
 
 			EnableAllCollisions = true;
@@ -169,7 +168,6 @@ public partial class Player : AnimatedEntity
 		{
 			CheckAFK();
 			PlayerUse();
-			CheckPlayerDropCarriable();
 		}
 	}
 
@@ -339,17 +337,6 @@ public partial class Player : AnimatedEntity
 	{
 		previous?.ActiveEnd( this, previous.Owner != this );
 		next?.ActiveStart( this );
-	}
-
-	private void CheckPlayerDropCarriable()
-	{
-		if ( Input.Pressed( InputButton.Drop ) && !Input.Down( InputButton.Run ) )
-		{
-			var droppedEntity = Inventory.DropActive();
-			if ( droppedEntity is not null )
-				if ( droppedEntity.PhysicsGroup is not null )
-					droppedEntity.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * DropVelocity;
-		}
 	}
 	#endregion
 
