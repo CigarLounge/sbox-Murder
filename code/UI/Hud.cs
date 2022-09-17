@@ -19,12 +19,12 @@ public class Hud : RootPanel
 	private void Init()
 	{
 		AddChild<HintDisplay>();
-		AddChild<PlayerInfo>();
 		AddChild<ChatBox>();
 		AddChild<VoiceChatDisplay>();
 		AddChild<RoundTimer>();
 		AddChild<VoiceList>();
 		AddChild<Scoreboard>();
+		AddChild<RoleDisplay>();
 		AddChild<FullScreenHintMenu>();
 		AddChild<DamageIndicator>();
 	}

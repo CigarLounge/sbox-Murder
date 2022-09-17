@@ -25,10 +25,10 @@ public static class RoleExtensions
 	{
 		return role switch
 		{
-			Role.None => Color.White,
+			Role.None => Color.Transparent,
 			Role.Bystander => new Color32( 85, 212, 255 ),
 			Role.Murderer => new Color32( 255, 56, 56 ),
-			_ => Color.White
+			_ => Color.Transparent
 		};
 	}
 
@@ -41,7 +41,7 @@ public static class RoleExtensions
 	{
 		return role switch
 		{
-			Role.None => "None",
+			Role.None => "",
 			Role.Bystander => "Bystander",
 			Role.Murderer => "Murderer",
 			_ => string.Empty
