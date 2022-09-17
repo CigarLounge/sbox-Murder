@@ -20,14 +20,12 @@ public class Hud : RootPanel
 	{
 		AddChild<HintDisplay>();
 		AddChild<PlayerInfo>();
-		AddChild<InventoryWrapper>();
 		AddChild<ChatBox>();
 		AddChild<VoiceChatDisplay>();
 		AddChild<RoundTimer>();
 		AddChild<VoiceList>();
 		AddChild<Scoreboard>();
 		AddChild<FullScreenHintMenu>();
-		AddChild<CarriableHint>();
 		AddChild<DamageIndicator>();
 	}
 

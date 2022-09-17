@@ -7,7 +7,8 @@ namespace Murder;
 [Title( "Player corpse" )]
 public partial class Corpse : ModelEntity, IEntityHint
 {
-	public Player Player { get; set; }
+	[Net]
+	public Player Player { get; init; }
 
 	public Corpse() { }
 
