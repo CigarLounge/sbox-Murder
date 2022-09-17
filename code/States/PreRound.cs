@@ -101,6 +101,7 @@ public class PreRound : BaseState
 		while ( detective == murderer ) // this is shit
 			detective = Rand.FromList( players );
 
+		detective.SendRole( To.Everyone );
 		detective.SetCarriable( new Revolver() );
 	}
 }
