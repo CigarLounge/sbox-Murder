@@ -144,32 +144,27 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		Host.AssertClient();
 
-		if ( !ViewModelPath.IsNullOrEmpty() )
+		if ( ViewModelPath.IsNullOrEmpty() )
+			return;
+
+		ViewModelEntity = new ViewModel
 		{
-			ViewModelEntity = new ViewModel
-			{
-				EnableViewmodelRendering = true,
-				Owner = Owner,
-				Position = Position
-			};
+			EnableViewmodelRendering = true,
+			Owner = Owner,
+			Position = Position
+		};
 
-			ViewModelEntity.SetModel( ViewModelPath );
-		}
+		ViewModelEntity.SetModel( ViewModelPath );
 
-		/* Hardcode this
-		if ( Info.HandsModel is not null )
+		HandsModelEntity = new BaseViewModel
 		{
-			HandsModelEntity = new BaseViewModel
-			{
-				EnableViewmodelRendering = true,
-				Model = Info.HandsModel,
-				Owner = Owner,
-				Position = Position
-			};
+			EnableViewmodelRendering = true,
+			Owner = Owner,
+			Position = Position
+		};
 
-			HandsModelEntity.SetParent( ViewModelEntity, true );
-		}
-		*/
+		HandsModelEntity.SetModel( "models/weapons/v_arms_ter.vmdl" );
+		HandsModelEntity.SetParent( ViewModelEntity, true );
 	}
 
 	/// <summary>
