@@ -43,19 +43,6 @@ public static partial class GameEvent
 			public SpawnedAttribute() : base( Spawned ) { }
 		}
 
-		public const string StatusChanged = "murder.player.status-changed";
-
-		/// <summary>
-		/// Occurs when a player's status has changed.
-		/// <para><strong>Parameters:</strong></para>
-		/// <para>The <see cref="Murder.Player"/> whose status has changed.</para>
-		/// <para>The old <see cref="PlayerStatus"/>.</para>
-		/// </summary>
-		public class StatusChangedAttribute : EventAttribute
-		{
-			public StatusChangedAttribute() : base( StatusChanged ) { }
-		}
-
 		public const string TookDamage = "murder.player.took-damage";
 
 		/// <summary>
