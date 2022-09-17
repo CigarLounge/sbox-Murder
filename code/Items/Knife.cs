@@ -87,10 +87,7 @@ public partial class Knife : Carriable
 			.WithFlag( DamageFlags.Slash );
 
 		if ( trace.Entity is Player )
-		{
-			PlaySound( FleshHit );
-			Delete();
-		}
+			PlaySound( FleshHit );	
 
 		trace.Entity.TakeDamage( damageInfo );
 	}
