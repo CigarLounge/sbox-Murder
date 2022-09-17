@@ -2,23 +2,56 @@ using System.Collections.Generic;
 
 namespace Murder;
 
-public abstract class Role
+public enum Role
 {
-	public static readonly Bystander Bystander = new();
-	public static readonly Murderer Murderer = new();
-	public static readonly NoneRole None = new();
+	None,
+	Bystander,
+	Murderer
+}
 
-	public virtual byte Ident => 255;
-	public virtual Color Color { get; }
-	public HashSet<Player> Players { get; init; }
-	public virtual string Title { get; }
+public static class RoleExtensions
+{
+	private static readonly HashSet<Player>[] _players;
 
-	protected Role() { }
+	static RoleExtensions()
+	{
+		_players = new HashSet<Player>[3];
+		_players[0] = new();
+		_players[1] = new();
+		_players[2] = new();
+	}
+
+	public static Color GetColor( this Role role )
+	{
+		return role switch
+		{
+			Role.None => Color.White,
+			Role.Bystander => Color.Blue,
+			Role.Murderer => Color.Red,
+			_ => Color.White
+		};
+	}
+
+	public static IEnumerable<Player> GetPlayers( this Role role )
+	{
+		return _players[(int)role];
+	}
+
+	public static string GetTitle( this Role role )
+	{
+		return role switch
+		{
+			Role.None => "None",
+			Role.Bystander => "Bystander",
+			Role.Murderer => "Murderer",
+			_ => string.Empty
+		};
+	}
 
 	[GameEvent.Player.RoleChanged]
 	private static void OnPlayerRoleChanged( Player player, Role oldRole )
 	{
-		oldRole?.Players.Remove( player );
-		player.Role?.Players.Add( player );
+		_players[(int)oldRole].Remove( player );
+		_players[(int)player.Role].Add( player );
 	}
 }

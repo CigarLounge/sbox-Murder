@@ -66,7 +66,7 @@ public partial class InProgress : BaseState
 
 	protected override void OnTimeUp()
 	{
-		PostRound.Load( new Murderer(), WinType.TimeUp );
+		PostRound.Load( Role.Murderer, WinType.TimeUp );
 	}
 
 	private Role IsRoundOver()
@@ -84,7 +84,7 @@ public partial class InProgress : BaseState
 		// 	return Team.None;
 
 		// return aliveTeams.Count == 1 ? aliveTeams[0] : Team.None;
-		return new Murderer();
+		return Role.Murderer;
 	}
 
 	public override void OnSecond()
@@ -106,9 +106,9 @@ public partial class InProgress : BaseState
 	{
 		var result = IsRoundOver();
 
-		if ( result != new Murderer() && !Game.PreventWin )
+		if ( result != Role.Murderer && !Game.PreventWin )
 		{
-			PostRound.Load( new Murderer(), WinType.Elimination );
+			PostRound.Load( Role.Murderer, WinType.Elimination );
 			return true;
 		}
 

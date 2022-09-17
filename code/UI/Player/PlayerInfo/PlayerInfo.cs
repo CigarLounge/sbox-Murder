@@ -9,11 +9,11 @@ public class PlayerInfo : Panel
 {
 	public static PlayerInfo Instance;
 
-	private Panel RoleContainer { get; set; }
-	private Label Role { get; set; }
+	private Panel RoleContainer { get; init; }
+	private Label RoleTitle { get; init; }
 
-	private Panel HealthContainer { get; set; }
-	private Label Health { get; set; }
+	private Panel HealthContainer { get; init; }
+	private Label Health { get; init; }
 
 	public PlayerInfo()
 	{
@@ -45,7 +45,7 @@ public class PlayerInfo : Panel
 		if ( !this.IsEnabled() )
 			return;
 
-		if ( player.CurrentPlayer.Role is NoneRole )
+		if ( player.CurrentPlayer.Role == Role.None )
 		{
 			RoleContainer.Enabled( false );
 			HealthContainer.Style.BorderTopLeftRadius = 4;
@@ -54,8 +54,8 @@ public class PlayerInfo : Panel
 		else
 		{
 			RoleContainer.Enabled( true );
-			RoleContainer.Style.BackgroundColor = player.CurrentPlayer.Role.Color;
-			Role.Text = player.CurrentPlayer.Role.Title;
+			RoleContainer.Style.BackgroundColor = player.CurrentPlayer.Role.GetColor();
+			RoleTitle.Text = player.CurrentPlayer.Role.GetTitle();
 
 			HealthContainer.Style.BorderTopLeftRadius = 0;
 			HealthContainer.Style.BorderBottomLeftRadius = 0;

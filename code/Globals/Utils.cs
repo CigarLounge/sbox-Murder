@@ -10,7 +10,7 @@ public static class Utils
 	public static int MinimumPlayerCount() => GetPlayers( ( pl ) => !pl.IsForcedSpectator ).Count;
 	public static bool HasMinimumPlayers() => MinimumPlayerCount() >= Game.MinPlayers;
 
-	public static List<Client> GetAliveClientsWithRole<T>() where T : Role => GetClients( ( pl ) => pl.IsAlive() && pl.Role is T );
+	public static List<Client> GetAliveClientsWithRole( Role role ) => GetClients( ( pl ) => pl.IsAlive() && pl.Role == role );
 	public static List<Client> GetDeadClients() => GetClients( ( pl ) => !pl.IsAlive() );
 
 	private static List<Player> GetPlayers( Func<Player, bool> predicate )

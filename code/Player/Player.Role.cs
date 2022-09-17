@@ -32,23 +32,12 @@ public partial class Player
 	{
 		Host.AssertServer();
 
-		ClientSetRole( to, Role.Ident );
-	}
-
-	public void SetRole( byte ident )
-	{
-		Role = ident switch
-		{
-			0 => Role.None,
-			1 => Role.Bystander,
-			2 => Role.Murderer,
-			_ => null,
-		};
+		ClientSetRole( to, Role );
 	}
 
 	[ClientRpc]
-	private void ClientSetRole( byte ident )
+	private void ClientSetRole( Role role )
 	{
-		SetRole( ident );
+		Role = role;
 	}
 }

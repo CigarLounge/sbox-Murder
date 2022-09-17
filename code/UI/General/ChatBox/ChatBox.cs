@@ -60,7 +60,7 @@ public partial class ChatBox : Panel
 				Input.Style.BorderColor = Color.Green;
 				return;
 			case Channel.Team:
-				Input.Style.BorderColor = player.Role.Color;
+				Input.Style.BorderColor = player.Role.GetColor();
 				return;
 		}
 
@@ -121,19 +121,19 @@ public partial class ChatBox : Panel
 		}
 
 		if ( player.CurrentChannel == Channel.All )
-			AddChat( To.Everyone, player.Client.Name, message, player.CurrentChannel, player.Role.Info.ResourceId );
+			AddChat( To.Everyone, player.Client.Name, message, player.CurrentChannel, player.Role );
 	}
 
 	[ConCmd.Client( "murder_chat_add", CanBeCalledFromServer = true )]
-	public static void AddChat( string name, string message, Channel channel, int roleId = -1 )
+	public static void AddChat( string name, string message, Channel channel, Role role = Role.None )
 	{
 		switch ( channel )
 		{
 			case Channel.All:
-				Instance?.AddEntry( name, message, ResourceLibrary.Get<RoleInfo>( roleId ).Color );
+				Instance?.AddEntry( name, message, role.GetColor() );
 				return;
 			case Channel.Team:
-				Instance?.AddEntry( $"(TEAM) {name}", message, ResourceLibrary.Get<RoleInfo>( roleId ).Color );
+				Instance?.AddEntry( $"(TEAM) {name}", message, role.GetColor() );
 				return;
 			case Channel.Spectator:
 				Instance?.AddEntry( name, message, Color.Yellow );

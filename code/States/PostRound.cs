@@ -12,6 +12,9 @@ public enum WinType
 public partial class PostRound : BaseState
 {
 	[Net]
+	public Role WinningRole { get; private set; }
+
+	[Net]
 	public WinType WinType { get; private set; }
 
 	public override string Name { get; } = "Post";
@@ -21,6 +24,7 @@ public partial class PostRound : BaseState
 
 	public PostRound( Role winningRole, WinType winType )
 	{
+		WinningRole = winningRole;
 		WinType = winType;
 	}
 
