@@ -23,7 +23,6 @@ public partial class Game : Sandbox.Game
 	{
 		Current = this;
 
-		Role.Init();
 		LoadResources();
 
 		if ( IsClient )

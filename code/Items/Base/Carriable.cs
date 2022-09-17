@@ -6,10 +6,7 @@ public enum SlotType
 {
 	Primary,
 	Secondary,
-	Melee,
-	OffensiveEquipment,
-	UtilityEquipment,
-	Grenade,
+	Melee
 }
 
 public enum HoldType
@@ -37,9 +34,12 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	}
 
 	public BaseViewModel HandsModelEntity { get; private set; }
-	public CarriableInfo Info { get; private set; }
 	public Player PreviousOwner { get; private set; }
+	public virtual HoldType HoldType => HoldType.None;
+	public virtual SlotType Slot => SlotType.Primary;
 	public BaseViewModel ViewModelEntity { get; protected set; }
+	public virtual string ViewModelPath { get; }
+	public virtual string WorldModelPath { get; }
 
 	/// <summary>
 	/// Return the entity we should be spawning particles from.
@@ -50,16 +50,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// The text that will show up in the inventory slot.
 	/// </summary>
 	public virtual string SlotText => string.Empty;
-
-	/// <summary>
-	/// Instructional text that will display next to a Primary Attack glyph.
-	/// </summary>
-	public virtual string PrimaryAttackHint => string.Empty;
-
-	/// <summary>
-	/// Instructional text that will display next to a Secondary Attack glyph.
-	/// </summary>
-	public virtual string SecondaryAttackHint => string.Empty;
 
 	public bool IsActiveCarriable => Owner?.ActiveCarriable == this;
 
@@ -73,22 +63,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		if ( ClassName.IsNullOrEmpty() )
-		{
-			Log.Error( this + " doesn't have a class name!" );
-			return;
-		}
-
-		Info = GameResource.GetInfo<CarriableInfo>( ClassName );
-		Model = Info.WorldModel;
-	}
-
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		if ( !ClassName.IsNullOrEmpty() )
-			Info = GameResource.GetInfo<CarriableInfo>( ClassName );
+		SetModel( WorldModelPath );
 	}
 
 	public virtual void ActiveStart( Player player )
@@ -144,10 +119,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public virtual void OnCarryStart( Player carrier )
 	{
-		// Bandaid fix for: https://github.com/Facepunch/sbox-issues/issues/1702
-		if ( IsClient )
-			Info ??= GameResource.GetInfo<CarriableInfo>( GetType() );
-
 		if ( !IsServer )
 			return;
 
@@ -179,7 +150,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public virtual void SimulateAnimator( PawnAnimator animator )
 	{
-		animator.SetAnimParameter( "holdtype", (int)Info.HoldType );
+		animator.SetAnimParameter( "holdtype", (int)HoldType );
 		animator.SetAnimParameter( "aim_body_weight", 1.0f );
 		animator.SetAnimParameter( "holdtype_handedness", 0 );
 	}
@@ -192,17 +163,19 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		Host.AssertClient();
 
-		if ( Info.ViewModel is not null )
+		if ( !ViewModelPath.IsNullOrEmpty() )
 		{
 			ViewModelEntity = new ViewModel
 			{
 				EnableViewmodelRendering = true,
-				Model = Info.ViewModel,
 				Owner = Owner,
 				Position = Position
 			};
+
+			ViewModelEntity.SetModel( ViewModelPath );
 		}
 
+		/* Hardcode this
 		if ( Info.HandsModel is not null )
 		{
 			HandsModelEntity = new BaseViewModel
@@ -215,6 +188,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 			HandsModelEntity.SetParent( ViewModelEntity, true );
 		}
+		*/
 	}
 
 	/// <summary>
@@ -254,12 +228,4 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	}
 
 	bool IUse.IsUsable( Entity user ) => Owner is null && user is Player;
-
-#if SANDBOX && DEBUG
-	[Event.Hotload]
-	private void OnHotload()
-	{
-		Info = GameResource.GetInfo<CarriableInfo>( ClassName );
-	}
-#endif
 }

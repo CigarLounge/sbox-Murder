@@ -26,7 +26,7 @@ public abstract partial class Weapon : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceReload { get; protected set; }
 
-	public new WeaponInfo Info => (WeaponInfo)base.Info;
+	public virtual float Damage => 0;
 	public override string SlotText => $"{AmmoClip} + {ReserveAmmo + Owner?.AmmoCount( Info.AmmoType )}";
 	private Vector3 RecoilOnShoot => new( Rand.Float( -Info.HorizontalRecoilRange, Info.HorizontalRecoilRange ), Info.VerticalRecoil, 0 );
 	private Vector3 CurrentRecoil { get; set; } = Vector3.Zero;
@@ -214,13 +214,6 @@ public abstract partial class Weapon : Carriable
 
 				var fullEndPosition = trace.EndPosition + trace.Direction * bulletSize;
 
-				if ( !Info.TracerParticle.IsNullOrEmpty() && trace.Distance > 200 )
-				{
-					var tracer = Particles.Create( Info.TracerParticle );
-					tracer?.SetPosition( 0, trace.StartPosition );
-					tracer?.SetPosition( 1, trace.EndPosition );
-				}
-
 				if ( !IsServer )
 					continue;
 
@@ -231,7 +224,7 @@ public abstract partial class Weapon : Carriable
 				{
 					OnHit( trace );
 
-					if ( Info.Damage <= 0 )
+					if ( Damage <= 0 )
 						continue;
 
 					var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 100f * force, damage )
