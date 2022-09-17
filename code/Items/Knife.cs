@@ -25,7 +25,7 @@ public partial class Knife : Carriable
 
 	public override void Simulate( Client client )
 	{
-		if ( TimeSinceStab < 1f )
+		if ( TimeSinceStab < 2f )
 			return;
 
 		if ( Input.Down( InputButton.PrimaryAttack ) )
@@ -33,7 +33,7 @@ public partial class Knife : Carriable
 			using ( LagCompensation() )
 			{
 				TimeSinceStab = 0;
-				MeleeAttack( 100f, 100f, 8f );
+				MeleeAttack( 120f, 100f, 8f );
 			}
 		}
 		else if ( Input.Released( InputButton.SecondaryAttack ) )
