@@ -5,6 +5,7 @@ namespace Murder;
 
 [Category( "Weapons" )]
 [ClassName( "murder_weapon_knife" )]
+[EditorModel( "models/weapons/w_knife.vmdl" )]
 [HammerEntity]
 [Title( "Knife" )]
 public partial class Knife : Carriable
@@ -12,12 +13,13 @@ public partial class Knife : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceStab { get; private set; }
 
+	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
+	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
+
 	private const string SwingSound = "knife_swing-1";
 	private const string FleshHit = "knife_flesh_hit-1";
 
 	private bool _isThrown = false;
-	private Player _thrower;
-	private Vector3 _thrownFrom;
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
 	private float _gravityModifier;
 
@@ -43,9 +45,16 @@ public partial class Knife : Carriable
 		}
 	}
 
+	public override void SimulateAnimator( PawnAnimator animator )
+	{
+		base.SimulateAnimator( animator );
+
+		animator.SetAnimParameter( "holdtype", 5 );
+	}
+
 	public override bool CanCarry( Player carrier )
 	{
-		return !_isThrown && base.CanCarry( carrier );
+		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
 	}
 
 	private void MeleeAttack( float damage, float range, float radius )
@@ -92,18 +101,13 @@ public partial class Knife : Carriable
 			.Ignore( Owner )
 			.Run();
 
-		_thrower = Owner;
 		_isThrown = true;
-		_thrownFrom = Owner.Position;
 		_gravityModifier = 0;
 
 		if ( !IsServer )
 			return;
 
-		if ( IsActiveCarriable )
-			Owner.Inventory.DropActive();
-		else
-			Owner.Inventory.Drop( this );
+		Owner.SetCarriable( null );
 
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
@@ -136,7 +140,7 @@ public partial class Knife : Carriable
 			.Radius( 0f )
 			.UseHitboxes()
 			.WithAnyTags( "solid" )
-			.Ignore( _thrower )
+			.Ignore( PreviousOwner )
 			.Ignore( this )
 			.Run();
 
@@ -156,10 +160,9 @@ public partial class Knife : Carriable
 					.WithPosition( trace.EndPosition )
 					.UsingTraceResult( trace )
 					.WithFlag( DamageFlags.Slash )
-					.WithAttacker( _thrower )
+					.WithAttacker( PreviousOwner )
 					.WithWeapon( this );
 
-				player.DistanceToAttacker = _thrownFrom.Distance( player.Position ).SourceUnitsToMeters();
 				player.TakeDamage( damageInfo );
 
 				Delete();
