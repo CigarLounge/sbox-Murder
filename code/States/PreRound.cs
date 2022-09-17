@@ -93,6 +93,14 @@ public class PreRound : BaseState
 				index = 0;
 		}
 
-		Rand.FromList( players ).Role = Role.Murderer;
+		var murderer = Rand.FromList( players );
+		murderer.Role = Role.Murderer;
+		murderer.SetCarriable( new Knife() );
+
+		var detective = Rand.FromList( players );
+		while ( detective == murderer ) // this is shit
+			detective = Rand.FromList( players );
+
+		detective.SetCarriable( new Revolver() );
 	}
 }
