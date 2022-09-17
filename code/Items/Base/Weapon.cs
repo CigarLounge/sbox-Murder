@@ -1,4 +1,3 @@
-using Murder;
 using Sandbox;
 using System;
 using System.Collections.Generic;
@@ -21,9 +20,6 @@ public abstract partial class Weapon : Carriable
 	public TimeSince TimeSincePrimaryAttack { get; protected set; }
 
 	[Net, Local, Predicted]
-	public TimeSince TimeSinceSecondaryAttack { get; protected set; }
-
-	[Net, Local, Predicted]
 	public TimeSince TimeSinceReload { get; protected set; }
 
 	public virtual float Damage => 0;
@@ -32,7 +28,15 @@ public abstract partial class Weapon : Carriable
 	public virtual float ReloadTime => 0;
 	public override string SlotText => $"{AmmoClip} + {ReserveAmmo}";
 	// private Vector3 RecoilOnShoot => new( Rand.Float( -Info.HorizontalRecoilRange, Info.HorizontalRecoilRange ), Info.VerticalRecoil, 0 );
-	private Vector3 CurrentRecoil { get; set; } = Vector3.Zero;
+	// private Vector3 CurrentRecoil { get; set; } = Vector3.Zero;
+
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		AmmoClip = ClipSize;
+		ReserveAmmo = int.MaxValue;
+	}
 
 	public override void ActiveStart( Player player )
 	{
@@ -85,11 +89,13 @@ public abstract partial class Weapon : Carriable
 */
 	protected virtual bool CanPrimaryAttack()
 	{
-		var rate = PrimaryRate;
-		if ( rate <= 0 )
+		if ( !Input.Pressed( InputButton.PrimaryAttack ) )
+			return false;
+
+		if ( PrimaryRate <= 0 )
 			return true;
 
-		return TimeSincePrimaryAttack > (1 / rate);
+		return TimeSincePrimaryAttack > (1 / PrimaryRate);
 	}
 
 	protected virtual void AttackPrimary()
@@ -105,7 +111,7 @@ public abstract partial class Weapon : Carriable
 		AmmoClip--;
 
 		Owner.SetAnimParameter( "b_attack", true );
-		ShootEffects();
+		// ShootEffects();
 		// PlaySound( Info.FireSound );
 
 		ShootBullet( 0, 1.5f, Damage, 3.0f, 1 );
@@ -143,6 +149,7 @@ public abstract partial class Weapon : Carriable
 		AmmoClip += TakeAmmo( ClipSize - AmmoClip );
 	}
 
+	/*
 	[ClientRpc]
 	protected virtual void ShootEffects()
 	{
@@ -152,6 +159,7 @@ public abstract partial class Weapon : Carriable
 		ViewModelEntity?.SetAnimParameter( "fire", true );
 		CurrentRecoil += RecoilOnShoot;
 	}
+	*/
 
 	[ClientRpc]
 	protected virtual void DryFireEffects()
@@ -165,7 +173,7 @@ public abstract partial class Weapon : Carriable
 		ViewModelEntity?.SetAnimParameter( "reload", true );
 	}
 
-	protected virtual void ShootBullet( float spread, float force, float damage, float bulletSize, int bulletCount )
+	protected void ShootBullet( float spread, float force, float damage, float bulletSize, int bulletCount )
 	{
 		// Seed rand using the tick, so bullet cones match on client and server
 		Rand.SetSeed( Time.Tick );
@@ -241,26 +249,5 @@ public abstract partial class Weapon : Carriable
 		ReserveAmmo -= available;
 
 		return available;
-	}
-
-	public static float GetDamageFalloff( float distance, float damage, float start, float end )
-	{
-		if ( end > 0f )
-		{
-			if ( start > 0f )
-			{
-				if ( distance < start )
-					return damage;
-
-				var falloffRange = end - start;
-				var difference = (distance - start);
-
-				return Math.Max( damage - (damage / falloffRange) * difference, 0f );
-			}
-
-			return Math.Max( damage - (damage / end) * distance, 0f );
-		}
-
-		return damage;
 	}
 }
