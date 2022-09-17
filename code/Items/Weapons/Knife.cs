@@ -77,11 +77,9 @@ public partial class Knife : Carriable
 			.WithWeapon( this )
 			.WithFlag( DamageFlags.Slash );
 
-		if ( trace.Entity is Player player )
+		if ( trace.Entity is Player )
 		{
-			player.DistanceToAttacker = 0;
 			PlaySound( FleshHit );
-			Owner.Inventory.DropActive();
 			Delete();
 		}
 

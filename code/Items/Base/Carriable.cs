@@ -33,6 +33,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		set => base.Owner = value;
 	}
 
+	public virtual float DeployTime => 0;
 	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
 	public virtual HoldType HoldType => HoldType.None;

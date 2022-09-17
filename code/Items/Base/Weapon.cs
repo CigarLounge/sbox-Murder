@@ -27,19 +27,12 @@ public abstract partial class Weapon : Carriable
 	public TimeSince TimeSinceReload { get; protected set; }
 
 	public virtual float Damage => 0;
-	public override string SlotText => $"{AmmoClip} + {ReserveAmmo + Owner?.AmmoCount( Info.AmmoType )}";
-	private Vector3 RecoilOnShoot => new( Rand.Float( -Info.HorizontalRecoilRange, Info.HorizontalRecoilRange ), Info.VerticalRecoil, 0 );
+	public virtual int ClipSize => 1;
+	public virtual float PrimaryRate => 0;
+	public virtual float ReloadTime => 0;
+	public override string SlotText => $"{AmmoClip} + {ReserveAmmo}";
+	// private Vector3 RecoilOnShoot => new( Rand.Float( -Info.HorizontalRecoilRange, Info.HorizontalRecoilRange ), Info.VerticalRecoil, 0 );
 	private Vector3 CurrentRecoil { get; set; } = Vector3.Zero;
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		AmmoClip = Info.ClipSize;
-
-		if ( Info.AmmoType == AmmoType.None )
-			ReserveAmmo = Info.ReserveAmmo;
-	}
 
 	public override void ActiveStart( Player player )
 	{
@@ -67,22 +60,15 @@ public abstract partial class Weapon : Carriable
 					AttackPrimary();
 				}
 			}
-
-			if ( CanSecondaryAttack() )
-			{
-				using ( LagCompensation() )
-				{
-					TimeSinceSecondaryAttack = 0;
-					AttackSecondary();
-				}
-			}
 		}
-		else if ( TimeSinceReload > Info.ReloadTime )
+		else if ( TimeSinceReload > ReloadTime )
 			OnReloadFinish();
 	}
 
+	/*
 	public override void BuildInput( InputBuilder input )
 	{
+		
 		base.BuildInput( input );
 
 		var oldPitch = input.ViewAngles.pitch;
@@ -94,32 +80,16 @@ public abstract partial class Weapon : Carriable
 		CurrentRecoil -= CurrentRecoil
 			.WithY( (oldPitch - input.ViewAngles.pitch) * Info.RecoilRecoveryScale )
 			.WithX( (oldYaw - input.ViewAngles.yaw) * Info.RecoilRecoveryScale );
+		
 	}
-
+*/
 	protected virtual bool CanPrimaryAttack()
 	{
-		if ( Info.FireMode == FireMode.Semi && !Input.Pressed( InputButton.PrimaryAttack ) )
-			return false;
-		else if ( Info.FireMode != FireMode.Semi && !Input.Down( InputButton.PrimaryAttack ) )
-			return false;
-
-		var rate = Info.PrimaryRate;
+		var rate = PrimaryRate;
 		if ( rate <= 0 )
 			return true;
 
 		return TimeSincePrimaryAttack > (1 / rate);
-	}
-
-	protected virtual bool CanSecondaryAttack()
-	{
-		if ( !Input.Pressed( InputButton.SecondaryAttack ) )
-			return false;
-
-		var rate = Info.SecondaryRate;
-		if ( rate <= 0 )
-			return true;
-
-		return TimeSinceSecondaryAttack > (1 / rate);
 	}
 
 	protected virtual void AttackPrimary()
@@ -127,7 +97,7 @@ public abstract partial class Weapon : Carriable
 		if ( AmmoClip == 0 )
 		{
 			DryFireEffects();
-			PlaySound( Info.DryFireSound );
+			// PlaySound( Info.DryFireSound );
 
 			return;
 		}
@@ -136,12 +106,10 @@ public abstract partial class Weapon : Carriable
 
 		Owner.SetAnimParameter( "b_attack", true );
 		ShootEffects();
-		PlaySound( Info.FireSound );
+		// PlaySound( Info.FireSound );
 
-		ShootBullet( Info.Spread, 1.5f, Info.Damage, 3.0f, Info.BulletsPerFire );
+		ShootBullet( 0, 1.5f, Damage, 3.0f, 1 );
 	}
-
-	protected virtual void AttackSecondary() { }
 
 	protected virtual bool CanReload()
 	{
@@ -151,7 +119,7 @@ public abstract partial class Weapon : Carriable
 		if ( !Input.Pressed( InputButton.Reload ) )
 			return false;
 
-		if ( AmmoClip >= Info.ClipSize || (Owner.AmmoCount( Info.AmmoType ) <= 0 && ReserveAmmo <= 0) )
+		if ( AmmoClip >= ClipSize || ReserveAmmo <= 0 )
 			return false;
 
 		return true;
@@ -172,7 +140,7 @@ public abstract partial class Weapon : Carriable
 	protected virtual void OnReloadFinish()
 	{
 		IsReloading = false;
-		AmmoClip += TakeAmmo( Info.ClipSize - AmmoClip );
+		AmmoClip += TakeAmmo( ClipSize - AmmoClip );
 	}
 
 	[ClientRpc]
@@ -222,8 +190,6 @@ public abstract partial class Weapon : Carriable
 
 				using ( Prediction.Off() )
 				{
-					OnHit( trace );
-
 					if ( Damage <= 0 )
 						continue;
 
@@ -232,20 +198,11 @@ public abstract partial class Weapon : Carriable
 						.WithAttacker( Owner )
 						.WithWeapon( this );
 
-					if ( trace.Entity is Player player )
-						player.DistanceToAttacker = Vector3.DistanceBetween( Owner.Position, player.Position ).SourceUnitsToMeters();
-
 					trace.Entity.TakeDamage( damageInfo );
 				}
 			}
 		}
 	}
-
-	/// <summary>
-	/// Called when the bullet hits something, i.e the World or an entity.
-	/// </summary>
-	/// <param name="trace"></param>
-	protected virtual void OnHit( TraceResult trace ) { }
 
 	/// <summary>
 	/// Does a trace from start to end, does bullet impact effects. Coded as an IEnumerable so you can return multiple
@@ -279,12 +236,9 @@ public abstract partial class Weapon : Carriable
 
 	protected int TakeAmmo( int ammo )
 	{
-		var available = Math.Min( Info.AmmoType == AmmoType.None ? ReserveAmmo : Owner.AmmoCount( Info.AmmoType ), ammo );
+		var available = Math.Min( ReserveAmmo, ammo );
 
-		if ( Info.AmmoType == AmmoType.None )
-			ReserveAmmo -= available;
-		else
-			Owner.TakeAmmo( Info.AmmoType, available );
+		ReserveAmmo -= available;
 
 		return available;
 	}
