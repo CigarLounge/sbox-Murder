@@ -5,7 +5,7 @@ namespace Murder;
 [ClassName( "murder_entity_corpse" )]
 [HideInEditor]
 [Title( "Player corpse" )]
-public partial class Corpse : ModelEntity, IEntityHint
+public partial class Corpse : ModelEntity, IEntityHint, IUse
 {
 	[Net]
 	public Player Player { get; init; }
@@ -85,5 +85,23 @@ public partial class Corpse : ModelEntity, IEntityHint
 	UI.EntityHintPanel IEntityHint.DisplayHint( Player player )
 	{
 		return new UI.Nameplate( Player );
+	}
+
+	bool IUse.OnUse( Entity user )
+	{
+		var player = (Player)user;
+
+		player.AssignedName = Player.AssignedName;
+		player.AssignedColour = Player.AssignedColour;
+
+		return false;
+	}
+
+	bool IUse.IsUsable( Entity user )
+	{
+		if ( user is not Player player )
+			return false;
+
+		return player.Role == Role.Murderer;
 	}
 }

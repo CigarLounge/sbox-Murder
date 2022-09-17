@@ -13,7 +13,7 @@ public class PostRoundPopup : Panel
 	public PostRoundPopup() => Instance = this;
 
 	[GameEvent.Round.End]
-	private static void DisplayWinner( Role winningTeam, WinType winType )
+	private static void DisplayWinner( Role winningRole )
 	{
 		if ( !Host.IsClient )
 			return;
