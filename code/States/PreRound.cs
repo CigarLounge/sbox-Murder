@@ -78,31 +78,20 @@ public class PreRound : BaseState
 		} );
 	}
 
-	private void AssignRoles( List<Player> players )
+	private static void AssignRoles( List<Player> players )
 	{
-		var traitorCount = Math.Max( players.Count >> 2, 1 );
-		var detectiveCount = players.Count >> 3;
 		players.Shuffle();
 
-		// var index = 0;
-		// var detectiveInfo = GameResource.GetInfo<RoleInfo>( typeof( Detective ) );
+		var index = 0;
+		foreach ( var player in players )
+		{
+			player.Role = Role.Bystander;
+			player.AssignedName = Game.Names[index++];
 
-		// while ( traitorCount-- > 0 )
-		// 	players[index++].Role = new Traitor();
+			if ( index > Game.Names.Count )
+				index = 0;
+		}
 
-		// while ( index < players.Count )
-		// {
-		// 	if ( detectiveCount > 0 && players[index].BaseKarma >= detectiveInfo.RequiredKarma )
-		// 	{
-		// 		players[index].Role = new Detective();
-		// 		detectiveCount--;
-		// 	}
-		// 	else
-		// 	{
-		// 		players[index].Role = new Innocent();
-		// 	}
-
-		// 	index++;
-		// }
+		Rand.FromList( players ).Role = Role.Murderer;
 	}
 }
