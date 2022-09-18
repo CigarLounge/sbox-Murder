@@ -20,6 +20,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
 	public BaseViewModel ViewModelEntity { get; protected set; }
+	public virtual string IconPath { get; }
 	public virtual string ViewModelPath { get; }
 	public virtual string WorldModelPath { get; }
 
@@ -33,7 +34,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// </summary>
 	public virtual string SlotText => string.Empty;
 
-	public bool IsActiveCarriable => Owner?.ActiveCarriable == this;
+	public bool IsActive => Owner?.ActiveCarriable == this;
 
 	public override void Spawn()
 	{

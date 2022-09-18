@@ -13,6 +13,7 @@ public partial class Knife : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceStab { get; private set; }
 
+	public override string IconPath { get; } = "ui/weapons/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
@@ -25,14 +26,13 @@ public partial class Knife : Carriable
 
 	public override void Simulate( Client client )
 	{
-		if ( TimeSinceStab < 2f )
+		if ( TimeSinceStab < 1.5f )
 			return;
 
 		if ( Input.Down( InputButton.PrimaryAttack ) )
 		{
 			using ( LagCompensation() )
 			{
-				TimeSinceStab = 0;
 				MeleeAttack( 120f, 100f, 8f );
 			}
 		}
@@ -59,6 +59,8 @@ public partial class Knife : Carriable
 
 	private void MeleeAttack( float damage, float range, float radius )
 	{
+		TimeSinceStab = 0;
+
 		Owner.SetAnimParameter( "b_attack", true );
 		SwingEffects();
 		PlaySound( SwingSound );
@@ -87,7 +89,7 @@ public partial class Knife : Carriable
 			.WithFlag( DamageFlags.Slash );
 
 		if ( trace.Entity is Player )
-			PlaySound( FleshHit );	
+			PlaySound( FleshHit );
 
 		trace.Entity.TakeDamage( damageInfo );
 	}
