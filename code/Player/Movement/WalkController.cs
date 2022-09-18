@@ -5,8 +5,8 @@ namespace Murder;
 
 public partial class WalkController : PawnController
 {
-	[Net] public float WalkSpeed { get; set; } = 110f;
-	[Net] public float DefaultSpeed { get; set; } = 230f;
+	[Net] public float SprintSpeed { get; set; } = 310f;
+	[Net] public float DefaultSpeed { get; set; } = 250f;
 	[Net] public float Acceleration { get; set; } = 8.0f;
 	[Net] public float AirAcceleration { get; set; } = 65f;
 	[Net] public float FallSoundZ { get; set; } = -30.0f;
@@ -63,10 +63,14 @@ public partial class WalkController : PawnController
 		if ( ws >= 0 )
 			return ws;
 
-		if ( Input.Down( InputButton.Run ) )
-			return WalkSpeed;
+		var player = (Player)Pawn;
 
-		return DefaultSpeed;
+		var speed = Input.Down( InputButton.Run ) && player.Role == Role.Murderer ? SprintSpeed : DefaultSpeed;
+
+		if ( !player.TimeUntilClean )
+			speed *= 0.5f;
+
+		return speed;
 	}
 
 	private void WalkMove()
