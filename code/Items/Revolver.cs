@@ -12,15 +12,19 @@ namespace Murder;
 public partial class Revolver : Carriable
 {
 	[Net, Predicted]
-	public bool BulletInClip { get; protected set; } = true;
+	public bool BulletInClip { get; private set; } = true;
 
 	[Net, Local, Predicted]
-	public bool IsReloading { get; protected set; }
+	public TimeSince TimeSincePrimaryAttack { get; private set; }
 
 	[Net, Local, Predicted]
-	public TimeSince TimeSinceReload { get; protected set; }
+	public bool IsReloading { get; private set; }
+
+	[Net, Local, Predicted]
+	public TimeSince TimeSinceReload { get; private set; }
 
 	public override float DeployTime => 1.2f;
+	public override string IconPath { get; } = "ui/weapons/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
 
@@ -33,6 +37,9 @@ public partial class Revolver : Carriable
 
 	public override void Simulate( Client client )
 	{
+		if ( TimeSincePrimaryAttack <= 0.5f )
+			return;
+
 		if ( !BulletInClip && !IsReloading )
 		{
 			Reload();
@@ -59,6 +66,8 @@ public partial class Revolver : Carriable
 	private void AttackPrimary()
 	{
 		BulletInClip = false;
+		TimeSincePrimaryAttack = 0;
+
 		Owner.SetAnimParameter( "b_attack", true );
 		ShootEffects();
 		PlaySound( "sounds/weapons/mr96/mr96_fire-1.sound" );
