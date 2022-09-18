@@ -1,0 +1,27 @@
+﻿@import "/ui/Hud.scss";
+
+Inventory
+{
+    background-color: $secondary;
+    border-radius: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    bottom: 100px;
+    right: 40px;
+
+    img
+    {
+        transition: opacity 0.2s ease-out;
+        opacity: 0.3;
+        width: 150px;
+        height: 150px;
+
+        &.active
+        {
+            opacity: 1;
+        }
+    }
+}

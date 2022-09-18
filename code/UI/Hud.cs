@@ -25,6 +25,7 @@ public class Hud : RootPanel
 		AddChild<VoiceList>();
 		AddChild<Scoreboard>();
 		AddChild<RoleDisplay>();
+		AddChild<Inventory>();
 		AddChild<FullScreenHintMenu>();
 		AddChild<DamageIndicator>();
 	}
