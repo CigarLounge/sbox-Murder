@@ -18,6 +18,16 @@ public partial class Game
 		player.Respawn();
 	}
 
+	[ConCmd.Admin( Name = "murder_takedamage" )]
+	public static void GiveItem( int damage )
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+		if ( !player.IsValid() )
+			return;
+
+		player.TakeDamage( new DamageInfo { Damage = damage } );
+	}
+
 	[ConCmd.Admin( Name = "murder_giveitem" )]
 	public static void GiveItem( string itemName )
 	{
