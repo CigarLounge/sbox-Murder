@@ -12,6 +12,9 @@ public partial class Player : AnimatedEntity
 	public Color32 AssignedColour { get; set; }
 
 	[Net]
+	public int CluesCollected { get; set; }
+
+	[Net]
 	public string SteamName { get; private set; }
 
 	public CameraMode Camera

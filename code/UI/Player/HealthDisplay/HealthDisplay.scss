@@ -1,0 +1,24 @@
+HealthDisplay
+{
+    aspect-ratio: 1;
+    height: 100px;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    justify-content: center;
+    align-items: center;
+
+    .name
+    {
+        position: absolute;
+        top: -50px;
+        font-size: 30px;
+        font-weight: 400;
+    }
+
+    .clues-collected
+    {
+        font-size: 40px;
+        font-weight: bold;
+    }
+}
