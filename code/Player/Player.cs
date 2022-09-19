@@ -257,6 +257,8 @@ public partial class Player : AnimatedEntity
 			return;
 
 		trace.Surface.DoFootstep( this, trace, foot, volume );
+		if ( (Local.Pawn as Player).Role == Role.Murderer )
+			Decal.Place( ResourceLibrary.Get<DecalDefinition>( "decals/bullethole.decal" ), trace, AssignedColour );
 	}
 
 	public float FootstepVolume()
