@@ -1,4 +1,3 @@
-using System;
 using Sandbox;
 using Sandbox.UI;
 
@@ -10,28 +9,31 @@ public class HealthDisplay : Panel
 	private NameDisplay NameDisplay { get; set; }
 	private Label CluesCollected { get; init; }
 
+	private bool _isShowing;
+
 	public override void Tick()
 	{
 		if ( Local.Pawn is not Player player )
 			return;
 
-		var isEnabled = player.IsSpectatingPlayer || player.IsAlive();
-		if ( isEnabled )
+		_isShowing = (player.Role != Role.None && player.IsAlive()) || player.IsSpectatingPlayer;
+		if ( _isShowing )
 		{
+			CluesCollected.Text = $"{player.CluesCollected}";
 			NameDisplay ??= AddChild<NameDisplay>();
 		}
 		else
 		{
+			CluesCollected.Text = string.Empty;
+
 			NameDisplay?.Delete();
 			NameDisplay = null;
 		}
-
-		CluesCollected.Text = isEnabled ? $"{player.CluesCollected}" : string.Empty;
 	}
 
 	public override void DrawBackground( ref RenderState state )
 	{
-		if ( Local.Pawn is not Player player || !player.CurrentPlayer.IsAlive() )
+		if ( Local.Pawn is not Player player || !_isShowing )
 			return;
 
 		base.DrawBackground( ref state );
