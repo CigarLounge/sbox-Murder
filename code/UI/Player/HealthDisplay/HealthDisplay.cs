@@ -9,15 +9,13 @@ public class HealthDisplay : Panel
 	private NameDisplay NameDisplay { get; set; }
 	private Label CluesCollected { get; init; }
 
-	private bool _isShowing;
-
 	public override void Tick()
 	{
 		if ( Local.Pawn is not Player player )
 			return;
 
-		_isShowing = (player.Role != Role.None && player.IsAlive()) || player.IsSpectatingPlayer;
-		if ( _isShowing )
+		this.Enabled( (player.Role != Role.None && player.IsAlive()) || player.IsSpectatingPlayer );
+		if ( this.IsEnabled() )
 		{
 			CluesCollected.Text = $"{player.CluesCollected}";
 			NameDisplay ??= AddChild<NameDisplay>();
@@ -33,7 +31,7 @@ public class HealthDisplay : Panel
 
 	public override void DrawBackground( ref RenderState state )
 	{
-		if ( Local.Pawn is not Player player || !_isShowing )
+		if ( Local.Pawn is not Player player || !this.IsEnabled() )
 			return;
 
 		base.DrawBackground( ref state );
