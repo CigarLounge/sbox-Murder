@@ -1,3 +1,4 @@
+using System;
 using Sandbox;
 using Sandbox.UI;
 
@@ -14,7 +15,8 @@ public class HealthDisplay : Panel
 		if ( Local.Pawn is not Player player )
 			return;
 
-		if ( player.IsSpectatingPlayer || player.IsAlive() )
+		var isEnabled = player.IsSpectatingPlayer || player.IsAlive();
+		if ( isEnabled )
 		{
 			NameDisplay ??= AddChild<NameDisplay>();
 		}
@@ -24,30 +26,29 @@ public class HealthDisplay : Panel
 			NameDisplay = null;
 		}
 
-		CluesCollected.Text = $"{player.CluesCollected}";
+		CluesCollected.Text = isEnabled ? $"{player.CluesCollected}" : string.Empty;
 	}
-
-	// TODO: Wait for this fix https://github.com/Facepunch/sbox-issues/issues/2335
-	private float BorderWidth { get; set; } = 5;
-	private float EdgeGap { get; set; } = 2;
-	private int Points { get; set; } = 64;
-	private float FillStart { get; set; } = .5f;
-	private float FillAmount { get; set; } = 0.37f;
-	private Color TrackColor { get; set; } = Color.White;
-	private Color FillColor { get; set; } = Color.Blue;
 
 	public override void DrawBackground( ref RenderState state )
 	{
+		if ( Local.Pawn is not Player player || !player.CurrentPlayer.IsAlive() )
+			return;
+
 		base.DrawBackground( ref state );
 
 		var center = Box.Rect.Center;
-		var radius = Box.Rect.Width * .5f;
 		var draw = Render.Draw2D;
 
-		draw.Color = TrackColor;
-		draw.CircleEx( center, radius, radius - BorderWidth, Points );
+		// TODO: Wait for this fix https://github.com/Facepunch/sbox-issues/issues/2335
+		draw.Material = Material.UI.Basic;
 
-		draw.Color = FillColor;
-		draw.CircleEx( center, radius - EdgeGap, radius - BorderWidth + EdgeGap, Points, FillStart * 360, (FillStart + FillAmount) * 360 );
+		var outlineRadius = Box.Rect.Width * 0.5f;
+		draw.Color = Color.Black.WithAlpha( 0.9f );
+		draw.Circle( center, outlineRadius );
+
+		var radius = Box.Rect.Width * .4f;
+		var healthPercentage = player.CurrentPlayer.Health / Player.MaxHealth;
+		draw.Color = player.AssignedColour;
+		draw.Circle( center, radius * healthPercentage );
 	}
 }
