@@ -254,7 +254,7 @@ public partial class Player : AnimatedEntity
 		trace.Surface.DoFootstep( this, trace, foot, volume );
 		//if ( (Local.Pawn as Player).Role == Role.Murderer )
 		var decal = ResourceLibrary.Get<DecalDefinition>( "decals/footprint.decal" );
-		Decal.Place( decal, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal ), AssignedColour );
+		Decal.Place( decal, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal + EyeRotation.Backward / 100 ), AssignedColour );
 	}
 
 	public float FootstepVolume()

@@ -29,11 +29,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// </summary>
 	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
 
-	/// <summary>
-	/// The text that will show up in the inventory slot.
-	/// </summary>
-	public virtual string SlotText => string.Empty;
-
 	public bool IsActive => Owner?.ActiveCarriable == this;
 
 	public override void Spawn()
@@ -92,7 +87,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		if ( Owner is not null )
 			return false;
 
-		if ( carrier == PreviousOwner && TimeSinceDropped < 1f )
+		if ( carrier == PreviousOwner && TimeSinceDropped <= 1f )
 			return false;
 
 		return true;
