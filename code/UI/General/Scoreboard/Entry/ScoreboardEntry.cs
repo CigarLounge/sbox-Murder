@@ -1,6 +1,5 @@
 using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
 
 namespace Murder.UI;
 
@@ -11,7 +10,6 @@ public class ScoreboardEntry : Panel
 	private Label PlayerName { get; init; }
 	private Label Ping { get; init; }
 
-	public LifeState PlayerStatus;
 	private readonly Client _client;
 
 	public ScoreboardEntry( Panel parent, Client client ) : base( parent )

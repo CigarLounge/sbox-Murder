@@ -49,11 +49,11 @@ ScoreboardGroup
         }
     }
 
-    &.dead
+    &.spectators
     {
         .group-title-panel
         {
-            background-color: $dead;
+            background-color: $spectator;
         }
     }
 
