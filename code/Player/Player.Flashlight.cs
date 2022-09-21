@@ -27,6 +27,7 @@ public partial class Player
 		if ( _worldLight.IsValid() )
 		{
 			var transform = GetAttachment( "eyes" ) ?? default;
+			transform.Position += EyeRotation.Forward * 5f;
 			_worldLight.Transform = transform;
 
 			if ( ActiveCarriable.IsValid() )
