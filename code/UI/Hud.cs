@@ -24,8 +24,8 @@ public class Hud : RootPanel
 		AddChild<RoundTimer>();
 		AddChild<VoiceList>();
 		AddChild<Scoreboard>();
+		AddChild<NameHealthWrapper>();
 		AddChild<RoleDisplay>();
-		AddChild<HealthDisplay>();
 		AddChild<Inventory>();
 		AddChild<FullScreenHintMenu>();
 		AddChild<DamageIndicator>();
