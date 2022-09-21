@@ -87,7 +87,7 @@ public class PreRound : BaseState
 		{
 			player.Role = Role.Bystander;
 			player.AssignedName = Game.Names[index++];
-			player.AssignedColour = Color.Random;
+			player.AssignedColour = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 
 			if ( index > Game.Names.Count )
 				index = 0;
