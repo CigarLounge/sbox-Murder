@@ -14,4 +14,10 @@ Nameplate
     {
         font-size: 30px;
     }
+
+    &:outro
+    {
+        transition: opacity 2s linear;
+        opacity: 0;
+    }
 }
