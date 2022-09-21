@@ -26,7 +26,7 @@ public class Nameplate : EntityHintPanel
 			return;
 
 		Name.Text = _player.AssignedName;
-		Name.Style.FontColor = _player.AssignedColour;
+		Name.Style.FontColor = _player.AssignedColor;
 
 		var hinter = ((Player)Local.Pawn).CurrentPlayer;
 		DisguiseHint.Enabled( !_player.IsAlive() && hinter.CanUse( _player.Corpse ) );

@@ -15,10 +15,10 @@ public class NameHealthDisplay : Panel
 			return;
 
 		Name.Text = player.CurrentPlayer.AssignedName;
-		Name.Style.FontColor = player.CurrentPlayer.AssignedColour;
+		Name.Style.FontColor = player.CurrentPlayer.AssignedColor;
 
 		RadialHealth.Radial.Style.Height = Length.Percent( player.CurrentPlayer.Health / Player.MaxHealth * 200 );
-		RadialHealth.Radial.Style.BackgroundColor = player.CurrentPlayer.AssignedColour;
+		RadialHealth.Radial.Style.BackgroundColor = player.CurrentPlayer.AssignedColor;
 
 		RadialHealth.CluesCollected.Text = $"{player.CurrentPlayer.CluesCollected}";
 	}

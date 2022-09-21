@@ -5,8 +5,8 @@ namespace Murder;
 
 public partial class Player
 {
-	[Net, Local]
-	public bool IsForcedSpectator { get; private set; } = false;
+	[Net]
+	public bool IsForcedSpectator { get; private set; }
 
 	private Player _spectatedPlayer;
 	public Player CurrentPlayer
@@ -18,7 +18,6 @@ public partial class Player
 		}
 	}
 
-	public bool IsSpectator => LifeState == LifeState.Dead;
 	public bool IsSpectatingPlayer => _spectatedPlayer.IsValid();
 	private int _spectatorIndex = 0;
 
