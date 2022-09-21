@@ -4,6 +4,20 @@ namespace Murder;
 
 public partial class Player
 {
+	[Net]
+	public string AssignedName { get; set; }
+
+	[Net]
+	public Color32 AssignedColor { get; set; }
+
+	[Net]
+	public int CluesCollected { get; set; }
+
+	[Net]
+	public string SteamName { get; private set; }
+
+	public Corpse Corpse { get; set; }
+
 	private Role _role;
 	public Role Role
 	{
@@ -22,6 +36,14 @@ public partial class Player
 
 			Event.Run( GameEvent.Player.RoleChanged, this, oldRole );
 		}
+	}
+
+	public void ResetInformation()
+	{
+		AssignedName = null;
+		AssignedColor = default;
+		CluesCollected = 0;
+		Role = Role.None;
 	}
 
 	/// <summary>
