@@ -63,6 +63,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 		base.ClientSpawn();
 
 		TakeDecalsFrom( Player );
+		Player.Corpse = this;
 	}
 
 	private void ApplyForceToBone( Vector3 force, int forceBone )
@@ -89,10 +90,11 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 
 	bool IUse.OnUse( Entity user )
 	{
-		var player = (Player)user;
+		var murderer = (Player)user;
 
-		player.AssignedName = Player.AssignedName;
-		player.AssignedColour = Player.AssignedColour;
+		murderer.AssignedName = Player.AssignedName;
+		murderer.AssignedColour = Player.AssignedColour;
+		murderer.CluesCollected = Player.CluesCollected;
 
 		return false;
 	}
