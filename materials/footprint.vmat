@@ -1,0 +1,26 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "projected_decals.vfx"
+
+	//---- Ambient Occlusion ----
+	TextureAmbientOcclusion "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Color ----
+	TextureColor "materials/footprint_color.tga"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+
+	//---- Lighting ----
+	g_flDirectionalLightmapMinZ "0.050"
+	g_flDirectionalLightmapStrength "1.000"
+	g_flGlossiness "0.500"
+
+	//---- Metalness ----
+	TextureMetalness "[0.000000 0.000000 0.000000 0.000000]"
+
+	//---- Translucent ----
+	TextureTranslucency "materials/footprint_trans.tga"
+}
