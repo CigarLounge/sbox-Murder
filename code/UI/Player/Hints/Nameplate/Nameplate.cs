@@ -10,6 +10,7 @@ public class Nameplate : EntityHintPanel
 	private readonly Player _player;
 
 	private Label Name { get; init; }
+	private Panel DisguiseHint { get; init; }
 
 	public Nameplate( Player player )
 	{
@@ -26,5 +27,15 @@ public class Nameplate : EntityHintPanel
 
 		Name.Text = _player.AssignedName;
 		Name.Style.FontColor = _player.AssignedColour;
+
+		var hinter = ((Player)Local.Pawn).CurrentPlayer;
+		DisguiseHint.Enabled( !_player.IsAlive() && hinter.CanUse( _player.Corpse ) );
+	}
+
+	public override void Delete( bool immediate = false )
+	{
+		DisguiseHint.Delete( true );
+
+		base.Delete( immediate );
 	}
 }
