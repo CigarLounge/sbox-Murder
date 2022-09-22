@@ -20,15 +20,12 @@ public class Hud : RootPanel
 	{
 		AddChild<HintDisplay>();
 		AddChild<ChatBox>();
-		AddChild<VoiceChatDisplay>();
-		AddChild<RoundTimer>();
-		AddChild<VoiceList>();
+		AddChild<VoiceChat>();
 		AddChild<Scoreboard>();
 		AddChild<NameHealthWrapper>();
 		AddChild<RoleDisplay>();
 		AddChild<InventoryWrapper>();
 		AddChild<FullScreenHintMenu>();
-		AddChild<DamageIndicator>();
 	}
 
 	[Event.Hotload]
