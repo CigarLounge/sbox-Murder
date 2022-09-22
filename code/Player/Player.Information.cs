@@ -1,14 +1,22 @@
 using Sandbox;
+using System.Collections.Generic;
 
 namespace Murder;
 
 public partial class Player
 {
-	[Net]
-	public string AssignedName { get; set; }
+	public static readonly List<string> Names = new()
+	{
+		"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
+		"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
+		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
+	};
 
 	[Net]
-	public Color32 AssignedColor { get; set; }
+	public string BystanderName { get; set; }
+
+	[Net]
+	public Color Color { get; set; }
 
 	[Net]
 	public int CluesCollected { get; set; }
@@ -40,8 +48,8 @@ public partial class Player
 
 	public void ResetInformation()
 	{
-		AssignedName = null;
-		AssignedColor = default;
+		BystanderName = null;
+		Color = default;
 		CluesCollected = 0;
 		Role = Role.None;
 	}

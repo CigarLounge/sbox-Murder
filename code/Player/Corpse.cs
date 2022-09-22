@@ -92,10 +92,10 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		var murderer = (Player)user;
 
-		murderer.AssignedName = Player.AssignedName;
-		murderer.AssignedColor = Player.AssignedColor;
+		murderer.BystanderName = Player.BystanderName;
+		murderer.Color = Player.Color;
 		murderer.CluesCollected = Player.CluesCollected;
-		murderer.ColoredClothing.RenderColor = Player.AssignedColor;
+		murderer.ColoredClothing.RenderColor = Player.Color;
 
 		return false;
 	}

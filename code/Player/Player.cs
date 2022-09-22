@@ -35,6 +35,7 @@ public partial class Player : AnimatedEntity
 		Tags.Add( "solid" );
 
 		SetModel( "models/citizen/citizen.vmdl" );
+		DressPlayer();
 
 		Health = 0;
 		LifeState = LifeState.Respawnable;
@@ -82,7 +83,6 @@ public partial class Player : AnimatedEntity
 
 			CreateHull();
 			CreateFlashlight();
-			DressPlayer();
 			ResetInterpolation();
 
 			Event.Run( GameEvent.Player.Spawned, this );
@@ -245,7 +245,7 @@ public partial class Player : AnimatedEntity
 		if ( volume < 5 )
 			return;
 
-		Decal.Place( Footprint, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), AssignedColor );
+		Decal.Place( Footprint, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), Color );
 	}
 
 	public float FootstepVolume()
