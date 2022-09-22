@@ -14,11 +14,11 @@ public class NameHealthDisplay : Panel
 		if ( Local.Pawn is not Player player )
 			return;
 
-		Name.Text = player.CurrentPlayer.AssignedName;
-		Name.Style.FontColor = player.CurrentPlayer.AssignedColor;
+		Name.Text = player.CurrentPlayer.BystanderName;
+		Name.Style.FontColor = player.CurrentPlayer.Color;
 
 		RadialHealth.Radial.Style.Height = Length.Percent( player.CurrentPlayer.Health / Player.MaxHealth * 200 );
-		RadialHealth.Radial.Style.BackgroundColor = player.CurrentPlayer.AssignedColor;
+		RadialHealth.Radial.Style.BackgroundColor = player.CurrentPlayer.Color;
 
 		RadialHealth.CluesCollected.Text = $"{player.CurrentPlayer.CluesCollected}";
 	}

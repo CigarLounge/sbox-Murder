@@ -21,7 +21,7 @@ public partial class MapVotePanel : Panel
 			if ( panel is FullScreenHintMenu )
 				continue;
 
-			if ( panel is not ChatBox and not VoiceChatDisplay )
+			if ( panel is not ChatBox and not VoiceChat )
 				panel.Delete( true );
 		}
 
@@ -50,7 +50,7 @@ public partial class MapVotePanel : Panel
 
 	public override void Tick()
 	{
-		var mapSelectionState = Game.Current.State as MapSelectionState;
+		var mapSelectionState = (MapSelectionState)Game.Current.State;
 
 		TimeText.Text = mapSelectionState.TimeLeftFormatted;
 

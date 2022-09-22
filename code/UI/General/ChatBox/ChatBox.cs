@@ -66,7 +66,7 @@ public partial class ChatBox : Panel
 
 	public void AddEntry( string name, string message, string classes = "" )
 	{
-		var entry = new ChatEntry( name, message );
+		var entry = new ChatBoxEntry( name, message );
 		if ( !classes.IsNullOrEmpty() )
 			entry.AddClass( classes );
 		EntryCanvas.AddChild( entry );
@@ -74,7 +74,7 @@ public partial class ChatBox : Panel
 
 	public void AddEntry( string name, string message, Color? color )
 	{
-		var entry = new ChatEntry( name, message, color );
+		var entry = new ChatBoxEntry( name, message, color );
 		EntryCanvas.AddChild( entry );
 	}
 
@@ -112,7 +112,7 @@ public partial class ChatBox : Panel
 
 		if ( !player.IsAlive() )
 		{
-			var clients = Game.Current.State is InProgress ? Utils.GetDeadClients() : Client.All;
+			var clients = Game.Current.State is GameplayState ? Utils.GetDeadClients() : Client.All;
 			AddChat( To.Multiple( clients ), player.Client.Name, message, Channel.Spectator );
 			return;
 		}

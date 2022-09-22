@@ -4,14 +4,14 @@ using Sandbox.UI;
 namespace Murder.UI;
 
 [UseTemplate]
-public class ChatEntry : Panel
+public class ChatBoxEntry : Panel
 {
-	public Label Name { get; init; }
-	public Label Message { get; init; }
+	private Label Name { get; init; }
+	private Label Message { get; init; }
 
 	private RealTimeSince _timeSinceCreation;
 
-	public ChatEntry( string name, string message, Color? color = null )
+	public ChatBoxEntry( string name, string message, Color? color = null )
 	{
 		_timeSinceCreation = 0;
 		Name.Text = name;
@@ -23,9 +23,8 @@ public class ChatEntry : Panel
 
 	public override void Tick()
 	{
-		base.Tick();
-
-		if ( _timeSinceCreation < 8 ) return;
+		if ( _timeSinceCreation < 8 )
+			return;
 
 		AddClass( "faded" );
 	}
