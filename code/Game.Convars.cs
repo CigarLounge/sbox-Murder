@@ -5,15 +5,6 @@ namespace Murder;
 public partial class Game
 {
 	#region Round
-	[ConVar.Server( "murder_preround_time", Help = "The length of the preround time.", Saved = true )]
-	public static int PreRoundTime { get; set; } = 20;
-
-	[ConVar.Server( "murder_inprogress_time", Help = "The length of the in progress round time.", Saved = true )]
-	public static int InProgressTime { get; set; } = 300;
-
-	[ConVar.Server( "murder_inprogress_secs_per_death", Help = "The number of seconds to add to the in progress round timer when someone dies.", Saved = true )]
-	public static int InProgressSecondsPerDeath { get; set; } = 15;
-
 	[ConVar.Server( "murder_postround_time", Help = "The length of the postround time.", Saved = true )]
 	public static int PostRoundTime { get; set; } = 15;
 

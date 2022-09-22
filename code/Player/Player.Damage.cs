@@ -118,7 +118,7 @@ public partial class Player
 
 		if ( info.Attacker is Player attacker && attacker != this )
 		{
-			if ( Game.Current.State is not InProgress and not PostRound )
+			if ( Game.Current.State is not GameplayState and not PostRound )
 				return;
 		}
 

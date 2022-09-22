@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 namespace Murder;
 
-public partial class MapSelectionState : BaseState
+public sealed partial class MapSelectionState : BaseState
 {
 	[Net]
 	public IDictionary<Client, string> Votes { get; private set; }
 
-	public override string Name { get; } = "Map Selection";
 	public override int Duration => Game.MapSelectionTime;
 
 	public const string MapsFile = "maps.txt";
