@@ -3,15 +3,15 @@ using Sandbox.UI;
 using System.Linq;
 
 namespace Murder.UI;
-
+/*
 [UseTemplate]
 public class PostRoundPopup : Panel
 {
-	public static PostRoundPopup Instance { get; private set; }
+	private static PostRoundPopup _instance;
 	private Label Header { get; init; }
 	private Label Content { get; init; }
 
-	public PostRoundPopup() => Instance = this;
+	public PostRoundPopup() => _instance = this;
 
 	[GameEvent.Round.End]
 	private static void DisplayWinner( Role winningRole )
@@ -21,16 +21,17 @@ public class PostRoundPopup : Panel
 
 		Local.Hud.AddChild( new PostRoundPopup() );
 
-		Instance.Header.Text = winningRole == Role.None ? "IT'S A TIE!" : $"THE {winningRole.GetTitle()} WIN!";
-		Instance.Header.Style.FontColor = winningRole.GetColor();
+		_instance.Header.Text = winningRole == Role.None ? "IT'S A TIE!" : $"THE {winningRole.GetTitle()} WIN!";
+		_instance.Header.Style.FontColor = winningRole.GetColor();
 
-		Instance.Content.Text = $"The murderer was {Role.Murderer.GetPlayers().First().SteamName}";
+		_instance.Content.Text = $"The murderer was {Role.Murderer.GetPlayers().First().SteamName}";
 	}
 
 	[Event.Entity.PostCleanup]
 	private void Close()
 	{
 		Delete();
-		Instance = null;
+		_instance = null;
 	}
 }
+*/
