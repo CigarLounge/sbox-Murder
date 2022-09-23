@@ -3,9 +3,12 @@ using System.Collections.Generic;
 
 namespace Murder;
 
-public sealed class GameplayState : BaseState
+public sealed partial class GameplayState : BaseState
 {
 	private readonly List<Player> _alivePlayers = new();
+
+	// This is used for freeze time.
+	public override int Duration => 5;
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -29,22 +32,23 @@ public sealed class GameplayState : BaseState
 	{
 		MapHandler.Cleanup();
 
-		if ( Host.IsServer )
+		if ( !Host.IsServer )
+			return;
+
+		foreach ( var client in Client.All )
 		{
-			foreach ( var client in Client.All )
-			{
-				var player = (Player)client.Pawn;
+			var player = (Player)client.Pawn;
 
-				player.Respawn();
+			player.Respawn();
 
-				if ( !player.IsForcedSpectator )
-					_alivePlayers.Add( player );
-			}
-
-			AssignRoles();
+			if ( !player.IsForcedSpectator )
+				_alivePlayers.Add( player );
 		}
 
+		AssignRoles();
+
 		Event.Run( GameEvent.Round.Start );
+		RunEvent();
 	}
 
 	private bool IsRoundOver()
@@ -89,8 +93,6 @@ public sealed class GameplayState : BaseState
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
-
-			player.SendRole( To.Everyone );
 		}
 	}
 
@@ -103,5 +105,12 @@ public sealed class GameplayState : BaseState
 		}
 
 		return false;
+	}
+
+	[ClientRpc]
+	public static void RunEvent()
+	{
+		Assert.NotNull( Game.Current.State as GameplayState );
+		Event.Run( GameEvent.Round.Start );
 	}
 }
