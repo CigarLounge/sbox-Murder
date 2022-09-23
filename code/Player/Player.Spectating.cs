@@ -50,7 +50,7 @@ public partial class Player
 			camera.OnUpdateSpectatedPlayer( CurrentPlayer );
 	}
 
-	public void MakeSpectator( bool useRagdollCamera = true )
+	public void MakeSpectator( bool useRagdollCamera = false )
 	{
 		Client.VoiceStereo = true;
 		Controller = null;

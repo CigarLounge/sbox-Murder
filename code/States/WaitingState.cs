@@ -12,7 +12,16 @@ public class WaitingState : BaseState
 
 	protected override void OnStart()
 	{
-		if ( Game.Current.TotalRoundsPlayed != 0 )
-			MapHandler.Cleanup();
+		if ( Game.Current.TotalRoundsPlayed == 0 )
+			return;
+
+		MapHandler.Cleanup();
+
+		foreach ( var client in Client.All )
+		{
+			var player = (Player)client.Pawn;
+
+			player.MakeSpectator();
+		}
 	}
 }

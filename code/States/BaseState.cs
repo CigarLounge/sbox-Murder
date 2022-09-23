@@ -35,7 +35,7 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerKilled( Player player )
 	{
-		player.MakeSpectator();
+		player.MakeSpectator( true );
 	}
 
 	public virtual void OnPlayerJoin( Player player ) { }

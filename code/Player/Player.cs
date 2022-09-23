@@ -91,7 +91,7 @@ public partial class Player : AnimatedEntity
 		else
 		{
 			LifeState = LifeState.Dead;
-			MakeSpectator( false );
+			MakeSpectator();
 		}
 
 		ClientRespawn( this );
