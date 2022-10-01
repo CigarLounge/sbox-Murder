@@ -13,10 +13,10 @@ public class VoiceChatEntry : Panel
 	private Label Name { get; init; }
 	private Image Avatar { get; init; }
 
-	
+
 	private readonly Client _client;
 	private float _targetVoiceLevel = 0;
-	private float _voiceLevel = 0.5f;	
+	private float _voiceLevel = 0.5f;
 	private readonly float _voiceTimeout = 0.1f;
 	private readonly WorldPanel _worldPanel;
 

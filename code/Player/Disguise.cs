@@ -12,7 +12,7 @@ public sealed class Disguise : EntityComponent<Player>
 	private Player _murderer;
 
 	public Disguise()
-	{	
+	{
 		ShouldTransmit = false;
 	}
 
