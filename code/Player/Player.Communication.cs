@@ -30,12 +30,7 @@ public partial class Player
 	[ConVar.ClientData( "mute_filter" )]
 	public MuteFilter MuteFilter { get; set; } = MuteFilter.None;
 
-	/// <summary>
-	/// Clientside only.
-	/// </summary>
-	public ColorGroup TagGroup { get; set; }
-
-	public bool CanHearSpectators => (!this.IsAlive() || Game.Current.State is not InProgress) && MuteFilter != MuteFilter.Spectators && MuteFilter != MuteFilter.All;
+	public bool CanHearSpectators => (!this.IsAlive() || Game.Current.State is not GameplayState) && MuteFilter != MuteFilter.Spectators && MuteFilter != MuteFilter.All;
 	public bool CanHearAlivePlayers => MuteFilter != MuteFilter.AlivePlayers && MuteFilter != MuteFilter.All;
 
 	public static void ToggleMute()

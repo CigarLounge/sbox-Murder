@@ -35,7 +35,7 @@ ChatBox
         overflow: scroll;
     }
 
-    tabtextentry
+    TabTextEntry
     {
         border-width: 2px;
     }
@@ -54,7 +54,7 @@ ChatBox
     }
 }
 
-ChatEntry 
+ChatBoxEntry 
 {
     border-radius: 4px;
     flex-shrink: 0;

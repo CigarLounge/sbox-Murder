@@ -59,6 +59,9 @@ public partial class WalkController : PawnController
 
 	private float GetWishSpeed()
 	{
+		if ( Game.Current.State is GameplayState state && !state.TimeLeft )
+			return 0;
+
 		var ws = Duck.GetWishSpeed();
 		if ( ws >= 0 )
 			return ws;

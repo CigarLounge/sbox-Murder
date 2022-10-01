@@ -47,7 +47,7 @@ public partial class Game
 	[ConCmd.Admin( Name = "murder_setrole" )]
 	public static void SetRole( Role role )
 	{
-		if ( Game.Current.State is not InProgress )
+		if ( Game.Current.State is not GameplayState )
 			return;
 
 		var player = ConsoleSystem.Caller.Pawn as Player;
@@ -60,7 +60,7 @@ public partial class Game
 	[ConCmd.Admin( Name = "murder_force_restart" )]
 	public static void ForceRestart()
 	{
-		Game.Current.ChangeState( new PreRound() );
+		Game.Current.ChangeState( new GameplayState() );
 	}
 
 	[ConCmd.Server( Name = "murder_forcespec" )]

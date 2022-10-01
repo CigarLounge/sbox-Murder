@@ -13,23 +13,32 @@ public class VoiceChatEntry : Panel
 	private Label Name { get; init; }
 	private Image Avatar { get; init; }
 
-	private readonly WorldPanel _worldPanel;
+	
 	private readonly Client _client;
-	private float _voiceLevel = 0.5f;
 	private float _targetVoiceLevel = 0;
+	private float _voiceLevel = 0.5f;	
 	private readonly float _voiceTimeout = 0.1f;
+	private readonly WorldPanel _worldPanel;
 
 	RealTimeSince _timeSincePlayed;
 
 	public VoiceChatEntry( Panel parent, Client client ) : base( parent )
 	{
-		Parent = parent;
-
 		_client = client;
 		Friend = new( client.PlayerId );
 
-		Avatar.SetTexture( $"avatar:{client.PlayerId}" );
-		Name.Text = Friend.Name;
+		var player = (Player)client.Pawn;
+
+		if ( player.IsAlive() )
+		{
+			Avatar.Style.BackgroundColor = player.Color;
+			Name.Text = player.BystanderName;
+		}
+		else
+		{
+			Avatar.SetTexture( $"avatar:{client.PlayerId}" );
+			Name.Text = Friend.Name;
+		}
 
 		_worldPanel = new WorldPanel();
 		_worldPanel.StyleSheet.Load( "/UI/General/VoiceChat/VoiceChatEntry.scss" );
@@ -42,7 +51,6 @@ public class VoiceChatEntry : Panel
 	{
 		_timeSincePlayed = 0;
 		_targetVoiceLevel = level;
-		Name.Text = Friend.Name;
 
 		if ( _client.IsValid() )
 			SetClass( "dead", !_client.Pawn.IsAlive() );

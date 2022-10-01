@@ -92,15 +92,16 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		var murderer = (Player)user;
 
-		murderer.AssignedName = Player.AssignedName;
-		murderer.AssignedColour = Player.AssignedColour;
-		murderer.CluesCollected = Player.CluesCollected;
+		murderer.Components.GetOrCreate<Disguise>().SetPlayer( Player );
 
 		return false;
 	}
 
 	bool IUse.IsUsable( Entity user )
 	{
+		if ( Game.Current.State is not GameplayState )
+			return false;
+
 		if ( user is not Player player )
 			return false;
 

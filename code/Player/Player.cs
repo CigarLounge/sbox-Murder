@@ -5,18 +5,6 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
-	[Net]
-	public string AssignedName { get; set; }
-
-	[Net]
-	public Color32 AssignedColour { get; set; }
-
-	[Net]
-	public int CluesCollected { get; set; }
-
-	[Net]
-	public string SteamName { get; private set; }
-
 	public CameraMode Camera
 	{
 		get => Components.Get<CameraMode>();
@@ -31,15 +19,10 @@ public partial class Player : AnimatedEntity
 		}
 	}
 
-	public Corpse Corpse { get; set; }
-
 	public Player( Client client ) : this()
 	{
 		client.Pawn = this;
 		SteamName = client.Name;
-
-		ClothingContainer.LoadFromClient( client );
-		_avatarClothes = new( ClothingContainer.Clothing );
 	}
 
 	public Player() { }
@@ -52,6 +35,7 @@ public partial class Player : AnimatedEntity
 		Tags.Add( "solid" );
 
 		SetModel( "models/citizen/citizen.vmdl" );
+		DressPlayer();
 
 		Health = 0;
 		LifeState = LifeState.Respawnable;
@@ -77,17 +61,18 @@ public partial class Player : AnimatedEntity
 		DropCarriable()?.Delete();
 		DeleteFlashlight();
 		ResetDamageData();
+		ResetInformation();
 		Client.SetValue( Strings.Spectator, IsForcedSpectator );
-		Role = Role.None;
 
 		Velocity = Vector3.Zero;
 		WaterLevel = 0;
 
 		if ( !IsForcedSpectator )
 		{
-			Health = MaxHealth;
 			Client.VoiceStereo = true;
+			Health = MaxHealth;
 			LifeState = LifeState.Alive;
+			TimeUntilClean = 0;
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -98,7 +83,6 @@ public partial class Player : AnimatedEntity
 
 			CreateHull();
 			CreateFlashlight();
-			DressPlayer();
 			ResetInterpolation();
 
 			Event.Run( GameEvent.Player.Spawned, this );
@@ -107,7 +91,7 @@ public partial class Player : AnimatedEntity
 		else
 		{
 			LifeState = LifeState.Dead;
-			MakeSpectator( false );
+			MakeSpectator();
 		}
 
 		ClientRespawn( this );
@@ -128,7 +112,7 @@ public partial class Player : AnimatedEntity
 			MuteFilter = MuteFilter.None;
 		}
 
-		if ( IsSpectator )
+		if ( IsForcedSpectator )
 			return;
 
 		CreateFlashlight();
@@ -223,6 +207,8 @@ public partial class Player : AnimatedEntity
 	[Net, Predicted]
 	public PawnAnimator Animator { get; private set; }
 
+	public static DecalDefinition Footprint;
+
 	TimeSince _timeSinceLastFootstep;
 
 	/// <summary>
@@ -259,8 +245,7 @@ public partial class Player : AnimatedEntity
 		if ( volume < 5 )
 			return;
 
-		var decal = ResourceLibrary.Get<DecalDefinition>( "decals/footprint.decal" );
-		Decal.Place( decal, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), AssignedColour );
+		Decal.Place( Footprint, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), Color );
 	}
 
 	public float FootstepVolume()

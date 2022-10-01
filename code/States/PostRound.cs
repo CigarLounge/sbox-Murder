@@ -1,5 +1,5 @@
-using System;
 using Sandbox;
+using System;
 
 namespace Murder;
 
@@ -8,7 +8,6 @@ public partial class PostRound : BaseState
 	[Net]
 	public Role WinningRole { get; private set; }
 
-	public override string Name { get; } = "Post";
 	public override int Duration => Game.PostRoundTime;
 
 	public PostRound() { }
@@ -16,11 +15,6 @@ public partial class PostRound : BaseState
 	public PostRound( Role winningRole )
 	{
 		WinningRole = winningRole;
-	}
-
-	public static void Load( Role winningTeam )
-	{
-		Game.Current.ForceStateChange( new PostRound( winningTeam ) );
 	}
 
 	protected override void OnStart()
@@ -37,6 +31,9 @@ public partial class PostRound : BaseState
 		shouldChangeMap = Game.Current.TotalRoundsPlayed >= Game.RoundLimit;
 		shouldChangeMap |= Game.Current.RTVCount >= MathF.Round( Client.All.Count * Game.RTVThreshold );
 
-		Game.Current.ChangeState( shouldChangeMap ? new MapSelectionState() : new PreRound() );
+		if ( shouldChangeMap )
+			Game.Current.ForceStateChange( new MapSelectionState() );
+		else
+			Game.Current.ChangeState( new GameplayState() );
 	}
 }

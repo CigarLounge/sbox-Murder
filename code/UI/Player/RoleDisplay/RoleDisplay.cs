@@ -10,13 +10,13 @@ public class RoleDisplay : Panel
 
 	public override void Tick()
 	{
-		var player = Local.Pawn as Player;
+		var player = ((Player)Local.Pawn).CurrentPlayer;
 
-		this.Enabled( player.CurrentPlayer.IsValid() && player.CurrentPlayer.IsAlive() );
+		this.Enabled( player.IsValid() && player.IsAlive() );
 		if ( !this.IsEnabled() )
 			return;
 
-		Role.Text = player.CurrentPlayer.Role.GetTitle();
-		Role.Style.FontColor = player.CurrentPlayer.Role.GetColor();
+		Role.Text = player.Role.GetTitle();
+		Role.Style.FontColor = player.Role.GetColor();
 	}
 }

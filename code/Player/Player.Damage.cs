@@ -3,33 +3,6 @@ using System;
 
 namespace Murder;
 
-public struct ColorGroup
-{
-	public Color Color;
-	public string Title;
-
-	public ColorGroup( string title, Color color )
-	{
-		Title = title;
-		Color = color;
-	}
-}
-
-public enum HitboxGroup
-{
-	None = -1,
-	Generic = 0,
-	Head = 1,
-	Chest = 2,
-	Stomach = 3,
-	LeftArm = 4,
-	RightArm = 5,
-	LeftLeg = 6,
-	RightLeg = 7,
-	Gear = 10,
-	Special = 11,
-}
-
 public partial class Player
 {
 	public const float MaxHealth = 100f;
@@ -46,24 +19,6 @@ public partial class Player
 	{
 		get => base.Health;
 		set => base.Health = Math.Clamp( value, 0, MaxHealth );
-	}
-
-	private static readonly ColorGroup[] _healthGroupList = new ColorGroup[]
-	{
-		new ColorGroup("Near Death", Color.FromBytes(246, 6, 6)),
-		new ColorGroup("Badly Wounded", Color.FromBytes(234, 129, 4)),
-		new ColorGroup("Wounded", Color.FromBytes(213, 202, 4)),
-		new ColorGroup("Hurt", Color.FromBytes(171, 231, 3)),
-		new ColorGroup("Healthy", Color.FromBytes(44, 233, 44))
-	};
-
-	public ColorGroup GetHealthGroup( float health )
-	{
-		if ( Health > MaxHealth )
-			return _healthGroupList[^1];
-
-		var index = (int)((health - 1f) / (MaxHealth / _healthGroupList.Length));
-		return _healthGroupList[index];
 	}
 
 	public override void OnKilled()
@@ -118,12 +73,9 @@ public partial class Player
 
 		if ( info.Attacker is Player attacker && attacker != this )
 		{
-			if ( Game.Current.State is not InProgress and not PostRound )
+			if ( Game.Current.State is not GameplayState and not PostRound )
 				return;
 		}
-
-		if ( info.Flags.HasFlag( DamageFlags.Bullet ) )
-			info.Damage *= GetBulletDamageMultipliers( ref info );
 
 		if ( info.Flags.HasFlag( DamageFlags.Blast ) )
 			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
@@ -141,20 +93,6 @@ public partial class Player
 
 		if ( Health <= 0f )
 			OnKilled();
-	}
-
-	private float GetBulletDamageMultipliers( ref DamageInfo info )
-	{
-		var damageMultiplier = 1f;
-
-		var hitboxGroup = (HitboxGroup)GetHitboxGroup( info.HitboxIndex );
-
-		if ( hitboxGroup == HitboxGroup.Head )
-			damageMultiplier *= 2f;
-		else if ( hitboxGroup >= HitboxGroup.LeftArm && hitboxGroup <= HitboxGroup.Gear )
-			damageMultiplier *= 0.55f;
-
-		return damageMultiplier;
 	}
 
 	private void ResetDamageData()

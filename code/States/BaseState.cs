@@ -7,11 +7,7 @@ public abstract partial class BaseState : BaseNetworkable
 	[Net]
 	public TimeUntil TimeLeft { get; protected set; }
 
-	[Net]
-	public bool HasStarted { get; private set; }
-
 	public virtual int Duration => 0;
-	public virtual string Name { get; }
 	public string TimeLeftFormatted => TimeLeft.Relative.TimerString();
 
 	private TimeUntil _nextSecondTime = 0f;
@@ -39,13 +35,10 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerKilled( Player player )
 	{
-		player.MakeSpectator();
+		player.MakeSpectator( true );
 	}
 
-	public virtual void OnPlayerJoin( Player player )
-	{
-		HasStarted = true;
-	}
+	public virtual void OnPlayerJoin( Player player ) { }
 
 	public virtual void OnPlayerLeave( Player player ) { }
 

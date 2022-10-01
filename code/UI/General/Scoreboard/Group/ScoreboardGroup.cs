@@ -6,25 +6,20 @@ namespace Murder.UI;
 [UseTemplate]
 public class ScoreboardGroup : Panel
 {
-	public readonly LifeState GroupStatus;
 	public int GroupMembers = 0;
 
 	private Label Title { get; init; }
 	private Panel Content { get; init; }
 
-	public ScoreboardGroup( Panel parent, LifeState GroupStatus ) : base( parent )
+	public ScoreboardGroup( Panel parent, bool spectators ) : base( parent )
 	{
-		this.GroupStatus = GroupStatus;
-		Title.Text = GroupStatus.ToString();
-		AddClass( GroupStatus.ToString() );
+		Title.Text = spectators ? "Spectators" : string.Empty;
+		AddClass( spectators ? "spectators" : "alive" );
 	}
 
 	public ScoreboardEntry AddEntry( Client client )
 	{
-		var scoreboardEntry = new ScoreboardEntry( Content, client )
-		{
-			PlayerStatus = GroupStatus
-		};
+		var scoreboardEntry = new ScoreboardEntry( Content, client );
 
 		scoreboardEntry.Update();
 

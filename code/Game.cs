@@ -19,13 +19,6 @@ public partial class Game : Sandbox.Game
 
 	public int RTVCount { get; set; }
 
-	public static readonly List<string> Names = new()
-	{
-		"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
-		"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
-		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
-	};
-
 	public Game()
 	{
 		Current = this;
@@ -68,8 +61,6 @@ public partial class Game : Sandbox.Game
 
 	public override void ClientJoined( Client client )
 	{
-		Event.Run( GameEvent.Client.Joined, client );
-
 		var player = new Player( client );
 
 		State.OnPlayerJoin( player );
@@ -79,7 +70,6 @@ public partial class Game : Sandbox.Game
 
 	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 	{
-		Event.Run( GameEvent.Client.Disconnected, client );
 		State.OnPlayerLeave( client.Pawn as Player );
 
 		UI.ChatBox.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
@@ -111,7 +101,7 @@ public partial class Game : Sandbox.Game
 
 	public override void OnVoicePlayed( Client client )
 	{
-		UI.VoiceChatDisplay.Instance?.OnVoicePlayed( client );
+		UI.VoiceChat.OnVoicePlayed( client );
 	}
 
 	public override void PostLevelLoaded()
@@ -127,23 +117,12 @@ public partial class Game : Sandbox.Game
 
 	private static void LoadResources()
 	{
-		Player.ClothingPresets.Add( new List<Clothing>() );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hat/balaclava/balaclava.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hair/eyebrows/eyebrows_black.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/jacket/longsleeve/longsleeve.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/gloves/tactical_gloves/tactical_gloves.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/trousers/smarttrousers/trousers.smart.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/vest/tactical_vest/models/tactical_vest.clothing" ) );
-		Player.ClothingPresets[0].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shoes/trainers/trainers.clothing" ) );
+		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hair/eyebrows/eyebrows_black.clothing" ) );
+		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/longsleeve/longsleeve.clothing" ) );
+		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/trousers/jeans/jeans_black.clothing" ) );
+		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shoes/trainers/trainers.clothing" ) );
 
-		Player.ClothingPresets.Add( new List<Clothing>() );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hat/balaclava/balaclava.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hair/eyebrows/eyebrows.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shirt/flannel_shirt/variations/blue_shirt/blue_shirt.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/gloves/tactical_gloves/tactical_gloves.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/trousers/cargopants/cargo_pants_army.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/vest/tactical_vest/models/tactical_vest.clothing" ) );
-		Player.ClothingPresets[1].Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shoes/trainers/trainers.clothing" ) );
+		Player.Footprint = ResourceLibrary.Get<DecalDefinition>( "decals/footprint.decal" );
 	}
 
 	private void OnStateChanged( BaseState oldState, BaseState newState )

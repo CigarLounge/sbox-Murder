@@ -45,27 +45,11 @@ ScoreboardGroup
     {
         .group-title-panel
         {
-            background-color: $alive;
+            background-color: $info;
         }
     }
 
-    &.dead
-    {
-        .group-title-panel
-        {
-            background-color: $dead;
-        }
-    }
-
-    &.missing
-    {
-        .group-title-panel
-        {
-            background-color: $missing;
-        }
-    }
-
-    &.spectator
+    &.spectators
     {
         .group-title-panel
         {

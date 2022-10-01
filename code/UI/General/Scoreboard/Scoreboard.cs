@@ -9,14 +9,14 @@ namespace Murder.UI;
 public class Scoreboard : Panel
 {
 	private readonly Dictionary<Client, ScoreboardEntry> _entries = new();
-	private readonly Dictionary<LifeState, ScoreboardGroup> _scoreboardGroups = new();
+	private readonly ScoreboardGroup[] _scoreboardGroups = new ScoreboardGroup[2];
 
 	private Panel Content { get; init; }
 
 	public Scoreboard()
 	{
-		AddScoreboardGroup( LifeState.Alive );
-		AddScoreboardGroup( LifeState.Dead );
+		_scoreboardGroups[0] = new ScoreboardGroup( Content, false );
+		_scoreboardGroups[1] = new ScoreboardGroup( Content, true );
 	}
 
 	public void AddClient( Client client )
@@ -37,7 +37,7 @@ public class Scoreboard : Panel
 			return;
 
 		var scoreboardGroup = GetScoreboardGroup( client );
-		if ( scoreboardGroup.GroupStatus != panel.PlayerStatus )
+		if ( scoreboardGroup != panel.Parent.Parent )
 		{
 			RemoveClient( client );
 			AddClient( client );
@@ -47,8 +47,8 @@ public class Scoreboard : Panel
 			panel.Update();
 		}
 
-		foreach ( var value in _scoreboardGroups.Values )
-			value.Style.Display = value.GroupMembers == 0 ? DisplayMode.None : DisplayMode.Flex;
+		foreach ( var group in _scoreboardGroups )
+			group.Enabled( group.GroupMembers != 0 );
 	}
 
 	private void RemoveClient( Client client )
@@ -56,7 +56,7 @@ public class Scoreboard : Panel
 		if ( !_entries.TryGetValue( client, out var panel ) )
 			return;
 
-		_scoreboardGroups.TryGetValue( panel.PlayerStatus, out var scoreboardGroup );
+		var scoreboardGroup = (ScoreboardGroup)panel.Parent.Parent;
 
 		if ( scoreboardGroup is not null )
 			scoreboardGroup.GroupMembers--;
@@ -67,8 +67,6 @@ public class Scoreboard : Panel
 
 	public override void Tick()
 	{
-		base.Tick();
-
 		if ( !IsVisible )
 			return;
 
@@ -91,17 +89,11 @@ public class Scoreboard : Panel
 			UpdateClient( client );
 	}
 
-	private ScoreboardGroup AddScoreboardGroup( LifeState someState )
-	{
-		var scoreboardGroup = new ScoreboardGroup( Content, someState );
-		_scoreboardGroups.Add( someState, scoreboardGroup );
-		return scoreboardGroup;
-	}
-
 	private ScoreboardGroup GetScoreboardGroup( Client client )
 	{
 		var player = client.Pawn as Player;
-		return _scoreboardGroups[player.LifeState];
+
+		return _scoreboardGroups[player.IsForcedSpectator ? 1 : 0];
 	}
 
 	[Event.BuildInput]
