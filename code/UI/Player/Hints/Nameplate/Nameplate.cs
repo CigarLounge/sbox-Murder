@@ -29,7 +29,7 @@ public class Nameplate : EntityHintPanel
 		Name.Style.FontColor = _player.AssignedColour;
 
 		var hinter = ((Player)Local.Pawn).CurrentPlayer;
-		DisguiseHint.Enabled( !_player.IsAlive() && hinter.CanUse( _player.Corpse ) );
+		DisguiseHint.Enabled( hinter.IsAlive() && hinter.CanUse( _player.Corpse ) );
 	}
 
 	public override void Delete( bool immediate = false )

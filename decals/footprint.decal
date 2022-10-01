@@ -6,9 +6,8 @@
 		[
 			{
 				Material = resource:"materials/footprint.vmat"
-				Width = "16.00,8.00,0"
-				Height = "12.00,32.00,0"
-				KeepAspect = true
+				Width = "9.00,8.00,0"
+				Height = "17.25,32.00,0"
 				Depth = "8.00,3.00,0"
 			},
 		]

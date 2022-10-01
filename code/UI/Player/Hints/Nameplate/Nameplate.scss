@@ -19,7 +19,6 @@ Nameplate
     .disguise-hint
     {
         align-items: center;
-        justify-content: left;
         font-size: 22px;
         width: 500px;
         position: absolute;
@@ -30,14 +29,13 @@ Nameplate
         {
             margin-left: 5px;
             margin-right: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.849);
             border-radius: 6px;
         }
     }
 
     &:outro
     {
-        transition: opacity 2s linear;
+        transition: opacity 0.2s linear;
         opacity: 0;
     }
 }
