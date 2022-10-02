@@ -317,7 +317,7 @@
 						[
 							{
 								from = "materials/models/weapons/v_models/hands/new_terr/hand.vmat"
-								to = "models/weapons/v_models/hands/new_terr/hand.vmat"
+								to = "materials/models/weapons/v_models/hands/new_terr/hand.vmat"
 							},
 						]
 						use_global_default = false
