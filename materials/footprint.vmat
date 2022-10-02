@@ -8,7 +8,7 @@ Layer0
 	TextureAmbientOcclusion "[1.000000 1.000000 1.000000 0.000000]"
 
 	//---- Color ----
-	TextureColor "materials/footprint_color.tga"
+	TextureColor "materials/foot.tga"
 
 	//---- Fog ----
 	g_bFogEnabled "1"
@@ -22,5 +22,5 @@ Layer0
 	TextureMetalness "[0.000000 0.000000 0.000000 0.000000]"
 
 	//---- Translucent ----
-	TextureTranslucency "materials/footprint_trans.tga"
+	TextureTranslucency "materials/foot_transparent.tga"
 }
