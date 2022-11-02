@@ -41,11 +41,11 @@ ScoreboardGroup
         flex-direction: column;
     }
 
-    &.alive
+    &.players
     {
         .group-title-panel
         {
-            background-color: $info;
+            background-color: #17ad44;
         }
     }
 

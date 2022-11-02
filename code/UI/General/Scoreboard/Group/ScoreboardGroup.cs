@@ -13,16 +13,14 @@ public class ScoreboardGroup : Panel
 
 	public ScoreboardGroup( Panel parent, bool spectators ) : base( parent )
 	{
-		Title.Text = spectators ? "Spectators" : string.Empty;
-		AddClass( spectators ? "spectators" : "alive" );
+		Title.Text = spectators ? "Spectators" : "Players";
+		AddClass( spectators ? "spectators" : "players" );
 	}
 
 	public ScoreboardEntry AddEntry( Client client )
 	{
 		var scoreboardEntry = new ScoreboardEntry( Content, client );
-
 		scoreboardEntry.Update();
-
 		return scoreboardEntry;
 	}
 }
