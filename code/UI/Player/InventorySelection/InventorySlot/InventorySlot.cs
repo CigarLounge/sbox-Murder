@@ -1,3 +1,4 @@
+using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
@@ -16,5 +17,13 @@ public class InventorySlot : Panel
 
 		SlotLabel.Text = ((int)carriable.Slot + 1).ToString();
 		SlotTitle.Text = carriable.Title;
+	}
+
+	public override void Tick()
+	{
+		if ( Local.Pawn is not Player player )
+			return;
+
+		SlotLabel.Style.BackgroundColor = player.CurrentPlayer.Role.GetColor();
 	}
 }

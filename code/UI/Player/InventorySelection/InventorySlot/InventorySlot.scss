@@ -6,11 +6,13 @@ InventorySlot
     align-items: center;
     transition: opacity 0.1s ease-out;
     transition: height 0.1s ease-in;
+    height: 100%;
 
     .slot-label 
     {
+        text-align: center;
         font-weight: bold;
-        margin-left: 10px;
+        width: 25%;
     }
 
     .slot-title
