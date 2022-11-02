@@ -13,6 +13,8 @@ public partial class Knife : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceStab { get; private set; }
 
+	public override string Title { get; } = "Knife";
+	public override SlotType Slot { get; } = SlotType.Weapon;
 	public override string IconPath { get; } = "ui/weapons/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
@@ -106,7 +108,10 @@ public partial class Knife : Carriable
 		if ( !IsServer )
 			return;
 
-		Owner.SetCarriable( null );
+		if ( IsActive )
+			Owner.Inventory.DropActive();
+		else
+			Owner.Inventory.Drop( this );
 
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;

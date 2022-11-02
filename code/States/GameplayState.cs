@@ -76,11 +76,11 @@ public sealed partial class GameplayState : BaseState
 
 		var murderer = _alivePlayers[0];
 		murderer.Role = Role.Murderer;
-		murderer.SetCarriable( new Knife() );
+		murderer.Inventory.Add( new Knife(), true );
 
 		var detective = _alivePlayers[1];
 		detective.Role = Role.Bystander;
-		detective.SetCarriable( new Revolver() );
+		detective.Inventory.Add( new Revolver(), true );
 
 		for ( var i = 2; i < _alivePlayers.Count; i++ )
 			_alivePlayers[i].Role = Role.Bystander;
@@ -93,6 +93,7 @@ public sealed partial class GameplayState : BaseState
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
+			player.Inventory.Add( new Holster() );
 		}
 	}
 

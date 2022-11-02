@@ -38,16 +38,16 @@ public partial class Game
 		if ( !player.IsValid() )
 			return;
 
-		if ( itemName == "revolver" )
-			player.SetCarriable( new Revolver() );
-		else if ( itemName == "knife" )
-			player.SetCarriable( new Knife() );
+		if ( itemName.ToLower() == "revolver" )
+			player.Inventory.Add( new Revolver() );
+		else if ( itemName.ToLower() == "knife" )
+			player.Inventory.Add( new Knife() );
 	}
 
 	[ConCmd.Admin( Name = "murder_setrole" )]
 	public static void SetRole( Role role )
 	{
-		if ( Game.Current.State is not GameplayState )
+		if ( Current.State is not GameplayState )
 			return;
 
 		var player = ConsoleSystem.Caller.Pawn as Player;

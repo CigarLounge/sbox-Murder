@@ -20,7 +20,7 @@ public sealed class RoundStartPopup : Panel
 
 		Style.FontColor = player.Role.GetColor();
 		Title.Text = $"You are a {player.Role.GetTitle()}";
-		Subtitle.Enabled( player.Carriable is Revolver );
+		Subtitle.Enabled( player.Inventory.Contains( new Revolver() ) );
 
 		Sound.FromScreen( "scream" );
 	}

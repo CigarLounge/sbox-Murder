@@ -24,7 +24,7 @@ public class Hud : RootPanel
 		AddChild<Scoreboard>();
 		AddChild<NameHealthWrapper>();
 		AddChild<RoleDisplay>();
-		AddChild<InventoryWrapper>();
+		AddChild<InventorySelection>();
 		AddChild<FullScreenHintMenu>();
 	}
 

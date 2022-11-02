@@ -1,0 +1,27 @@
+InventorySelection 
+{
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    &.hide 
+    {
+        display: none;
+    }
+
+    .rounded-top-left
+    {
+        border-top-left-radius: 4px;
+    }
+
+    .rounded-bottom-left
+    {
+        border-bottom-left-radius: 4px;
+    }
+}

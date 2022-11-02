@@ -5,6 +5,8 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
+	public Inventory Inventory { get; private init; }
+
 	public CameraMode Camera
 	{
 		get => Components.Get<CameraMode>();
@@ -25,7 +27,10 @@ public partial class Player : AnimatedEntity
 		SteamName = client.Name;
 	}
 
-	public Player() { }
+	public Player()
+	{
+		Inventory = new( this );
+	}
 
 	public override void Spawn()
 	{
@@ -58,7 +63,6 @@ public partial class Player : AnimatedEntity
 
 		LifeState = LifeState.Respawnable;
 
-		DropCarriable()?.Delete();
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
@@ -130,10 +134,9 @@ public partial class Player : AnimatedEntity
 			if ( ActiveCarriable.IsValid() && _lastKnownCarriable.IsValid() )
 				(ActiveCarriable, _lastKnownCarriable) = (_lastKnownCarriable, ActiveCarriable);
 		}
-		else if ( Input.Pressed( InputButton.Slot1 ) )
-			ActiveCarriable = null;
-		else if ( Input.Pressed( InputButton.Slot2 ) )
-			ActiveCarriable ??= Carriable;
+
+		if ( Input.ActiveChild is Carriable carriable )
+			Inventory.SetActive( carriable );
 
 		SimulateActiveCarriable();
 
@@ -278,49 +281,26 @@ public partial class Player : AnimatedEntity
 		if ( !IsServer )
 			return;
 
-		if ( other is Carriable carriable && Carriable is null )
-			SetCarriable( carriable );
-	}
-
-	[Net]
-	public Carriable Carriable { get; private set; }
-
-	public void SetCarriable( Carriable carriable, bool makeActive = false )
-	{
-		if ( Carriable is not null )
+		switch ( other )
 		{
-			ActiveCarriable = null;
-			Carriable.Parent = null;
-			Carriable.OnCarryDrop( this );
-		}
-
-		if ( !carriable?.CanCarry( this ) ?? false )
-			return;
-
-		Carriable = carriable;
-
-		if ( Carriable is not null )
-		{
-			Carriable.SetParent( this, true );
-			Carriable.OnCarryStart( this );
-
-			if ( makeActive )
-				ActiveCarriable = Carriable;
+			case Carriable carriable:
+			{
+				Inventory.Pickup( carriable );
+				break;
+			}
 		}
 	}
 
-	public Carriable DropCarriable()
+	public override void OnChildAdded( Entity child )
 	{
-		if ( Carriable is null )
-			return null;
+		if ( child is Carriable carriable )
+			Inventory.OnChildAdded( carriable );
+	}
 
-		var dropped = Carriable;
-		SetCarriable( null );
-
-		if ( dropped.PhysicsGroup is not null )
-			dropped.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * 300f;
-
-		return dropped;
+	public override void OnChildRemoved( Entity child )
+	{
+		if ( child is Carriable carriable )
+			Inventory.OnChildRemoved( carriable );
 	}
 
 	#region ActiveCarriable

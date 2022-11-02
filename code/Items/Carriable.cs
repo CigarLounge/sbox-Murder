@@ -2,6 +2,12 @@ using Sandbox;
 
 namespace Murder;
 
+public enum SlotType
+{
+	Weapon,
+	Holster
+}
+
 [Title( "Carriable" ), Icon( "luggage" )]
 public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 {
@@ -16,6 +22,8 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		set => base.Owner = value;
 	}
 
+	public virtual string Title { get; }
+	public virtual SlotType Slot { get; }
 	public virtual float DeployTime => 0;
 	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
@@ -194,7 +202,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		var player = (Player)user;
 
 		if ( CanCarry( player ) )
-			player.SetCarriable( this );
+			player.Inventory.Add( this, true );
 
 		return false;
 	}

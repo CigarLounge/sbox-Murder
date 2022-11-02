@@ -1,0 +1,39 @@
+InventorySlot 
+{
+    height: 34px;
+    font-size: 20px;
+    opacity: 0.5;
+    align-items: center;
+    transition: opacity 0.1s ease-out;
+    transition: height 0.1s ease-in;
+
+    .slot-label 
+    {
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .slot-title
+    {
+        width: 100%;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+    &.active 
+    {
+        opacity: 1;
+    }
+
+    &:outro
+    {
+        height: 0;
+        opacity: 0;
+    }
+
+    &:intro
+    {
+        height: 0;
+        opacity: 0;
+    }
+}

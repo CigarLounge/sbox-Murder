@@ -23,6 +23,8 @@ public partial class Revolver : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceReload { get; private set; }
 
+	public override string Title { get; } = "Revolver";
+	public override SlotType Slot { get; } = SlotType.Weapon;
 	public override float DeployTime => 1.2f;
 	public override string IconPath { get; } = "ui/weapons/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";

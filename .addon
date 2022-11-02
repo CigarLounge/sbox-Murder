@@ -3,6 +3,7 @@
   "Type": "game",
   "Org": "matt",
   "Ident": "murder",
+  "Tags": null,
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
