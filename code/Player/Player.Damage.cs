@@ -44,6 +44,7 @@ public partial class Player
 		EnableDrawing = false;
 		EnableTouch = false;
 
+		Inventory.DropAll();
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
