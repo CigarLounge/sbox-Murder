@@ -23,7 +23,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 
 		this.CopyBonesFrom( player );
 		this.SetRagdollVelocityFrom( player );
-		ApplyForceToBone( Player.LastDamage.Force, Player.GetHitboxBone( Player.LastDamage.HitboxIndex ) );
+		ApplyForceToBone( Player.LastDamage.Force, Player.LastDamage.BoneIndex );
 		CopyBodyGroups( player );
 
 		foreach ( var child in Player.Children )
