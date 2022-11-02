@@ -93,7 +93,7 @@ public sealed partial class GameplayState : BaseState
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
-			player.Inventory.Add( new Holster() );
+			player.Inventory.Add( new Holster(), true );
 		}
 	}
 
