@@ -21,7 +21,7 @@ public partial class MapVotePanel : Panel
 			if ( panel is FullScreenHintMenu )
 				continue;
 
-			if ( panel is not ChatBox and not VoiceChat )
+			if ( panel is not TextChat and not VoiceChat )
 				panel.Delete( true );
 		}
 

@@ -65,14 +65,14 @@ public partial class Game : Sandbox.Game
 
 		State.OnPlayerJoin( player );
 
-		UI.ChatBox.AddInfo( To.Everyone, $"{client.Name} has joined" );
+		UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has joined" );
 	}
 
 	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 	{
 		State.OnPlayerLeave( client.Pawn as Player );
 
-		UI.ChatBox.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
+		UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
 
 		// Only delete the pawn if they are alive.
 		// Keep the dead body otherwise on disconnect.

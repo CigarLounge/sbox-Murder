@@ -1,6 +1,6 @@
 ﻿@import "/ui/Hud.scss";
 
-ChatBox 
+TextChat 
 {
     position: absolute;
     bottom: 200px;
@@ -54,7 +54,7 @@ ChatBox
     }
 }
 
-ChatBoxEntry 
+TextChatEntry 
 {
     border-radius: 4px;
     flex-shrink: 0;

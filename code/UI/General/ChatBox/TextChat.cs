@@ -4,12 +4,12 @@ using Sandbox.UI;
 namespace Murder.UI;
 
 [UseTemplate]
-public partial class ChatBox : Panel
+public partial class TextChat : Panel
 {
 	private static readonly Color _allChatColor = Role.Bystander.GetColor();
 	private static readonly Color _spectatorChatColor = new Color32( 252, 219, 56 );
 
-	public static ChatBox Instance { get; private set; }
+	public static TextChat Instance { get; private set; }
 
 	private Panel EntryCanvas { get; init; }
 	private TabTextEntry Input { get; init; }
@@ -29,7 +29,7 @@ public partial class ChatBox : Panel
 		}
 	}
 
-	public ChatBox()
+	public TextChat()
 	{
 		Instance = this;
 
@@ -66,7 +66,7 @@ public partial class ChatBox : Panel
 
 	public void AddEntry( string name, string message, string classes = "" )
 	{
-		var entry = new ChatBoxEntry( name, message );
+		var entry = new TextChatEntry( name, message );
 		if ( !classes.IsNullOrEmpty() )
 			entry.AddClass( classes );
 		EntryCanvas.AddChild( entry );
@@ -74,7 +74,7 @@ public partial class ChatBox : Panel
 
 	public void AddEntry( string name, string message, Color? color )
 	{
-		var entry = new ChatBoxEntry( name, message, color );
+		var entry = new TextChatEntry( name, message, color );
 		EntryCanvas.AddChild( entry );
 	}
 
