@@ -22,6 +22,14 @@ public sealed class RoundStartPopup : Panel
 		Title.Text = $"You are a {player.Role.GetTitle()}";
 		Subtitle.Enabled( player.Inventory.Contains( new Revolver() ) );
 
+		Help.Text = player.Role switch
+		{
+			Role.Murderer => "Kill everyone and don't get caught.",
+			Role.Bystander => "There is a murderer on the loose. Don't get killed!",
+			Role.None => string.Empty,
+			_ => string.Empty
+		};
+
 		Sound.FromScreen( "scream" );
 	}
 
