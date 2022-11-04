@@ -11,12 +11,17 @@ public class Scoreboard : Panel
 	private readonly Dictionary<Client, ScoreboardEntry> _entries = new();
 	private readonly ScoreboardGroup[] _scoreboardGroups = new ScoreboardGroup[2];
 
+	private Panel Container { get; init; }
 	private Panel Content { get; init; }
 
-	public Scoreboard()
+	public Scoreboard( Panel parent, Panel buttons )
 	{
+		Parent = parent;
+
 		_scoreboardGroups[0] = new ScoreboardGroup( Content, false );
 		_scoreboardGroups[1] = new ScoreboardGroup( Content, true );
+
+		Container.AddChild( buttons );
 	}
 
 	public void AddClient( Client client )
@@ -94,11 +99,5 @@ public class Scoreboard : Panel
 		var player = client.Pawn as Player;
 
 		return _scoreboardGroups[player.IsForcedSpectator ? 1 : 0];
-	}
-
-	[Event.BuildInput]
-	private void MenuInput( InputBuilder input )
-	{
-		this.Enabled( input.Down( InputButton.Score ) );
 	}
 }
