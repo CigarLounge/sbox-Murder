@@ -6,7 +6,6 @@ ScoreboardHeader
 
     .server-information-panel
     {
-        display: flex;
         flex-grow: 1;
         flex-direction: column;
         justify-content: flex-end;
@@ -25,10 +24,10 @@ ScoreboardHeader
 
     .server-data-panel
     {
-        display: flex;
         flex-direction: column;
         text-align: right;
         font-weight: 500;
+        align-self: center;
     }
 
     .created-by
