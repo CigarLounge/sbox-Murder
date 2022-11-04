@@ -30,7 +30,7 @@ public sealed class RoundStartPopup : Panel
 			_ => string.Empty
 		};
 
-		Sound.FromScreen( "scream" );
+		PlaySound( "scream" );
 	}
 
 	public override void Tick()
