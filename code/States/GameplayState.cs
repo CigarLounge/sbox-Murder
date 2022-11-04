@@ -5,10 +5,9 @@ namespace Murder;
 
 public sealed partial class GameplayState : BaseState
 {
+	public override int FreezeDuration => 5;
 	private readonly List<Player> _alivePlayers = new();
-
-	// This is used for freeze time.
-	public override int Duration => 5;
+	// private TimeUntil _timeUntilNextClue = 20;
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -65,6 +64,13 @@ public sealed partial class GameplayState : BaseState
 	{
 		if ( !Host.IsServer )
 			return;
+
+		// TODO: Figure out how fast clues should spawn.
+		// if ( _timeUntilNextClue )
+		// {
+		// 	_ = new Clue();
+		// 	_timeUntilNextClue = 30;
+		// }
 
 		if ( !Utils.HasMinimumPlayers() && IsRoundOver() )
 			Game.Current.ForceStateChange( new WaitingState() );

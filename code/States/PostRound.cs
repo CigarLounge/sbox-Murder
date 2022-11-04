@@ -8,7 +8,7 @@ public partial class PostRound : BaseState
 	[Net]
 	public Role WinningRole { get; private set; }
 
-	public override int Duration => Game.PostRoundTime;
+	public override int FreezeDuration => Game.PostRoundTime;
 
 	public PostRound() { }
 
