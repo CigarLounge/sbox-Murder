@@ -13,9 +13,4 @@ public class PostRoundPopup : Panel
 	{
 		Players.AddChild( new Entry( "Matt", "Golf", 5 ) );
 	}
-
-	public void Close()
-	{
-		Delete();
-	}
 }
