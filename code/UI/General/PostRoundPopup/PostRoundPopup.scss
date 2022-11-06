@@ -1,65 +1,37 @@
+@import "/ui/Hud.scss";
+
 PostRoundPopup
 {
     position: absolute;
-    width: 100%;
+    display: flex;
     height: 100%;
-    transition: opacity 1s ease-in-out;
+    width: 100%;
+    align-items: center;
     justify-content: center;
-    text-align: center;
-    pointer-events: none;
-    opacity: 1;
-    z-index: 7;
-
-    .background-banner
-    {
-        position: absolute;
-        top: 100px;
-        width: 100%;
-        height: 150px;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 0 10px black;
-    }
-
-    .container
-    {
-        max-height: 250px;
-        flex-direction: column;
-        transition: transform 2s ease-in-out;
-        transform: scale(1);
-    }
-
-    .header
-    {
-        text-transform: uppercase;
-        font-weight: bolder;
-        font-size: 50px;
-        width: 100%;
-    }
+    pointer-events: all;
+    opacity: 0.98;
 
     .content
     {
-        font-size: 20px;
-        font-weight: 600;
-    }
+        flex-direction: column;
+        align-items: flex-start;
+        height: 70%;
+        width: 50%;
+        font-size: 25px;
+        padding: 20px;
 
-    &:intro
-    {
-        opacity: 0;
-
-        .container
+        .header
         {
-            transform: scale(0.75);
+            font-size: 40px;
+            font-weight: 500;
         }
-    }
 
-    &:outro
-    {
-        opacity: 0;
-
-        .container
+        .players
         {
-            transform: scale(0.75);
+            flex-direction: column;
+            overflow: scroll;
+            height: 85%;
+            width: 100%;
         }
     }
 }
