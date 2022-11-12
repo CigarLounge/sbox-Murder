@@ -1,12 +1,7 @@
 using Sandbox;
+using Sandbox.Component;
 
 namespace Murder;
-
-public enum SlotType
-{
-	Weapon,
-	Holster
-}
 
 [Title( "Carriable" ), Icon( "luggage" )]
 public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
@@ -22,8 +17,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		set => base.Owner = value;
 	}
 
-	public virtual string Title { get; }
-	public virtual SlotType Slot { get; }
 	public virtual float DeployTime => 0;
 	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
@@ -37,7 +30,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// </summary>
 	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
 
-	public bool IsActive => Owner?.ActiveCarriable == this;
+	public bool IsActive => !Owner?.IsHolstered ?? false;
 
 	public override void Spawn()
 	{
@@ -50,6 +43,11 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableShadowInFirstPerson = true;
 
 		SetModel( WorldModelPath );
+	}
+
+	public override void ClientSpawn()
+	{
+		Components.Create<Glow>();
 	}
 
 	public virtual void ActiveStart( Player player )
@@ -86,10 +84,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public override void Simulate( Client client ) { }
 
-	public override void FrameSimulate( Client client ) { }
-
-	public override void BuildInput( InputBuilder input ) { }
-
 	public virtual bool CanCarry( Player carrier )
 	{
 		if ( Owner is not null )
@@ -101,7 +95,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		return true;
 	}
 
-	public void OnCarryStart( Player carrier )
+	public virtual void OnCarryStart( Player carrier )
 	{
 		if ( !IsServer )
 			return;
@@ -111,7 +105,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableDrawing = false;
 	}
 
-	public void OnCarryDrop( Player dropper )
+	public virtual void OnCarryDrop( Player dropper )
 	{
 		PreviousOwner = dropper;
 
@@ -202,7 +196,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		var player = (Player)user;
 
 		if ( CanCarry( player ) )
-			player.Inventory.Add( this, true );
+			player.SetCarriable( this );
 
 		return false;
 	}

@@ -1,3 +1,4 @@
+using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
@@ -12,5 +13,11 @@ public class PostRoundPopup : Panel
 	public PostRoundPopup()
 	{
 		Players.AddChild( new Entry( "Matt", "Golf", 5 ) );
+	}
+
+	[Event.Entity.PostCleanup]
+	private void PostCleanup()
+	{
+		Delete( true );
 	}
 }

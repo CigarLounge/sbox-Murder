@@ -30,8 +30,8 @@ public partial class Player
 			transform.Position += EyeRotation.Forward * 5f;
 			_worldLight.Transform = transform;
 
-			if ( ActiveCarriable.IsValid() )
-				_worldLight.Transform = ActiveCarriable.GetAttachment( "muzzle" ) ?? transform;
+			if ( !IsHolstered )
+				_worldLight.Transform = Carriable.GetAttachment( "muzzle" ) ?? transform;
 		}
 
 		if ( TimeSinceLightToggled > 0.25f && toggle )
@@ -85,10 +85,10 @@ public partial class Player
 		var eyeTransform = new Transform( EyePosition, EyeRotation );
 		_viewLight.Transform = eyeTransform;
 
-		if ( !ActiveCarriable.IsValid() )
+		if ( IsHolstered )
 			return;
 
-		var muzzleTransform = ActiveCarriable.ViewModelEntity?.GetAttachment( "muzzle" );
+		var muzzleTransform = Carriable.ViewModelEntity?.GetAttachment( "muzzle" );
 
 		if ( !muzzleTransform.HasValue )
 			return;
@@ -99,7 +99,7 @@ public partial class Player
 		var muzzleTrace = Trace.Ray( mz.Position, EyePosition )
 			.Size( 2 )
 			.Ignore( this )
-			.Ignore( ActiveCarriable )
+			.Ignore( Carriable )
 			.Run();
 
 		var downOffset = Vector3.Down * 2f;
@@ -115,7 +115,7 @@ public partial class Player
 
 		var fwdTrace = Trace.Box( Vector3.One * 2, origin, destination )
 			.Ignore( this )
-			.Ignore( ActiveCarriable )
+			.Ignore( Carriable )
 			.Run();
 
 		var pullbackAmount = 0.0f;
