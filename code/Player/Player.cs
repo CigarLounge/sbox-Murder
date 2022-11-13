@@ -61,7 +61,6 @@ public partial class Player : AnimatedEntity
 		IsHolstered = true;
 		Carriable?.Delete();
 		Carriable = null;	
-		Corpse = null;
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
@@ -138,12 +137,10 @@ public partial class Player : AnimatedEntity
 				IsHolstered = false;
 		}
 
-		SimulateActiveCarriable();
+		SimulateCarriable();
 
 		if ( this.IsAlive() )
-		{
 			SimulateFlashlight();
-		}
 
 		if ( IsClient )
 		{

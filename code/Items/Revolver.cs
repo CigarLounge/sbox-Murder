@@ -29,6 +29,13 @@ public partial class Revolver : Carriable
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
 
+	public override void ClientSpawn()
+	{
+		var glow = Components.GetOrCreate<Glow>();
+		glow.Color = Role.Bystander.GetColor();
+		glow.ObscuredColor = Color.Transparent;
+	}
+
 	public override void ActiveStart( Player player )
 	{
 		base.ActiveStart( player );
@@ -99,7 +106,7 @@ public partial class Revolver : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( IsClient )
+		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );

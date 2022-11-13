@@ -25,6 +25,13 @@ public partial class Knife : Carriable
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
 	private float _gravityModifier;
 
+	public override void ClientSpawn()
+	{
+		var glow = Components.GetOrCreate<Glow>();
+		glow.Color = Role.Murderer.GetColor();
+		glow.ObscuredColor = Color.Transparent;
+	}
+
 	public override void Simulate( Client client )
 	{
 		if ( TimeSinceStab < 1.5f )
@@ -60,7 +67,7 @@ public partial class Knife : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( IsClient )
+		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );

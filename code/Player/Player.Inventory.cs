@@ -46,7 +46,7 @@ public partial class Player
 
 	private bool _wasHolstered = true;
 
-	public void SimulateActiveCarriable()
+	public void SimulateCarriable()
 	{
 		if ( !Carriable.IsValid() || !Carriable.IsAuthority )
 			return;

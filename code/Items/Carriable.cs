@@ -1,5 +1,4 @@
 using Sandbox;
-using Sandbox.Component;
 
 namespace Murder;
 
@@ -43,11 +42,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableShadowInFirstPerson = true;
 
 		SetModel( WorldModelPath );
-	}
-
-	public override void ClientSpawn()
-	{
-		Components.Create<Glow>();
 	}
 
 	public virtual void ActiveStart( Player player )
