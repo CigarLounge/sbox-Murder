@@ -1,5 +1,6 @@
 using Sandbox;
 using System;
+using System.Collections.Generic;
 
 namespace Murder;
 
@@ -12,9 +13,10 @@ public partial class PostRound : BaseState
 
 	public PostRound() { }
 
-	public PostRound( Role winningRole )
+	public PostRound( Role winningRole, List<Player> murderers, List<Player> bystanders )
 	{
 		WinningRole = winningRole;
+		UI.PostRoundPopup.Display( winningRole, murderers, bystanders );
 	}
 
 	protected override void OnStart()

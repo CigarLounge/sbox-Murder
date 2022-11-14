@@ -1,16 +1,21 @@
+using System.Collections.Generic;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
 
 [UseTemplate]
-public class PostRoundPopup : Panel
+public partial class PostRoundPopup : Panel
 {
 	private Panel Players { get; init; }
 	private Label WinningText { get; init; }
 	private Label Murderer { get; init; }
 
-	public PostRoundPopup()
+	[ClientRpc]
+	public static void Display( Role winningRole, List<Player> murderers, List<Player> bystanders )
 	{
-		Players.AddChild( new Entry( "Matt", "Golf", 5 ) );
+		Log.Info( winningRole );
+		Log.Info( murderers.Count );
+		Log.Info( bystanders.Count );
 	}
 }
