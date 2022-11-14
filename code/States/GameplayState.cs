@@ -7,7 +7,8 @@ public sealed partial class GameplayState : BaseState
 {
 	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
-	// private TimeUntil _timeUntilNextClue = 20;
+	private readonly List<Player> _bystanders = new();
+	private readonly List<Player> _murderers = new();
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -50,14 +51,18 @@ public sealed partial class GameplayState : BaseState
 		RunEvent();
 	}
 
-	private bool IsRoundOver()
+	private Role IsRoundOver()
 	{
-		var aliveRoles = new bool[2];
+		List<Role> aliveRoles = new();
 
 		foreach ( var player in _alivePlayers )
-			aliveRoles[(int)player.Role - 1] = true;
+			if ( !aliveRoles.Contains( player.Role ) )
+				aliveRoles.Add( player.Role );
 
-		return aliveRoles[0] ^ aliveRoles[1];
+		if ( aliveRoles.IsNullOrEmpty() )
+			return Role.None;
+
+		return aliveRoles.Count == 1 ? aliveRoles[0] : Role.None;
 	}
 
 	public override void OnSecond()
@@ -65,14 +70,7 @@ public sealed partial class GameplayState : BaseState
 		if ( !Host.IsServer )
 			return;
 
-		// TODO: Figure out how fast clues should spawn.
-		// if ( _timeUntilNextClue )
-		// {
-		// 	_ = new Clue();
-		// 	_timeUntilNextClue = 30;
-		// }
-
-		if ( !Utils.HasMinimumPlayers() && IsRoundOver() )
+		if ( !Utils.HasMinimumPlayers() && IsRoundOver() == Role.None )
 			Game.Current.ForceStateChange( new WaitingState() );
 	}
 
@@ -83,18 +81,23 @@ public sealed partial class GameplayState : BaseState
 		var murderer = _alivePlayers[0];
 		murderer.Role = Role.Murderer;
 		murderer.SetCarriable( new Knife() );
+		_murderers.Add( murderer );
 
 		var detective = _alivePlayers[1];
 		detective.Role = Role.Bystander;
 		detective.SetCarriable( new Revolver() );
-
-		for ( var i = 2; i < _alivePlayers.Count; i++ )
-			_alivePlayers[i].Role = Role.Bystander;
+		_bystanders.Add( detective );
 
 		Player.Names.Shuffle();
 		for ( var i = 0; i < _alivePlayers.Count; i++ )
 		{
 			var player = _alivePlayers[i];
+
+			if ( player.Role == Role.None )
+			{
+				_alivePlayers[i].Role = Role.Bystander;
+				_bystanders.Add( detective );
+			}
 
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
@@ -102,15 +105,11 @@ public sealed partial class GameplayState : BaseState
 		}
 	}
 
-	private bool ChangeRoundIfOver()
+	private void ChangeRoundIfOver()
 	{
-		if ( IsRoundOver() && !Game.PreventWin )
-		{
-			Game.Current.ForceStateChange( new PostRound( _alivePlayers[0].Role ) );
-			return true;
-		}
-
-		return false;
+		var result = IsRoundOver();
+		if ( result != Role.None && !Game.PreventWin )
+			Game.Current.ForceStateChange( new PostRound( result, _murderers, _bystanders ) );
 	}
 
 	[ClientRpc]

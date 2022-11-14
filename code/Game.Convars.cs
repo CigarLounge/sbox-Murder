@@ -6,7 +6,7 @@ public partial class Game
 {
 	#region Round
 	[ConVar.Server( "murder_postround_time", Help = "The length of the postround time.", Saved = true )]
-	public static int PostRoundTime { get; set; } = 15;
+	public static int PostRoundTime { get; set; } = 10;
 
 	[ConVar.Server( "murder_mapselection_time", Help = "The length of the map selection period.", Saved = true )]
 	public static int MapSelectionTime { get; set; } = 15;

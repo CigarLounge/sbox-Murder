@@ -10,6 +10,8 @@ PostRoundPopup
     justify-content: center;
     pointer-events: all;
     opacity: 0.98;
+    transition: all 0.15s ease-out;
+    transform: scale(1);
 
     .content
     {
@@ -33,5 +35,10 @@ PostRoundPopup
             height: 85%;
             width: 100%;
         }
+    }
+
+    &:intro, &:outro
+    {
+        transform: scale(0.95);
     }
 }

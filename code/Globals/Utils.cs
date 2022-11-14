@@ -1,6 +1,8 @@
 using Sandbox;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
 
 namespace Murder;
 
@@ -38,4 +40,7 @@ public static class Utils
 		await GameTask.DelaySeconds( seconds );
 		callback?.Invoke();
 	}
+
+	public static byte[] Serialize<T>( T data ) => JsonSerializer.SerializeToUtf8Bytes( data );
+	public static T Deserialize<T>( byte[] bytes ) => JsonSerializer.Deserialize<T>( bytes );
 }

@@ -1,5 +1,6 @@
 using Sandbox;
 using System;
+using System.Collections.Generic;
 
 namespace Murder;
 
@@ -12,9 +13,35 @@ public partial class PostRound : BaseState
 
 	public PostRound() { }
 
-	public PostRound( Role winningRole )
+	public PostRound( Role winningRole, List<Player> murderers, List<Player> bystanders )
 	{
 		WinningRole = winningRole;
+
+		List<UI.PostRoundPopup.PlayerData> murdererData = new();
+		murderers.ForEach( ( murderer ) =>
+		{
+			murdererData.Add( new UI.PostRoundPopup.PlayerData
+			{
+				Name = murderer.Client.Name,
+				AssignedName = murderer.BystanderName,
+				CluesCollected = murderer.CluesCollected,
+				Color = murderer.Color
+			} );
+		} );
+
+		List<UI.PostRoundPopup.PlayerData> bystanderData = new();
+		bystanders.ForEach( ( bystander ) =>
+		{
+			bystanderData.Add( new UI.PostRoundPopup.PlayerData
+			{
+				Name = bystander.Client.Name,
+				AssignedName = bystander.BystanderName,
+				CluesCollected = bystander.CluesCollected,
+				Color = bystander.Color
+			} );
+		} );
+
+		UI.PostRoundPopup.Display( WinningRole, Utils.Serialize( murdererData.ToArray() ), Utils.Serialize( bystanderData.ToArray() ) );
 	}
 
 	protected override void OnStart()
