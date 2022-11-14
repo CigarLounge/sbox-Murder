@@ -5,8 +5,6 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
-	public Inventory Inventory { get; private init; }
-
 	public CameraMode Camera
 	{
 		get => Components.Get<CameraMode>();
@@ -21,15 +19,12 @@ public partial class Player : AnimatedEntity
 		}
 	}
 
-	public Player( Client client ) : this()
+	public Player() { }
+
+	public Player( Client client )
 	{
 		client.Pawn = this;
 		SteamName = client.Name;
-	}
-
-	public Player()
-	{
-		Inventory = new( this );
 	}
 
 	public override void Spawn()
@@ -63,6 +58,9 @@ public partial class Player : AnimatedEntity
 
 		LifeState = LifeState.Respawnable;
 
+		IsHolstered = true;
+		Carriable?.Delete();
+		Carriable = null;	
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
@@ -129,21 +127,20 @@ public partial class Player : AnimatedEntity
 		var controller = GetActiveController();
 		controller?.Simulate( client, this, Animator );
 
-		if ( Input.Pressed( InputButton.Menu ) )
+		if ( Carriable.IsValid() )
 		{
-			if ( ActiveCarriable.IsValid() && _lastKnownCarriable.IsValid() )
-				(ActiveCarriable, _lastKnownCarriable) = (_lastKnownCarriable, ActiveCarriable);
+			if ( Input.Pressed( InputButton.Menu ) && Carriable.IsValid() )
+				IsHolstered = !IsHolstered;
+			else if ( Input.Pressed( InputButton.Slot1 ) )
+				IsHolstered = true;
+			else if ( Input.Pressed( InputButton.Slot2 ) )
+				IsHolstered = false;
 		}
 
-		if ( Input.ActiveChild is Carriable carriable )
-			Inventory.SetActive( carriable );
-
-		SimulateActiveCarriable();
+		SimulateCarriable();
 
 		if ( this.IsAlive() )
-		{
 			SimulateFlashlight();
-		}
 
 		if ( IsClient )
 		{
@@ -172,17 +169,6 @@ public partial class Player : AnimatedEntity
 		}
 
 		DisplayEntityHints();
-		ActiveCarriable?.FrameSimulate( client );
-	}
-
-	/// <summary>
-	/// Called after the camera setup logic has run. Allow the player to
-	/// do stuff to the camera, or using the camera. Such as positioning entities
-	/// relative to it, like viewmodels etc.
-	/// </summary>
-	public override void PostCameraSetup( ref CameraSetup setup )
-	{
-		ActiveCarriable?.PostCameraSetup( ref setup );
 	}
 
 	/// <summary>
@@ -190,11 +176,6 @@ public partial class Player : AnimatedEntity
 	/// </summary>
 	public override void BuildInput( InputBuilder input )
 	{
-		if ( input.StopProcessing )
-			return;
-
-		ActiveCarriable?.BuildInput( input );
-
 		if ( input.StopProcessing )
 			return;
 
@@ -276,62 +257,14 @@ public partial class Player : AnimatedEntity
 		EnableHitboxes = true;
 	}
 
-	public override void StartTouch( Entity other )
+	public override void Touch( Entity other )
 	{
 		if ( !IsServer )
 			return;
 
-		switch ( other )
-		{
-			case Carriable carriable:
-			{
-				Inventory.Pickup( carriable );
-				break;
-			}
-		}
+		if ( other is Carriable carriable && !Carriable.IsValid() )
+			SetCarriable( carriable );
 	}
-
-	public override void OnChildAdded( Entity child )
-	{
-		if ( child is Carriable carriable )
-			Inventory.OnChildAdded( carriable );
-	}
-
-	public override void OnChildRemoved( Entity child )
-	{
-		if ( child is Carriable carriable )
-			Inventory.OnChildRemoved( carriable );
-	}
-
-	#region ActiveCarriable
-	[Net, Predicted]
-	public Carriable ActiveCarriable { get; set; }
-
-	public Carriable _lastActiveCarriable;
-	public Carriable _lastKnownCarriable;
-
-	public void SimulateActiveCarriable()
-	{
-		if ( _lastActiveCarriable != ActiveCarriable )
-		{
-			OnActiveCarriableChanged( _lastActiveCarriable, ActiveCarriable );
-			_lastKnownCarriable = _lastActiveCarriable;
-			_lastActiveCarriable = ActiveCarriable;
-		}
-
-		if ( !ActiveCarriable.IsValid() || !ActiveCarriable.IsAuthority )
-			return;
-
-		if ( ActiveCarriable.TimeSinceDeployed > ActiveCarriable.DeployTime )
-			ActiveCarriable.Simulate( Client );
-	}
-
-	public void OnActiveCarriableChanged( Carriable previous, Carriable next )
-	{
-		previous?.ActiveEnd( this, previous.Owner != this );
-		next?.ActiveStart( this );
-	}
-	#endregion
 
 	protected override void OnDestroy()
 	{

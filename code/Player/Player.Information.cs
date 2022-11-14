@@ -49,8 +49,9 @@ public partial class Player
 	public void ResetInformation()
 	{
 		BystanderName = null;
-		Color = default;
 		CluesCollected = 0;
+		Color = default;
+		Corpse = null;
 		Role = Role.None;
 	}
 

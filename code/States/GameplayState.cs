@@ -5,7 +5,7 @@ namespace Murder;
 
 public sealed partial class GameplayState : BaseState
 {
-	public override int FreezeDuration => 5;
+	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
 	private readonly List<Player> _bystanders = new();
 	private readonly List<Player> _murderers = new();
@@ -80,12 +80,12 @@ public sealed partial class GameplayState : BaseState
 
 		var murderer = _alivePlayers[0];
 		murderer.Role = Role.Murderer;
-		murderer.Inventory.Add( new Knife(), true );
+		murderer.SetCarriable( new Knife() );
 		_murderers.Add( murderer );
 
 		var detective = _alivePlayers[1];
 		detective.Role = Role.Bystander;
-		detective.Inventory.Add( new Revolver(), true );
+		detective.SetCarriable( new Revolver() );
 		_bystanders.Add( detective );
 
 		Player.Names.Shuffle();
@@ -102,7 +102,6 @@ public sealed partial class GameplayState : BaseState
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
-			player.Inventory.Add( new Holster(), true );
 		}
 	}
 

@@ -18,4 +18,10 @@ public partial class PostRoundPopup : Panel
 		Log.Info( murderers.Count );
 		Log.Info( bystanders.Count );
 	}
+
+	[Event.Entity.PostCleanup]
+	private void PostCleanup()
+	{
+		Delete( true );
+	}
 }

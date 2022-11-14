@@ -7,15 +7,15 @@ public abstract partial class BaseState : BaseNetworkable
 	[Net]
 	public TimeUntil TimeLeft { get; protected set; }
 
-	public virtual int FreezeDuration => 0;
+	public virtual int Duration => 0;
 	public string TimeLeftFormatted => TimeLeft.Relative.TimerString();
 
 	private TimeUntil _nextSecondTime = 0f;
 
 	public void Start()
 	{
-		if ( Host.IsServer && FreezeDuration > 0 )
-			TimeLeft = FreezeDuration;
+		if ( Host.IsServer && Duration > 0 )
+			TimeLeft = Duration;
 
 		OnStart();
 	}

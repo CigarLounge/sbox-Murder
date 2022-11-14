@@ -6,21 +6,17 @@ namespace Murder.UI;
 [UseTemplate]
 public sealed class RoundStartPopup : Panel
 {
-	private static RoundStartPopup _instance;
-
 	private Label Title { get; init; }
 	private Label Subtitle { get; init; }
 	private Label Help { get; init; }
 
 	public RoundStartPopup()
 	{
-		_instance = this;
-
 		var player = (Player)Local.Pawn;
 
 		Style.FontColor = player.Role.GetColor();
 		Title.Text = $"You are a {player.Role.GetTitle()}";
-		Subtitle.Enabled( player.Inventory.Contains( new Revolver() ) );
+		Subtitle.Enabled( player.Carriable is Revolver );
 
 		Help.Text = player.Role switch
 		{

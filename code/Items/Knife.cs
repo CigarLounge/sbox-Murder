@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.Component;
 using SandboxEditor;
 
 namespace Murder;
@@ -13,8 +14,6 @@ public partial class Knife : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceStab { get; private set; }
 
-	public override string Title { get; } = "Knife";
-	public override SlotType Slot { get; } = SlotType.Weapon;
 	public override string IconPath { get; } = "ui/weapons/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
@@ -25,6 +24,13 @@ public partial class Knife : Carriable
 	private bool _isThrown = false;
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
 	private float _gravityModifier;
+
+	public override void ClientSpawn()
+	{
+		var glow = Components.GetOrCreate<Glow>();
+		glow.Color = Role.Murderer.GetColor();
+		glow.ObscuredColor = Color.Transparent;
+	}
 
 	public override void Simulate( Client client )
 	{
@@ -57,6 +63,22 @@ public partial class Knife : Carriable
 	public override bool CanCarry( Player carrier )
 	{
 		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
+	}
+
+	public override void OnCarryStart( Player carrier )
+	{
+		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
+			Components.GetOrCreate<Glow>().Enabled = false;
+
+		base.OnCarryStart( carrier );
+	}
+
+	public override void OnCarryDrop( Player dropper )
+	{
+		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
+			Components.GetOrCreate<Glow>().Enabled = true;
+
+		base.OnCarryDrop( dropper );
 	}
 
 	private void MeleeAttack( float damage, float range, float radius )
@@ -108,10 +130,7 @@ public partial class Knife : Carriable
 		if ( !IsServer )
 			return;
 
-		if ( IsActive )
-			Owner.Inventory.DropActive();
-		else
-			Owner.Inventory.Drop( this );
+		Owner.DropCarriable();
 
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;

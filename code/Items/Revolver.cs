@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.Component;
 using SandboxEditor;
 using System.Collections.Generic;
 
@@ -23,12 +24,17 @@ public partial class Revolver : Carriable
 	[Net, Local, Predicted]
 	public TimeSince TimeSinceReload { get; private set; }
 
-	public override string Title { get; } = "Revolver";
-	public override SlotType Slot { get; } = SlotType.Weapon;
 	public override float DeployTime => 1.2f;
 	public override string IconPath { get; } = "ui/weapons/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
+
+	public override void ClientSpawn()
+	{
+		var glow = Components.GetOrCreate<Glow>();
+		glow.Color = Role.Bystander.GetColor();
+		glow.ObscuredColor = Color.Transparent;
+	}
 
 	public override void ActiveStart( Player player )
 	{
@@ -96,6 +102,22 @@ public partial class Revolver : Carriable
 	public override bool CanCarry( Player carrier )
 	{
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
+	}
+
+	public override void OnCarryStart( Player carrier )
+	{
+		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
+			Components.GetOrCreate<Glow>().Enabled = false;
+
+		base.OnCarryStart( carrier );
+	}
+
+	public override void OnCarryDrop( Player dropper )
+	{
+		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
+			Components.GetOrCreate<Glow>().Enabled = true;
+
+		base.OnCarryDrop( dropper );
 	}
 
 	protected void ShootBullet( float force, float damage, float bulletSize )

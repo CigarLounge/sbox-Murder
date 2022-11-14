@@ -38,10 +38,10 @@ public partial class Game
 		if ( !player.IsValid() )
 			return;
 
-		if ( itemName.ToLower() == "revolver" )
-			player.Inventory.Add( new Revolver() );
-		else if ( itemName.ToLower() == "knife" )
-			player.Inventory.Add( new Knife() );
+		if ( itemName.Equals( "revolver", StringComparison.OrdinalIgnoreCase ) )
+			player.SetCarriable( new Revolver() );
+		else if ( itemName.Equals( "knife", StringComparison.OrdinalIgnoreCase ) )
+			player.SetCarriable( new Knife() );
 	}
 
 	[ConCmd.Admin( Name = "murder_setrole" )]

@@ -31,7 +31,7 @@ public partial class Player
 
 		if ( LastAttacker is Player player && Role == player.Role )
 		{
-			player.Inventory.DropActive();
+			player.DropCarriable();
 			player.TimeUntilClean = 20f;
 			player.Client.AddInt( "kills" );
 		}
@@ -44,7 +44,7 @@ public partial class Player
 		EnableDrawing = false;
 		EnableTouch = false;
 
-		Inventory.DropAll();
+		DropCarriable();
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
