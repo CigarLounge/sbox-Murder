@@ -60,7 +60,7 @@ public partial class Player : AnimatedEntity
 
 		IsHolstered = true;
 		Carriable?.Delete();
-		Carriable = null;	
+		Carriable = null;
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
