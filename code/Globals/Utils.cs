@@ -1,7 +1,6 @@
 using Sandbox;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
 
 namespace Murder;
@@ -11,10 +10,7 @@ public static class Utils
 	public static List<Player> GetAlivePlayers() => GetPlayers( ( pl ) => pl.IsAlive() );
 	public static int MinimumPlayerCount() => GetPlayers( ( pl ) => !pl.IsForcedSpectator ).Count;
 	public static bool HasMinimumPlayers() => MinimumPlayerCount() >= Game.MinPlayers;
-
-	public static List<Client> GetAliveClientsWithRole( Role role ) => GetClients( ( pl ) => pl.IsAlive() && pl.Role == role );
 	public static List<Client> GetDeadClients() => GetClients( ( pl ) => !pl.IsAlive() );
-
 	private static List<Player> GetPlayers( Func<Player, bool> predicate )
 	{
 		List<Player> players = new();

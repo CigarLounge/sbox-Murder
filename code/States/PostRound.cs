@@ -13,22 +13,25 @@ public partial class PostRound : BaseState
 
 	public PostRound() { }
 
-	public PostRound( Role winningRole, List<Player> players )
+	public PostRound( Role winningRole )
 	{
 		WinningRole = winningRole;
 
 		List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
-		players.ForEach( ( bystander ) =>
+		foreach ( var client in Client.All )
 		{
+			if ( client.Pawn is not Player player )
+				return;
+
 			playerData.Add( new UI.PostRoundPopup.PostRoundData.PlayerData
 			{
-				Name = bystander.Client.Name,
-				AssignedName = bystander.BystanderName,
-				CluesCollected = bystander.CluesCollected,
-				Color = bystander.Color,
-				Role = bystander.Role
+				Name = player.Client.Name,
+				AssignedName = player.BystanderName,
+				CluesCollected = player.CluesCollected,
+				Color = player.Color,
+				Role = player.Role
 			} );
-		} );
+		}
 
 		UI.PostRoundPopup.Display( Utils.Serialize( new UI.PostRoundPopup.PostRoundData
 		{

@@ -7,7 +7,6 @@ public sealed partial class GameplayState : BaseState
 {
 	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
-	private readonly List<Player> _players = new();
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -93,7 +92,6 @@ public sealed partial class GameplayState : BaseState
 		{
 			var player = _alivePlayers[i];
 
-			_players.Add( player );
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
@@ -104,7 +102,7 @@ public sealed partial class GameplayState : BaseState
 	{
 		var result = IsRoundOver();
 		if ( result != Role.None && !Game.PreventWin )
-			Game.Current.ForceStateChange( new PostRound( result, _players ) );
+			Game.Current.ForceStateChange( new PostRound( result ) );
 	}
 
 	[ClientRpc]
