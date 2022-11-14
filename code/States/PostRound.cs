@@ -13,35 +13,28 @@ public partial class PostRound : BaseState
 
 	public PostRound() { }
 
-	public PostRound( Role winningRole, List<Player> murderers, List<Player> bystanders )
+	public PostRound( Role winningRole, List<Player> players )
 	{
 		WinningRole = winningRole;
 
-		List<UI.PostRoundPopup.PlayerData> murdererData = new();
-		murderers.ForEach( ( murderer ) =>
+		List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
+		players.ForEach( ( bystander ) =>
 		{
-			murdererData.Add( new UI.PostRoundPopup.PlayerData
-			{
-				Name = murderer.Client.Name,
-				AssignedName = murderer.BystanderName,
-				CluesCollected = murderer.CluesCollected,
-				Color = murderer.Color
-			} );
-		} );
-
-		List<UI.PostRoundPopup.PlayerData> bystanderData = new();
-		bystanders.ForEach( ( bystander ) =>
-		{
-			bystanderData.Add( new UI.PostRoundPopup.PlayerData
+			playerData.Add( new UI.PostRoundPopup.PostRoundData.PlayerData
 			{
 				Name = bystander.Client.Name,
 				AssignedName = bystander.BystanderName,
 				CluesCollected = bystander.CluesCollected,
-				Color = bystander.Color
+				Color = bystander.Color,
+				Role = bystander.Role
 			} );
 		} );
 
-		UI.PostRoundPopup.Display( WinningRole, Utils.Serialize( murdererData.ToArray() ), Utils.Serialize( bystanderData.ToArray() ) );
+		UI.PostRoundPopup.Display( Utils.Serialize( new UI.PostRoundPopup.PostRoundData
+		{
+			WinningRole = WinningRole,
+			Players = playerData
+		} ) );
 	}
 
 	protected override void OnStart()
