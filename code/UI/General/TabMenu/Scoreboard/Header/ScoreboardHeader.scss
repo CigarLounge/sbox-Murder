@@ -8,13 +8,13 @@ ScoreboardHeader
     {
         flex-grow: 1;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
     }
 
     .server-name-label
     {   
-        font-size: 25px;
-        font-weight: bolder;
+        font-size: 40px;
+        font-weight: 600;
     }
 
     .server-description-label
@@ -26,8 +26,13 @@ ScoreboardHeader
     {
         flex-direction: column;
         text-align: right;
-        font-weight: 500;
-        align-self: center;
+        font-size: 16px;
+        align-self: flex-end;
+
+        .current-map
+        {
+            font-weight: bold;
+        }
     }
 
     .created-by
