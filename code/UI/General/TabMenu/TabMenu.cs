@@ -10,6 +10,7 @@ public partial class TabMenu : Panel
 
 	private readonly Scoreboard _scoreboard;
 	private readonly Button _muteButton;
+	private readonly Button _forceSpectate;
 
 	public TabMenu()
 	{
@@ -20,6 +21,7 @@ public partial class TabMenu : Panel
 		var scoreboardButtons = new Panel();
 		scoreboardButtons.AddClass( "spacing" );
 		_muteButton = scoreboardButtons.Add.ButtonWithIcon( "Mute Alive Players", "volume_up", string.Empty, Player.ToggleMute );
+		_forceSpectate = scoreboardButtons.Add.ButtonWithIcon( "Force Spectate", "videocam", string.Empty, Game.ToggleForceSpectator );
 		_scoreboard = new Scoreboard( this, scoreboardButtons );
 
 		_scoreboard.EnableFade( true );
@@ -29,6 +31,9 @@ public partial class TabMenu : Panel
 	{
 		if ( Local.Client.Pawn is not Player player )
 			return;
+
+		_forceSpectate.Text = player.IsForcedSpectator ? "Disable Spectating" : "Force Spectating";
+		_forceSpectate.Icon = player.IsForcedSpectator ? "videocam_off" : "videocam";
 
 		_muteButton.Enabled( !player.IsAlive() );
 		if ( !_muteButton.IsEnabled() )
