@@ -35,10 +35,7 @@ public partial class TabMenu : Panel
 		_forceSpectate.Text = player.IsForcedSpectator ? "Disable Spectating" : "Force Spectating";
 		_forceSpectate.Icon = player.IsForcedSpectator ? "videocam_off" : "videocam";
 
-		_muteButton.Enabled( !player.IsAlive() );
-		if ( !_muteButton.IsEnabled() )
-			return;
-
+		_muteButton.SetClass( "inactive", player.IsAlive() );
 		switch ( player.MuteFilter )
 		{
 			case MuteFilter.None:
