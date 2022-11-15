@@ -1,7 +1,7 @@
 ﻿﻿<link rel="stylesheet" href="PostRoundPopup.scss" />
 
 <root>
-    <div class="content background-color-gradient rounded text-shadow">
+    <div class="content background-color-primary rounded text-shadow box-shadow">
         <div style="justify-content: flex-end; width: 100%; flex-shrink: 0;">
             <button icon="close" onclick="PostCleanup()"></button>
         </div>
@@ -9,8 +9,8 @@
         <div style="flex-direction: column; flex-shrink: 0;">
             <text @ref="WinningText" class="header">Bystanders win!</text>
             <div class="sub-header">
-                <text style="padding-right: 8px;">The murderer(s) were</text>
-                <text @ref="Murderer" style="color: rgb(120, 70, 245);">Delta</text>
+                <text style="padding-right: 8px;">The murderer was</text>
+                <text @ref="Murderer" style="color: rgb(120, 70, 245); font-size: 26px;">Delta</text>
             </div>
         </div>
 

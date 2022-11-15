@@ -9,9 +9,9 @@ PostRoundPopup
     align-items: center;
     justify-content: center;
     pointer-events: all;
-    opacity: 0.98;
     transition: all 0.15s ease-out;
     transform: scale(1);
+    bottom: 0px;
 
     .content
     {
@@ -28,6 +28,11 @@ PostRoundPopup
             font-weight: 500;
         }
 
+        .sub-header
+        {
+            align-items: center;
+        }
+
         .players
         {
             flex-direction: column;
@@ -39,6 +44,8 @@ PostRoundPopup
 
     &:intro, &:outro
     {
+        bottom: 10px;
         transform: scale(0.95);
+        opacity: 0;
     }
 }
