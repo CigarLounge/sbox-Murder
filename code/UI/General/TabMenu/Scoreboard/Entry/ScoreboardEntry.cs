@@ -21,7 +21,6 @@ public class ScoreboardEntry : Panel
 	{
 		PlayerName.Text = _client.Name;
 		Ping.Text = _client.IsBot ? "BOT" : _client.Ping.ToString();
-		SetClass( "me", _client == Local.Client );
 		PlayerAvatar.SetTexture( $"avatar:{_client.PlayerId}" );
 	}
 }
