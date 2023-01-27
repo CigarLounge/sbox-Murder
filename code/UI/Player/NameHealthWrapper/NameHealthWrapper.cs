@@ -1,4 +1,4 @@
-using Sandbox;
+/*using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
@@ -26,3 +26,4 @@ public class NameHealthWrapper : Panel
 		}
 	}
 }
+*/

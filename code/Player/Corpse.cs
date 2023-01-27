@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.UI;
 
 namespace Murder;
 
@@ -7,17 +8,15 @@ namespace Murder;
 [Title( "Player corpse" )]
 public partial class Corpse : ModelEntity, IEntityHint, IUse
 {
-	[Net]
-	public Player Player { get; private set; }
+	[Net] public Player Player { get; private set; }
 
 	public Corpse() { }
 
 	public Corpse( Player player )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		Player = player;
-		Owner = player;
 		Transform = player.Transform;
 		Model = player.Model;
 
@@ -83,7 +82,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 
 	float IEntityHint.HintDistance => Player.MaxHintDistance;
 
-	UI.EntityHintPanel IEntityHint.DisplayHint( Player player )
+	Panel IEntityHint.DisplayHint( Player player )
 	{
 		return new UI.Nameplate( Player );
 	}
@@ -99,7 +98,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 
 	bool IUse.IsUsable( Entity user )
 	{
-		if ( GameManager.Instance.State is not GameplayState )
+		if ( GameState.Current is not GameplayState )
 			return false;
 
 		if ( user is not Player player )

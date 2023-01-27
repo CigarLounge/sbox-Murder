@@ -33,7 +33,6 @@ public partial class Player : AnimatedEntity
 		EnableTouch = false;
 
 		SetModel( "models/citizen/citizen.vmdl" );
-		DressPlayer();
 	}
 
 	public void Respawn()
@@ -66,6 +65,7 @@ public partial class Player : AnimatedEntity
 			CreateHull();
 			CreateFlashlight();
 			ResetInterpolation();
+			DressPlayer();
 
 			Event.Run( GameEvent.Player.Spawned, this );
 			GameManager.Instance.State.OnPlayerSpawned( this );
@@ -105,8 +105,11 @@ public partial class Player : AnimatedEntity
 			MuteFilter = MuteFilter.None;
 		}
 
-		if ( IsForcedSpectator )
+		if ( !this.IsAlive() )
 			return;
+
+		if ( IsLocalPawn )
+			CameraMode.Current = new FirstPersonCamera();
 
 		CreateFlashlight();
 
@@ -119,7 +122,9 @@ public partial class Player : AnimatedEntity
 			return;
 
 		var controller = GetActiveController();
+		Controller?.SetActivePlayer( this );
 		controller?.Simulate();
+		SimulateAnimation( Controller );
 
 		if ( Carriable.IsValid() )
 		{

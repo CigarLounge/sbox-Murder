@@ -23,7 +23,7 @@ public partial class Player
 
 	public override void OnKilled()
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
@@ -55,7 +55,7 @@ public partial class Player
 
 	private void ClientOnKilled()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if ( IsLocalPawn )
 			CurrentChannel = Channel.Spectator;
@@ -66,7 +66,7 @@ public partial class Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		if ( !this.IsAlive() )
 			return;
@@ -77,7 +77,7 @@ public partial class Player
 				return;
 		}
 
-		if ( info.Flags.HasFlag( DamageFlags.Blast ) )
+		if ( info.Tags.Contains( "blast" ) )
 			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
 
 		info.Damage = Math.Min( Health, info.Damage );
@@ -87,7 +87,6 @@ public partial class Player
 		LastDamage = info;
 
 		Health -= info.Damage;
-		Event.Run( GameEvent.Player.TookDamage, this );
 
 		this.ProceduralHitReaction( info );
 

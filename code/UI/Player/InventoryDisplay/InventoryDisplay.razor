@@ -1,6 +1,6 @@
-﻿@namespace Murder.UI
+﻿@*@namespace Murder.UI
 
-@if (!Game.LocalPawn.IsAlive())
+@if (!Hud.DisplayedPlayer.IsAlive())
 {
 	return;
 }
@@ -14,7 +14,7 @@
 	<div class="slot">
 		<inputglyph button="Slot2" />
 		<div class="line box-shadow"></div>
-		<text @ref="Carriable">Carriable</text>
+		<text @ref="Carriable">@Hud.DisplayedPlayer.Carriable.ClassName</text>
 	</div>
 </root>
 
@@ -22,3 +22,36 @@
 {
 
 }
+
+<style>
+    InventoryDisplay 
+    {
+        position: absolute;
+        bottom: 25px;
+        right: 25px;
+        display: flex;
+        flex-direction: column;
+        
+        .slot
+        {
+            align-items: center;
+            font-size: 30px;
+            align-self: flex-end;
+            transition: all 0.1s ease-in;
+
+            .line
+            {
+                width: 2px;
+                height: 80%;
+                background-color: rgb(255, 255, 255);
+                margin: 5px;
+             }
+
+            inputglyph 
+            {
+                border-radius: 6px;
+            }
+
+        }
+    }
+</style>*@

@@ -15,7 +15,7 @@ public partial class PostRound : GameState
 	{
 		WinningRole = winningRole;
 
-		List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
+		/*List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
 
 		foreach ( var client in Game.Clients )
 		{
@@ -36,7 +36,7 @@ public partial class PostRound : GameState
 		{
 			WinningRole = WinningRole,
 			Players = playerData
-		} ) );
+		} ) );*/
 	}
 
 	protected override void OnStart()
@@ -59,3 +59,4 @@ public partial class PostRound : GameState
 			GameManager.Instance.ChangeState( new GameplayState() );
 	}
 }
+

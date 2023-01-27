@@ -1,0 +1,91 @@
+﻿@using Sandbox;
+
+@namespace Murder.UI
+
+@if (Game.LocalPawn is not Murder.Player player)
+{
+	return;
+}
+
+<root>
+	<text class="title">You are a @player.Role.GetTitle()</text>
+	@if (player.Role == Role.Bystander && player.Carriable is Revolver)
+	{
+		<text class="subtitle">with a secret weapon.</text>
+	}
+	<text class="help">@HelpText()</text>
+</root>
+
+@code
+{
+	public RoundStartPopup()
+	{
+		PlaySound("scream");
+	}
+
+	public override void Tick()
+	{
+		if (GameState.Current.TimeLeft)
+			Delete();
+	}
+
+	private string HelpText()
+	{
+		return ((Murder.Player)Game.LocalPawn).Role switch
+		{
+			Role.Murderer => "Kill everyone and don't get caught.",
+			Role.Bystander => "There is a murderer on the loose. Don't get killed!",
+			Role.None => string.Empty,
+			_ => string.Empty
+		};
+	}
+
+	[GameEvent.Round.Start]
+	private static void OnRoundStart()
+	{
+		if (!Game.IsClient)
+			return;
+
+		if (Murder.GameManager.Instance.State.TimeLeft)
+			return;
+
+		var player = (Murder.Player)Game.LocalPawn;
+
+		if (player.Role == Role.None)
+			return;
+
+		Game.RootPanel.AddChild<RoundStartPopup>();
+	}
+}
+
+<style>
+	RoundStartPopup 
+	{
+		position: absolute;
+		color: @(((Murder.Player)Game.LocalPawn).Role.GetColor().Hex);
+		background-color: black;
+		width: 100%;
+		height: 100%;
+		font-size: 30px;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		transition: opacity 0.5s linear;
+	}
+
+	RoundStartPopup:outro
+	{
+		opacity: 0;
+	}
+
+	.title 
+	{
+		font-weight: bold;
+	}
+
+	.subtitle 
+	{
+		color: rgb(120, 70, 245);
+		padding-bottom: 10px;
+	}
+</style>

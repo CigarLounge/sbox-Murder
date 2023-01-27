@@ -30,6 +30,22 @@ public partial class GameManager : Sandbox.GameManager
 			_ = new UI.Hud();	
 	}
 
+	public override void FrameSimulate( IClient client )
+	{
+		if ( client.Pawn is not Entity entity || !entity.IsValid() || !entity.IsAuthority )
+			return;
+
+		entity.FrameSimulate( client );
+		CameraMode.Current.FrameSimulate( client );
+	}
+
+	public override void BuildInput()
+	{
+		CameraMode.Current.BuildInput();
+
+		base.BuildInput();
+	}
+
 	/// <summary>
 	/// Changes the state if minimum players is met. Otherwise, force changes to "WaitingState"
 	/// </summary>
@@ -66,14 +82,14 @@ public partial class GameManager : Sandbox.GameManager
 
 		State.OnPlayerJoin( player );
 
-		UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has joined" );
+		//UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has joined" );
 	}
 
 	public override void ClientDisconnect( IClient client, NetworkDisconnectionReason reason )
 	{
 		State.OnPlayerLeave( client.Pawn as Player );
 
-		UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
+		//UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
 	
 		var player = (Player)client.Pawn;
 

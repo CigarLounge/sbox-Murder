@@ -1,13 +1,11 @@
 using Sandbox;
 using Sandbox.Component;
-using SandboxEditor;
 
 namespace Murder;
 
 [Category( "Weapons" )]
 [ClassName( "murder_weapon_knife" )]
 [EditorModel( "models/weapons/w_knife.vmdl" )]
-[HammerEntity]
 [Title( "Knife" )]
 public partial class Knife : Carriable
 {
@@ -32,7 +30,7 @@ public partial class Knife : Carriable
 		glow.ObscuredColor = Color.Transparent;
 	}
 
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
 		if ( TimeSinceStab < 1.5f )
 			return;
@@ -53,11 +51,11 @@ public partial class Knife : Carriable
 		}
 	}
 
-	public override void SimulateAnimator( PawnAnimator animator )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		base.SimulateAnimator( animator );
-
-		animator.SetAnimParameter( "holdtype", 5 );
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Punch;
+		anim.AimBodyWeight = 1.0f;
+		anim.Handedness = 0;
 	}
 
 	public override bool CanCarry( Player carrier )
@@ -67,7 +65,7 @@ public partial class Knife : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
+		if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );
@@ -75,7 +73,7 @@ public partial class Knife : Carriable
 
 	public override void OnCarryDrop( Player dropper )
 	{
-		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
+		if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = true;
 
 		base.OnCarryDrop( dropper );
@@ -102,7 +100,7 @@ public partial class Knife : Carriable
 
 		trace.Surface.DoBulletImpact( trace );
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		var damageInfo = DamageInfo.Generic( damage )
@@ -110,7 +108,7 @@ public partial class Knife : Carriable
 			.UsingTraceResult( trace )
 			.WithAttacker( Owner )
 			.WithWeapon( this )
-			.WithFlag( DamageFlags.Slash );
+			.WithTag( "slash" );
 
 		if ( trace.Entity is Player )
 			PlaySound( FleshHit );
@@ -127,7 +125,7 @@ public partial class Knife : Carriable
 		_isThrown = true;
 		_gravityModifier = 0;
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		Owner.DropCarriable();
@@ -182,7 +180,7 @@ public partial class Knife : Carriable
 				var damageInfo = DamageInfo.Generic( 100f )
 					.WithPosition( trace.EndPosition )
 					.UsingTraceResult( trace )
-					.WithFlag( DamageFlags.Slash )
+					.WithTag( "slash" )
 					.WithAttacker( PreviousOwner )
 					.WithWeapon( this );
 

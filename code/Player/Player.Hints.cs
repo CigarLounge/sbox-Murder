@@ -39,14 +39,13 @@ public partial class Player
 		{
 			var glow = entity.Components.GetOrCreate<Glow>();
 			glow.Width = 0.25f;
-			glow.Color = Role.Color;
 			glow.Enabled = true;
 		}
 	}
 
 	private static void DeleteHint()
 	{
-		_currentHintPanel?.Delete( true );
+		_currentHintPanel?.Delete();
 		_currentHintPanel = null;
 		UI.FullScreenHintMenu.Instance?.Close();
 

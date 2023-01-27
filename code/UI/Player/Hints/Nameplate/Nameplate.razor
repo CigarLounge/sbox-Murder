@@ -1,0 +1,91 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using System;
+
+@namespace Murder.UI
+
+<root class="label-holder text-shadow">
+	<text class="name">@_player.BystanderName</text>
+
+	@if (_player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
+	{
+		<div @ref=@DisguiseHint class="disguise-hint">
+			<text>Press</text>
+			<inputglyph button="Use" />
+			<text>to disguise as this player</text>
+		</div>
+	}
+</root>
+
+@code
+{
+    private static Nameplate _previous;
+    private readonly Murder.Player _player;
+
+    private Panel DisguiseHint { get; init; }
+
+    public Nameplate(Murder.Player player)
+    {
+        _previous?.Delete(true);
+
+        _player = player;
+        _previous = this;
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(_player.Corpse.IsValid(), Hud.DisplayedPlayer.CanUse(_player.Corpse));
+    }
+
+	public override void Delete(bool immediate = false)
+	{
+		DisguiseHint?.Delete(true);
+
+		base.Delete(immediate);
+	}
+}
+
+<style>
+    Nameplate 
+    {
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        transform: translateX(-50%) translateY(-50%);
+        transition: opacity 0.15s ease-out;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        font-weight: 600;
+        flex-direction: column;
+
+        .name
+        {
+            color: @_player.Color.Hex;
+            font-size: 30px;
+        }
+
+        .disguise-hint 
+        {
+            align-items: center;
+            font-size: 22px;
+            width: 500px;
+            position: absolute;
+            top: 50px;
+            left: -130px;
+
+            inputglyph
+            {
+                margin-left: 5px;
+                margin-right: 5px;
+                border-radius: 6px;
+            }
+        }
+
+        &:outro 
+        {
+            transition: opacity 2s linear;
+            opacity: 0;
+        }
+    }
+</style>

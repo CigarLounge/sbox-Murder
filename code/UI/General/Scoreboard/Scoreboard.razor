@@ -1,0 +1,44 @@
+@using Sandbox;
+@using System;
+@using System.Collections.Generic;
+
+@namespace Murder.UI
+
+<root>
+    <ScoreboardInfo />
+    <div class="background-color-secondary rounded-bottom groups">
+        @foreach(var client in Game.Clients)
+        {
+            <ScoreboardEntry @Client=@client />
+        }
+    </div>
+</root>
+
+@code 
+{
+    protected override int BuildHash()
+    {
+        return Game.Clients.Count.GetHashCode();
+    }
+}
+
+<style>
+    Scoreboard 
+    {
+        flex-direction: column;
+        transition: bottom 0.2s ease-out;
+        max-height: 70%;
+
+        .groups 
+        {
+            flex-direction: column;
+            padding: 8 8 12 8;
+            overflow: scroll;
+        }
+        
+        &:intro 
+        {
+            bottom: 25px;
+        }
+    }
+</style>

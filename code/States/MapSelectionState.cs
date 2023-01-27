@@ -15,7 +15,7 @@ public sealed partial class MapSelectionState : GameState
 	{
 		if ( Votes.Count == 0 )
 		{
-			Game.ChangeLevel( Game.Random.FromList( GameManager.Current.MapVoteIdents.ToList() ) ?? GameManager.DefaultMap );
+			//Game.ChangeLevel( Game.Random.FromList( GameManager.Current.MapVoteIdents.ToList() ) ?? GameManager.DefaultMap );
 			return;
 		}
 
@@ -29,7 +29,7 @@ public sealed partial class MapSelectionState : GameState
 
 	protected override void OnStart()
 	{
-		UI.FullScreenHintMenu.Instance?.ForceOpen( new UI.MapSelectionMenu() );
+		//UI.FullScreenHintMenu.Instance?.ForceOpen( new UI.MapSelectionMenu() );
 	}
 
 	[ConCmd.Server]

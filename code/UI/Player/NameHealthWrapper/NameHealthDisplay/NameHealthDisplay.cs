@@ -1,4 +1,4 @@
-using Sandbox;
+/*using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
@@ -23,3 +23,4 @@ public class NameHealthDisplay : Panel
 		RadialHealth.CluesCollected.Text = $"{player.CurrentPlayer.CluesCollected}";
 	}
 }
+*/

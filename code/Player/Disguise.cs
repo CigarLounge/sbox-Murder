@@ -57,7 +57,7 @@ public sealed class Disguise : EntityComponent<Player>
 	[GameEvent.Player.Killed]
 	private static void OnPlayerKilled( Player player )
 	{
-		if ( !Host.IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( player.LastAttacker is not Player attacker )
@@ -72,7 +72,7 @@ public sealed class Disguise : EntityComponent<Player>
 	[GameEvent.Round.End]
 	private static void RemoveDisguise( Role winningRole )
 	{
-		if ( !Host.IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		foreach ( var murderer in Role.Murderer.GetPlayers() )

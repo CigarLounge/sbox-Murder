@@ -16,13 +16,13 @@ public partial class MapVotePanel : Panel
 	public MapVotePanel()
 	{
 		// Delete unneeded UI elements.
-		foreach ( var panel in Local.Hud.Children.ToList() )
+		foreach ( var panel in Game.RootPanel.Children.ToList() )
 		{
 			if ( panel is FullScreenHintMenu )
 				continue;
 
-			if ( panel is not TextChat and not VoiceChat )
-				panel.Delete( true );
+			//if ( panel is not TextChat and not VoiceChat )
+				//panel.Delete( true );
 		}
 
 		var mapIdents = GameManager.Instance.MapVoteIdents;

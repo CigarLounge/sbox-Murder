@@ -1,8 +1,11 @@
+using System;
+using Sandbox;
 using Sandbox.UI;
+using Sandbox.Utility;
 
 namespace Murder.UI;
 
 [UseTemplate]
-public class Crosshair : Panel
+public partial class Crosshair : Panel
 {
 }

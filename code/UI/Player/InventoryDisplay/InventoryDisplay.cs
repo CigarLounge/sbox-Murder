@@ -1,4 +1,4 @@
-using Sandbox;
+/*using Sandbox;
 using Sandbox.UI;
 
 namespace Murder.UI;
@@ -27,3 +27,4 @@ internal class InventoryDisplay : Panel
 		}
 	}
 }
+*/
