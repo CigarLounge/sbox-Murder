@@ -4,12 +4,10 @@ using System.Collections.Generic;
 
 namespace Murder;
 
-public partial class PostRound : BaseState
+public partial class PostRound : GameState
 {
-	[Net]
-	public Role WinningRole { get; private set; }
-
-	public override int Duration => Game.PostRoundTime;
+	[Net] public Role WinningRole { get; private set; }
+	public override int Duration => GameManager.PostRoundTime;
 
 	public PostRound() { }
 
@@ -18,7 +16,8 @@ public partial class PostRound : BaseState
 		WinningRole = winningRole;
 
 		List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
-		foreach ( var client in Client.All )
+
+		foreach ( var client in Game.Clients )
 		{
 			if ( client.Pawn is not Player player )
 				return;
@@ -42,7 +41,7 @@ public partial class PostRound : BaseState
 
 	protected override void OnStart()
 	{
-		Game.Current.TotalRoundsPlayed++;
+		GameManager.Instance.TotalRoundsPlayed++;
 
 		Event.Run( GameEvent.Round.End, WinningRole );
 	}
@@ -51,12 +50,12 @@ public partial class PostRound : BaseState
 	{
 		bool shouldChangeMap;
 
-		shouldChangeMap = Game.Current.TotalRoundsPlayed >= Game.RoundLimit;
-		shouldChangeMap |= Game.Current.RTVCount >= MathF.Round( Client.All.Count * Game.RTVThreshold );
+		shouldChangeMap = GameManager.Instance.TotalRoundsPlayed >= GameManager.RoundLimit;
+		shouldChangeMap |= GameManager.Instance.RTVCount >= MathF.Round( Game.Clients.Count * GameManager.RTVThreshold );
 
 		if ( shouldChangeMap )
-			Game.Current.ForceStateChange( new MapSelectionState() );
+			GameManager.Instance.ForceStateChange( new MapSelectionState() );
 		else
-			Game.Current.ChangeState( new GameplayState() );
+			GameManager.Instance.ChangeState( new GameplayState() );
 	}
 }

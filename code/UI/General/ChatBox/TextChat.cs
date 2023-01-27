@@ -1,5 +1,6 @@
 using Sandbox;
 using Sandbox.UI;
+using Sandbox.Util;
 
 namespace Murder.UI;
 
@@ -106,13 +107,13 @@ public partial class TextChat : Panel
 
 		if ( message == Strings.RTVCommand )
 		{
-			Game.RockTheVote();
+			GameManager.RockTheVote();
 			return;
 		}
 
 		if ( !player.IsAlive() )
 		{
-			var clients = Game.Current.State is GameplayState ? Utils.GetDeadClients() : Client.All;
+			var clients = GameManager.Instance.State is GameplayState ? Utils.GetDeadClients() : Client.All;
 			AddChat( To.Multiple( clients ), player.Client.Name, message, Channel.Spectator );
 			return;
 		}

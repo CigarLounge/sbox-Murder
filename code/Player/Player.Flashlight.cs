@@ -4,11 +4,8 @@ namespace Murder;
 
 public partial class Player
 {
-	[Net, Predicted]
-	public bool FlashlightEnabled { get; private set; } = false;
-
-	[Net, Local, Predicted]
-	private TimeSince TimeSinceLightToggled { get; set; }
+	[Net, Predicted] public bool FlashlightEnabled { get; private set; } = false;
+	[Net, Local, Predicted] private TimeSince TimeSinceLightToggled { get; set; }
 
 	/// <summary>
 	/// The third person flashlight.
@@ -49,7 +46,7 @@ public partial class Player
 
 	protected void CreateFlashlight()
 	{
-		if ( Host.IsServer )
+		if ( Game.IsServer )
 		{
 			_worldLight = CreateLight();
 			_worldLight.EnableHideInFirstPerson = true;
@@ -71,7 +68,7 @@ public partial class Player
 		_viewLight = null;
 	}
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	private void FrameUpdate()
 	{
 		if ( !_viewLight.IsValid() )

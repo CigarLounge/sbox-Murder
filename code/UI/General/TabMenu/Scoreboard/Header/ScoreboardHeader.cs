@@ -19,7 +19,7 @@ public class ScoreboardHeader : Panel
 	{
 		PlayerCount.Text = $"{Client.All.Count} / {ConsoleSystem.GetValue( "maxplayers" ).ToInt( 0 )} Players";
 
-		var roundsRemaining = Game.RoundLimit - Game.Current.TotalRoundsPlayed;
+		var roundsRemaining = GameManager.RoundLimit - GameManager.Instance.TotalRoundsPlayed;
 		var suffix = roundsRemaining == 1 ? "round" : "rounds";
 		MapChange.Text = $"Map will change in {roundsRemaining} {suffix}";
 	}

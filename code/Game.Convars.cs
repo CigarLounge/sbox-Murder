@@ -2,7 +2,7 @@ using Sandbox;
 
 namespace Murder;
 
-public partial class Game
+public partial class GameManager
 {
 	#region Round
 	[ConVar.Server( "murder_postround_time", Help = "The length of the postround time.", Saved = true )]

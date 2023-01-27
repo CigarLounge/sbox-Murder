@@ -31,7 +31,7 @@ public sealed class RoundStartPopup : Panel
 
 	public override void Tick()
 	{
-		if ( Game.Current.State.TimeLeft )
+		if ( GameManager.Instance.State.TimeLeft )
 			Delete();
 	}
 
@@ -41,7 +41,7 @@ public sealed class RoundStartPopup : Panel
 		if ( !Host.IsClient )
 			return;
 
-		if ( Game.Current.State.TimeLeft )
+		if ( GameManager.Instance.State.TimeLeft )
 			return;
 
 		var player = (Player)Local.Pawn;

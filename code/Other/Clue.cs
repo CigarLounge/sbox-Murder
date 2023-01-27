@@ -15,7 +15,7 @@ public class Clue : Prop
 
 	public override void Spawn()
 	{
-		Model = Rand.FromList( _models );
+		Model = Game.Random.FromList( _models );
 		SetupPhysicsFromModel( PhysicsMotionType.Static );
 
 		PhysicsEnabled = true;

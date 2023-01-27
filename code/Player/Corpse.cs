@@ -99,7 +99,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 
 	bool IUse.IsUsable( Entity user )
 	{
-		if ( Game.Current.State is not GameplayState )
+		if ( GameManager.Instance.State is not GameplayState )
 			return false;
 
 		if ( user is not Player player )

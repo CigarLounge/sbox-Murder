@@ -48,7 +48,7 @@ public partial class Player
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
-		Game.Current.State.OnPlayerKilled( this );
+		GameManager.Instance.State.OnPlayerKilled( this );
 
 		ClientOnKilled( this );
 	}
@@ -73,7 +73,7 @@ public partial class Player
 
 		if ( info.Attacker is Player attacker && attacker != this )
 		{
-			if ( Game.Current.State is not GameplayState and not PostRound )
+			if ( GameManager.Instance.State is not GameplayState and not PostRound )
 				return;
 		}
 

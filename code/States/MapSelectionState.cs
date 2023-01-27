@@ -5,24 +5,21 @@ using System.Threading.Tasks;
 
 namespace Murder;
 
-public sealed partial class MapSelectionState : BaseState
+public sealed partial class MapSelectionState : GameState
 {
-	[Net]
-	public IDictionary<Client, string> Votes { get; private set; }
-
-	public override int Duration => Game.MapSelectionTime;
-
+	[Net] public IDictionary<IClient, string> Votes { get; private set; }
+	public override int Duration => GameManager.MapSelectionTime;
 	public const string MapsFile = "maps.txt";
 
 	protected override void OnTimeUp()
 	{
 		if ( Votes.Count == 0 )
 		{
-			Global.ChangeLevel( Rand.FromList( Game.Current.MapVoteIdents as List<string> ) ?? Game.DefaultMap );
+			Game.ChangeLevel( Game.Random.FromList( GameManager.Current.MapVoteIdents.ToList() ) ?? GameManager.DefaultMap );
 			return;
 		}
 
-		Global.ChangeLevel
+		Game.ChangeLevel
 		(
 			Votes.GroupBy( x => x.Value )
 			.OrderBy( x => x.Count() )
@@ -32,13 +29,13 @@ public sealed partial class MapSelectionState : BaseState
 
 	protected override void OnStart()
 	{
-		UI.FullScreenHintMenu.Instance?.ForceOpen( new UI.MapVotePanel() );
+		UI.FullScreenHintMenu.Instance?.ForceOpen( new UI.MapSelectionMenu() );
 	}
 
 	[ConCmd.Server]
 	public static void SetVote( string map )
 	{
-		if ( Game.Current.State is not MapSelectionState state )
+		if ( Current is not MapSelectionState state )
 			return;
 
 		if ( ConsoleSystem.Caller.Pawn is not Player player )
@@ -55,18 +52,19 @@ public sealed partial class MapSelectionState : BaseState
 			maps = await GetRemoteMapIdents();
 
 		maps.Shuffle();
-		Game.Current.MapVoteIdents = maps;
+		//GameManager.Current.MapVoteIdents = maps;
 	}
 
 	private static async Task<List<string>> GetLocalMapIdents()
 	{
 		var maps = new List<string>();
-
 		var rawMaps = FileSystem.Data.ReadAllText( MapsFile );
+
 		if ( rawMaps.IsNullOrEmpty() )
 			return maps;
 
 		var splitMaps = rawMaps.Split( "\n" );
+
 		foreach ( var rawMap in splitMaps )
 		{
 			var mapIdent = rawMap.Trim();
@@ -83,16 +81,8 @@ public sealed partial class MapSelectionState : BaseState
 
 	private static async Task<List<string>> GetRemoteMapIdents()
 	{
-		var query = new Package.Query
-		{
-			Type = Package.Type.Map,
-			Order = Package.Order.User,
-			Take = 99,
-		};
+		var queryResult = await Package.FindAsync( $"type:map game:{Game.Server.GameIdent.Replace( "#local", "" )}", take: 99 );
 
-		query.Tags.Add( "game:" + Global.GameIdent );
-
-		var packages = await query.RunAsync( default );
-		return packages.Select( ( p ) => p.FullIdent ).ToList();
+		return queryResult.Packages.Select( ( p ) => p.FullIdent ).ToList();
 	}
 }

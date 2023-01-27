@@ -1,0 +1,24 @@
+﻿@namespace Murder.UI
+
+@if (!Game.LocalPawn.IsAlive())
+{
+	return;
+}
+
+<root class="text-shadow">
+	<div class="slot" @ref="Holster">
+		<inputglyph button="Slot1" />
+		<div class="line box-shadow"></div>
+		<text>Holster</text>
+	</div>
+	<div class="slot">
+		<inputglyph button="Slot2" />
+		<div class="line box-shadow"></div>
+		<text @ref="Carriable">Carriable</text>
+	</div>
+</root>
+
+@code
+{
+
+}

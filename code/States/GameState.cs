@@ -2,19 +2,18 @@ using Sandbox;
 
 namespace Murder;
 
-public abstract partial class BaseState : BaseNetworkable
+public abstract partial class GameState : BaseNetworkable
 {
-	[Net]
-	public TimeUntil TimeLeft { get; protected set; }
+	public static GameState Current => GameManager.Instance.State;
 
+	[Net] public TimeUntil TimeLeft { get; protected set; }
 	public virtual int Duration => 0;
 	public string TimeLeftFormatted => TimeLeft.Relative.TimerString();
-
 	private TimeUntil _nextSecondTime = 0f;
 
 	public void Start()
 	{
-		if ( Host.IsServer && Duration > 0 )
+		if ( Game.IsServer && Duration > 0 )
 			TimeLeft = Duration;
 
 		OnStart();
@@ -22,7 +21,7 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public void Finish()
 	{
-		if ( Host.IsServer )
+		if ( Game.IsServer )
 			TimeLeft = 0f;
 
 		OnFinish();
@@ -30,12 +29,12 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerSpawned( Player player )
 	{
-		Game.Current.MoveToSpawnpoint( player );
+		GameManager.Instance.MoveToSpawnpoint( player );
 	}
 
 	public virtual void OnPlayerKilled( Player player )
 	{
-		player.MakeSpectator( true );
+		player.MakeSpectator();
 	}
 
 	public virtual void OnPlayerJoin( Player player ) { }
@@ -53,7 +52,7 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnSecond()
 	{
-		if ( Host.IsServer && TimeLeft )
+		if ( Game.IsServer && TimeLeft )
 			OnTimeUp();
 	}
 
@@ -62,12 +61,4 @@ public abstract partial class BaseState : BaseNetworkable
 	protected virtual void OnFinish() { }
 
 	protected virtual void OnTimeUp() { }
-
-	protected async void StartRespawnTimer( Player player )
-	{
-		await GameTask.DelaySeconds( 1 );
-
-		if ( player.IsValid() && Game.Current.State == this )
-			player.Respawn();
-	}
 }

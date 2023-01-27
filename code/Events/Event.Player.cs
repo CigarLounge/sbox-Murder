@@ -42,17 +42,5 @@ public static partial class GameEvent
 		{
 			public SpawnedAttribute() : base( Spawned ) { }
 		}
-
-		public const string TookDamage = "murder.player.took-damage";
-
-		/// <summary>
-		/// Occurs when a player takes damage.
-		/// <para><strong>Parameters:</strong></para>
-		/// <para>The <see cref="Murder.Player"/> who took damage.</para>
-		/// </summary>
-		public class TookDamageAttribute : EventAttribute
-		{
-			public TookDamageAttribute() : base( TookDamage ) { }
-		}
 	}
 }

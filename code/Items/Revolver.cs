@@ -1,6 +1,5 @@
 using Sandbox;
 using Sandbox.Component;
-using SandboxEditor;
 using System.Collections.Generic;
 
 namespace Murder;
@@ -8,7 +7,6 @@ namespace Murder;
 [Category( "Weapons" )]
 [ClassName( "murder_weapon_revolver" )]
 [EditorModel( "models/weapons/w_mr96.vmdl" )]
-[HammerEntity]
 [Title( "Revolver" )]
 public partial class Revolver : Carriable
 {
@@ -43,7 +41,7 @@ public partial class Revolver : Carriable
 		IsReloading = false;
 	}
 
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
 		if ( TimeSincePrimaryAttack <= 0.5f )
 			return;
@@ -71,6 +69,13 @@ public partial class Revolver : Carriable
 		}
 	}
 
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
+	{
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
+		anim.AimBodyWeight = 1.0f;
+		anim.Handedness = 0;
+	}
+
 	private void AttackPrimary()
 	{
 		BulletInClip = false;
@@ -92,13 +97,6 @@ public partial class Revolver : Carriable
 		ReloadEffects();
 	}
 
-	public override void SimulateAnimator( PawnAnimator animator )
-	{
-		base.SimulateAnimator( animator );
-
-		animator.SetAnimParameter( "holdtype", 1 );
-	}
-
 	public override bool CanCarry( Player carrier )
 	{
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
@@ -106,7 +104,7 @@ public partial class Revolver : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
+		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );
@@ -114,7 +112,7 @@ public partial class Revolver : Carriable
 
 	public override void OnCarryDrop( Player dropper )
 	{
-		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
+		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = true;
 
 		base.OnCarryDrop( dropper );
@@ -123,7 +121,7 @@ public partial class Revolver : Carriable
 	protected void ShootBullet( float force, float damage, float bulletSize )
 	{
 		// Seed rand using the tick, so bullet cones match on client and server
-		Rand.SetSeed( Time.Tick );
+		Game.SetRandomSeed( Time.Tick );
 
 		var forward = Owner.EyeRotation.Forward;
 
@@ -133,7 +131,7 @@ public partial class Revolver : Carriable
 
 			var fullEndPosition = trace.EndPosition + trace.Direction * bulletSize;
 
-			if ( !IsServer )
+			if ( !Game.IsServer )
 				continue;
 
 			if ( !trace.Entity.IsValid() )

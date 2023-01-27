@@ -4,9 +4,7 @@ namespace Murder;
 
 public partial class Player
 {
-	[Net]
-	public Entity Using { get; protected set; }
-
+	[Net] public Entity Using { get; private set; }
 	/// <summary>
 	/// The entity we're currently looking at.
 	/// </summary>
@@ -14,6 +12,34 @@ public partial class Player
 
 	public const float UseDistance = 80f;
 	private float _traceDistance;
+
+	public bool CanUse( Entity entity )
+	{
+		if ( entity is not IUse use )
+			return false;
+
+		if ( !use.IsUsable( this ) )
+			return false;
+
+		if ( _traceDistance > UseDistance && FindUsablePoint( entity ) is null )
+			return false;
+
+		return true;
+	}
+
+	public bool CanContinueUsing( Entity entity )
+	{
+		if ( HoveredEntity != entity )
+			return false;
+
+		if ( _traceDistance > UseDistance && FindUsablePoint( entity ) is null )
+			return false;
+
+		if ( entity is IUse use && use.OnUse( this ) )
+			return true;
+
+		return false;
+	}
 
 	protected void PlayerUse()
 	{
@@ -24,7 +50,7 @@ public partial class Player
 			if ( Input.Pressed( InputButton.Use ) )
 			{
 				if ( CanUse( HoveredEntity ) )
-					StartUsing( HoveredEntity );
+					Using = HoveredEntity;
 			}
 
 			if ( !Input.Down( InputButton.Use ) )
@@ -56,44 +82,28 @@ public partial class Player
 			return null;
 
 		_traceDistance = trace.Distance;
+
 		return trace.Entity;
-	}
-
-	public bool CanUse( Entity entity )
-	{
-		if ( entity is not IUse use )
-			return false;
-
-		if ( _traceDistance > UseDistance )
-			return false;
-
-		if ( !use.IsUsable( this ) )
-			return false;
-
-		return true;
-	}
-
-	public bool CanContinueUsing( Entity entity )
-	{
-		if ( HoveredEntity != entity )
-			return false;
-
-		if ( _traceDistance > UseDistance )
-			return false;
-
-		if ( entity is IUse use && use.OnUse( this ) )
-			return true;
-
-		return false;
-	}
-
-	public void StartUsing( Entity entity )
-	{
-		Using = entity;
 	}
 
 	protected void StopUsing()
 	{
 		Using = null;
+	}
+
+	private Vector3? FindUsablePoint( Entity entity )
+	{
+		if ( entity is null || entity.PhysicsGroup is null || entity.PhysicsGroup.BodyCount == 0 )
+			return null;
+
+		foreach ( var body in entity.PhysicsGroup.Bodies )
+		{
+			var usablePoint = body.FindClosestPoint( EyePosition );
+
+			if ( EyePosition.Distance( usablePoint ) <= UseDistance )
+				return usablePoint;
+		}
+
+		return null;
 	}
 }

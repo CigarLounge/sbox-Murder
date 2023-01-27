@@ -1,14 +1,12 @@
 using Sandbox;
+using Sandbox.Diagnostics;
 
 namespace Murder;
 
 public partial class Player
 {
-	[Net, Change]
-	public Carriable Carriable { get; private set; }
-
-	[Net, Predicted]
-	public bool IsHolstered { get; private set; } = true;
+	[Net, Predicted] public bool IsHolstered { get; set; }
+	[Net, Change] public Carriable Carriable { get; private set; }
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
 	{

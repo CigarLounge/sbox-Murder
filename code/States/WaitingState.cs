@@ -2,22 +2,22 @@ using Sandbox;
 
 namespace Murder;
 
-public class WaitingState : BaseState
+public class WaitingState : GameState
 {
 	public override void OnSecond()
 	{
-		if ( Host.IsServer && Utils.HasMinimumPlayers() )
-			Game.Current.ForceStateChange( new GameplayState() );
+		if ( Game.IsServer && GameManager.HasMinimumPlayers() )
+			GameManager.Instance.ForceStateChange( new GameplayState() );
 	}
 
 	protected override void OnStart()
 	{
-		if ( Game.Current.TotalRoundsPlayed == 0 )
+		if ( GameManager.Instance.TotalRoundsPlayed == 0 )
 			return;
 
 		MapHandler.Cleanup();
 
-		foreach ( var client in Client.All )
+		foreach ( var client in Game.Clients )
 		{
 			var player = (Player)client.Pawn;
 
