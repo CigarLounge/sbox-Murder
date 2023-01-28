@@ -77,8 +77,8 @@ public partial class Player
 				return;
 		}
 
-		if ( info.Tags.Contains( "blast" ) )
-			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
+		//if ( info.Tags.Contains( "blast" ) )
+			//Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
 
 		info.Damage = Math.Min( Health, info.Damage );
 

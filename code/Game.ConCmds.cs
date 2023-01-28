@@ -6,7 +6,7 @@ namespace Murder;
 public partial class GameManager
 {
 	[ConCmd.Admin( Name = "murder_takedamage" )]
-	public static void GiveItem( int damage )
+	public static void GiveItem( float damage )
 	{
 		var player = ConsoleSystem.Caller.Pawn as Player;
 

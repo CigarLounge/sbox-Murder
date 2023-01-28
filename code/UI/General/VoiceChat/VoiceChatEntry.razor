@@ -101,33 +101,37 @@
 }
 
 <style>
-	VoiceChatEntry {
+	VoiceChatEntry 
+	{
 		flex-direction: row;
 		padding: 8px 8px;
 		margin-bottom: 5px;
 		align-items: center;
 		transition: all 0.05s ease-out;
 		background-color: @BackgroundColor();
-		&:intro
+	}
 
+	VoiceChatEntry:intro 
 	{
 		opacity: 0;
 		left: 10px;
 	}
 
-	&:outro {
+	VoiceChatEntry:outro 
+	{
 		opacity: 0;
 		left: 10px;
 	}
 
-	.avatar {
+	.avatar 
+	{
 		width: 25px;
 		height: 25px;
 		border-radius: 4px;
 	}
 
-	.name {
+	.name 
+	{
 		margin-left: 5px;
 	}
-
-	}</style>
+</style>

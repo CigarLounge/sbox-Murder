@@ -9,7 +9,7 @@
 
 <root>
 	<text class="title">You are a @player.Role.GetTitle()</text>
-	@if (player.Role == Role.Bystander && player.Carriable is Revolver)
+	@if (player.Carriable is Revolver)
 	{
 		<text class="subtitle">with a secret weapon.</text>
 	}
@@ -71,21 +71,21 @@
 		align-items: center;
 		justify-content: center;
 		transition: opacity 0.5s linear;
-	}
 
-	RoundStartPopup:outro
-	{
-		opacity: 0;
-	}
+		&:outro
+		{
+			opacity: 0;
+		}
 
-	.title 
-	{
-		font-weight: bold;
-	}
+		.title 
+		{
+			font-weight: bold;
+		}
 
-	.subtitle 
-	{
-		color: rgb(120, 70, 245);
-		padding-bottom: 10px;
+		.subtitle 
+		{
+			color: #7846F5;
+			padding-bottom: 10px;
+		}
 	}
 </style>

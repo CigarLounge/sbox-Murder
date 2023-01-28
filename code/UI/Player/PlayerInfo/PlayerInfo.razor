@@ -1,0 +1,99 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using System;
+
+@namespace Murder.UI
+
+@if (!Hud.DisplayedPlayer.IsAlive())
+{
+	return;
+}
+
+<root class="text-shadow">
+	<text class="name">@Hud.DisplayedPlayer.BystanderName</text>
+	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
+		<div @ref="InnerCircle" class="inner-circle box-shadow"></div>
+		<text class="clues">@Hud.DisplayedPlayer.CluesCollected</text>
+	</div>
+	<text class="role text-shadow">@Hud.DisplayedPlayer.Role.GetTitle()</text>
+</root>
+
+@code
+{
+	private Panel InnerCircle { get; set; }
+
+	public override void Tick()
+	{
+		var player = Hud.DisplayedPlayer;
+
+		if (!player.IsAlive())
+			return;
+
+		InnerCircle.Style.Height = Length.Percent(player.Health - 5);
+		InnerCircle.Style.Width = Length.Percent(player.Health - 5);
+	}
+
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
+
+		return HashCode.Combine(player.IsAlive(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.CluesCollected.GetHashCode());
+	}
+}
+
+<style>
+	PlayerInfo {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		font-size: 35;
+		font-weight: 600;
+	}
+
+	.clues {
+		translateX(-50%);
+		align-items: center;
+		justify-content: center;
+	}
+
+	.name {
+		position: absolute;
+		bottom: 240px;
+		left: 135px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Color.Hex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.outer-circle {
+		position: absolute;
+		font-size: 50px;
+		font-weight: 600;
+		bottom: 10px;
+		left: 25px;
+		width: 225px;
+		height: 225px;
+		border-radius: 50%;
+		transition: all 0.1s ease-out;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.inner-circle {
+		position: absolute;
+		border-radius: 50%;
+		width: 50%;
+		height: 50%;
+		background-color: @Hud.DisplayedPlayer.Color.Hex;
+		transition: all 0.1s ease-out;
+	}
+
+	.role {
+		position: absolute;
+		left: 50%;
+		bottom: 10px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
+	}
+</style>
