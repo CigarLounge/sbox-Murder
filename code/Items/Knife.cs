@@ -131,11 +131,48 @@ public partial class Knife : Carriable
 
 		Owner.DropCarriable();
 
+		PhysicsEnabled = true;
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
-		Velocity = PreviousOwner.EyeRotation.Forward * (1250f + PreviousOwner.Velocity.Length);
+		
+		Velocity =  PreviousOwner.EyeRotation.Forward * (700f + PreviousOwner.Velocity.Length) + Vector3.Up * 200 ;
+		ApplyLocalAngularImpulse( new Vector3( 0, 1500 , 0 ) );
+	}
 
-		EnableTouch = false;
+	public override void StartTouch( Entity other )
+	{
+		if ( other is Player player && player != PreviousOwner )
+		{
+			_isThrown = false;
+
+			var damageInfo = DamageInfo.Generic( 200f )
+				.WithPosition( Position )
+				.WithForce( Position.Normal * 20f )
+				.WithAttacker( PreviousOwner )
+				.WithWeapon( this )
+				.WithTag( "slash" );
+
+			player.TakeDamage( damageInfo );
+		}
+	}
+
+	protected override void OnPhysicsCollision( CollisionEventData eventData )
+	{
+		if ( !_isThrown || Velocity.Length < 500f )
+			return;
+
+		_isThrown = false;
+
+		if ( !eventData.Other.Entity.IsWorld )
+			return;
+
+		var dot = Vector3.Dot( eventData.Normal, (Rotation *_throwRotation).Backward );
+
+		if ( dot < 0.707f )
+			return;
+
+		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Run() );
+		Position = eventData.Position;
 		PhysicsEnabled = false;
 	}
 
@@ -143,75 +180,5 @@ public partial class Knife : Carriable
 	protected void SwingEffects()
 	{
 		ViewModelEntity?.SetAnimParameter( "fire", true );
-	}
-
-	[Event.Tick.Server]
-	private void ServerTick()
-	{
-		if ( !_isThrown )
-			return;
-
-		var oldPosition = Position;
-		var newPosition = Position;
-		newPosition += Velocity * Time.Delta;
-
-		_gravityModifier += 8;
-		newPosition -= new Vector3( 0f, 0f, _gravityModifier * Time.Delta );
-
-		var trace = Trace.Ray( Position, newPosition )
-			.Radius( 0f )
-			.UseHitboxes()
-			.WithAnyTags( "solid" )
-			.Ignore( PreviousOwner )
-			.Ignore( this )
-			.Run();
-
-		Position = trace.EndPosition;
-		Rotation = Rotation.From( trace.Direction.EulerAngles ) * _throwRotation;
-
-		if ( !trace.Hit )
-			return;
-
-		switch ( trace.Entity )
-		{
-			case Player player:
-			{
-				trace.Surface.DoBulletImpact( trace );
-
-				var damageInfo = DamageInfo.Generic( 100f )
-					.WithPosition( trace.EndPosition )
-					.UsingTraceResult( trace )
-					.WithTag( "slash" )
-					.WithAttacker( PreviousOwner )
-					.WithWeapon( this );
-
-				player.TakeDamage( damageInfo );
-
-				Delete();
-
-				break;
-			}
-			case WorldEntity:
-			{
-				if ( Vector3.GetAngle( trace.Normal, trace.Direction ) < 120 )
-					goto default;
-
-				trace.Surface.DoBulletImpact( trace );
-
-				Position -= trace.Direction * 4f; // Make the knife stuck in the terrain.			
-
-				break;
-			}
-			default:
-			{
-				Position = oldPosition - trace.Direction * 5;
-				Velocity = trace.Direction * 500f * PhysicsBody.Mass;
-				PhysicsEnabled = true;
-				break;
-			}
-		}
-
-		EnableTouch = true;
-		_isThrown = false;
 	}
 }
