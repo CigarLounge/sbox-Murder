@@ -43,7 +43,7 @@
 
 		var player = (Murder.Player)_client.Pawn;
 
-		if (HideIdentity())
+		if (player.IsIdentityHidden)
 		{
 			Avatar.Texture = null;
 			Avatar.Style.BackgroundColor = player.Color;
@@ -97,7 +97,7 @@
 
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(HideIdentity());
+		return HashCode.Combine(((Murder.Player)_client.Pawn).IsIdentityHidden);
 	}
 
 	private string BackgroundColor()
@@ -106,11 +106,6 @@
 			return "#fcdb38";
 
 		return "#303030";
-	}
-
-	private bool HideIdentity()
-	{
-		return ((Murder.Player)_client.Pawn).IsAlive() && GameState.Current is GameplayState;
 	}
 }
 

@@ -102,7 +102,6 @@ public partial class Player : AnimatedEntity
 			Role = Role.None;
 		else
 		{
-			CurrentChannel = Channel.All;
 			MuteFilter = MuteFilter.None;
 		}
 

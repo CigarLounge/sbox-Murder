@@ -60,7 +60,7 @@ public sealed partial class MapSelectionState : GameState
 		var maps = new List<string>();
 		var rawMaps = FileSystem.Data.ReadAllText( MapsFile );
 
-		if ( rawMaps.IsNullOrEmpty() )
+		if ( string.IsNullOrEmpty( rawMaps ) )
 			return maps;
 
 		var splitMaps = rawMaps.Split( "\n" );

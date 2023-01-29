@@ -19,7 +19,7 @@ public partial class GameManager
 	[ConCmd.Admin( Name = "murder_giveitem" )]
 	public static void GiveItem( string itemName )
 	{
-		if ( itemName.IsNullOrEmpty() )
+		if ( string.IsNullOrEmpty( itemName ) )
 			return;
 
 		var player = ConsoleSystem.Caller.Pawn as Player;
@@ -67,7 +67,7 @@ public partial class GameManager
 		client.SetValue( "rtv", true );
 		Instance.RTVCount += 1;
 
-		//UI.TextChat.AddInfo( $"{client.Name} has rocked the vote! ({Instance.RTVCount}/{MathF.Round( Game.Clients.Count * GameManager.RTVThreshold )})" );
+		UI.TextChat.AddInfo( $"{client.Name} has rocked the vote! ({Instance.RTVCount}/{MathF.Round( Game.Clients.Count * GameManager.RTVThreshold )})" );
 	}
 
 	[ConCmd.Server( Name = "kill" )]

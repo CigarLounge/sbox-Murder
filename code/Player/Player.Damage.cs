@@ -48,8 +48,6 @@ public partial class Player
 
 		if ( IsLocalPawn )
 		{
-			CurrentChannel = Channel.Spectator;
-
 			if ( Corpse.IsValid() )
 				CameraMode.Current = new FollowEntityCamera( Corpse );
 		}

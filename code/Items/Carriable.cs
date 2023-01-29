@@ -113,7 +113,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		Game.AssertClient();
 
-		if ( ViewModelPath.IsNullOrEmpty() )
+		if ( string.IsNullOrEmpty( ViewModelPath ) )
 			return;
 
 		ViewModelEntity = new ViewModel

@@ -17,6 +17,7 @@ public partial class Player
 	[Net] public int CluesCollected { get; set; }
 	[Net] public string SteamName { get; private set; }
 	public Corpse Corpse { get; set; }
+	public bool IsIdentityHidden => this.IsAlive() && GameState.Current is GameplayState;
 
 	private Role _role;
 	public Role Role
