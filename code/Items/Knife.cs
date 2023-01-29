@@ -1,5 +1,6 @@
 using Sandbox;
 using Sandbox.Component;
+using System;
 
 namespace Murder;
 
@@ -9,26 +10,13 @@ namespace Murder;
 [Title( "Knife" )]
 public partial class Knife : Carriable
 {
-	[Net, Local, Predicted]
-	public TimeSince TimeSinceStab { get; private set; }
-
+	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
 	public override string IconPath { get; } = "ui/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
-	private const string SwingSound = "knife_swing-1";
-	private const string FleshHit = "knife_flesh_hit-1";
-
 	private bool _isThrown = false;
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
-	private float _gravityModifier;
-
-	/*	public override void ClientSpawn()
-		{
-			var glow = Components.GetOrCreate<Glow>();
-			glow.Color = Role.Murderer.GetColor();
-			glow.ObscuredColor = Color.Transparent;
-		}*/
 
 	public override void Simulate( IClient client )
 	{
@@ -63,21 +51,26 @@ public partial class Knife : Carriable
 		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
 	}
 
-	/*	public override void OnCarryStart( Player carrier )
-		{
-			if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
-				Components.GetOrCreate<Glow>().Enabled = false;
+	public override void OnCarryStart( Player carrier )
+	{
+		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
+			Components.GetOrCreate<Glow>().Enabled = false;
 
-			base.OnCarryStart( carrier );
+		base.OnCarryStart( carrier );
+	}
+
+	public override void OnCarryDrop( Player dropper )
+	{
+		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
+		{
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Enabled = true;
+			glow.Color = Role.Murderer.GetColor();
+			glow.ObscuredColor = Color.Transparent;
 		}
 
-		public override void OnCarryDrop( Player dropper )
-		{
-			if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
-				Components.GetOrCreate<Glow>().Enabled = true;
-
-			base.OnCarryDrop( dropper );
-		}*/
+		base.OnCarryDrop( dropper );
+	}
 
 	private void MeleeAttack( float damage, float range, float radius )
 	{
@@ -85,7 +78,7 @@ public partial class Knife : Carriable
 
 		Owner.SetAnimParameter( "b_attack", true );
 		SwingEffects();
-		PlaySound( SwingSound );
+		PlaySound( "knife_swing-1" );
 
 		var endPosition = Owner.EyePosition + Owner.EyeRotation.Forward * range;
 
@@ -112,7 +105,7 @@ public partial class Knife : Carriable
 			.WithTag( "slash" );
 
 		if ( trace.Entity is Player )
-			PlaySound( FleshHit );
+			PlaySound( "knife_flesh_hit-1" );
 
 		trace.Entity.TakeDamage( damageInfo );
 	}
@@ -124,7 +117,6 @@ public partial class Knife : Carriable
 			.Run();
 
 		_isThrown = true;
-		_gravityModifier = 0;
 
 		if ( !Game.IsServer )
 			return;
@@ -134,9 +126,9 @@ public partial class Knife : Carriable
 		PhysicsEnabled = true;
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
-		
-		Velocity =  PreviousOwner.EyeRotation.Forward * (700f + PreviousOwner.Velocity.Length) + Vector3.Up * 200 ;
-		ApplyLocalAngularImpulse( new Vector3( 0, 1500 , 0 ) );
+
+		Velocity = PreviousOwner.EyeRotation.Forward * (700f + PreviousOwner.Velocity.Length) + Vector3.Up * 200;
+		ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
 	}
 
 	public override void StartTouch( Entity other )
@@ -158,20 +150,20 @@ public partial class Knife : Carriable
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		if ( !_isThrown || Velocity.Length < 500f )
-			return;
-
 		_isThrown = false;
+
+		if ( eventData.Speed < 500f )
+			return;
 
 		if ( !eventData.Other.Entity.IsWorld )
 			return;
 
-		var dot = Vector3.Dot( eventData.Normal, (Rotation *_throwRotation).Backward );
+		var dot = Vector3.Dot( eventData.Normal, (Rotation * _throwRotation).Backward );
 
-		if ( dot < 0.707f )
+		if ( dot < MathF.Cos( MathF.PI / 4f ) )
 			return;
 
-		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Run() );
+		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Ignore( this ).Run() );
 		Position = eventData.Position;
 		PhysicsEnabled = false;
 	}

@@ -10,29 +10,14 @@ namespace Murder;
 [Title( "Revolver" )]
 public partial class Revolver : Carriable
 {
-	[Net, Predicted]
-	public bool BulletInClip { get; private set; } = true;
-
-	[Net, Local, Predicted]
-	public TimeSince TimeSincePrimaryAttack { get; private set; }
-
-	[Net, Local, Predicted]
-	public bool IsReloading { get; private set; }
-
-	[Net, Local, Predicted]
-	public TimeSince TimeSinceReload { get; private set; }
-
+	[Net, Local, Predicted] public bool BulletInClip { get; private set; } = true;
+	[Net, Local, Predicted] public TimeSince TimeSincePrimaryAttack { get; private set; }
+	[Net, Local, Predicted] public bool IsReloading { get; private set; }
+	[Net, Local, Predicted] public TimeSince TimeSinceReload { get; private set; }
 	public override float DeployTime => 1.2f;
 	public override string IconPath { get; } = "ui/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
-
-	/*public override void ClientSpawn()
-	{
-		var glow = Components.GetOrCreate<Glow>();
-		glow.Color = Role.Bystander.GetColor();
-		glow.ObscuredColor = Color.Transparent;
-	}*/
 
 	public override void ActiveStart( Player player )
 	{
@@ -102,7 +87,7 @@ public partial class Revolver : Carriable
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
 	}
 
-	/*public override void OnCarryStart( Player carrier )
+	public override void OnCarryStart( Player carrier )
 	{
 		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = false;
@@ -113,10 +98,15 @@ public partial class Revolver : Carriable
 	public override void OnCarryDrop( Player dropper )
 	{
 		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
-			Components.GetOrCreate<Glow>().Enabled = true;
+		{
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Enabled = true;
+			glow.Color = Role.Bystander.GetColor();
+			glow.ObscuredColor = Color.Transparent;
+		}
 
 		base.OnCarryDrop( dropper );
-	}*/
+	}
 
 	protected void ShootBullet()
 	{
