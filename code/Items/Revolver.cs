@@ -23,7 +23,7 @@ public partial class Revolver : Carriable
 	public TimeSince TimeSinceReload { get; private set; }
 
 	public override float DeployTime => 1.2f;
-	public override string IconPath { get; } = "ui/weapons/revolver.png";
+	public override string IconPath { get; } = "ui/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
 

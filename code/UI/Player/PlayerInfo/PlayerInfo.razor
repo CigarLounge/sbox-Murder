@@ -16,18 +16,21 @@
 		<text class="clues">@Hud.DisplayedPlayer.CluesCollected</text>
 	</div>
 	<text class="role text-shadow">@Hud.DisplayedPlayer.Role.GetTitle()</text>
+	<CarriableDisplay />
 </root>
 
 @code
 {
 	private Panel InnerCircle { get; set; }
 
-	public override void Tick()
+	protected override void OnAfterTreeRender(bool firstTime)
 	{
-		var player = Hud.DisplayedPlayer;
+		base.OnAfterTreeRender(firstTime);
 
-		if (!player.IsAlive())
+		if (InnerCircle is null)
 			return;
+
+		var player = Hud.DisplayedPlayer;
 
 		InnerCircle.Style.Height = Length.Percent(player.Health - 5);
 		InnerCircle.Style.Width = Length.Percent(player.Health - 5);
@@ -37,7 +40,7 @@
 	{
 		var player = Hud.DisplayedPlayer;
 
-		return HashCode.Combine(player.IsAlive(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.CluesCollected.GetHashCode());
+		return HashCode.Combine(player.Health.GetHashCode(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.CluesCollected.GetHashCode());
 	}
 }
 
@@ -50,32 +53,21 @@
 		font-weight: 600;
 	}
 
-	.clues {
-		translateX(-50%);
-		align-items: center;
-		justify-content: center;
-	}
-
 	.name {
 		position: absolute;
 		bottom: 240px;
 		left: 135px;
 		transform: translateX(-50%);
 		color: @Hud.DisplayedPlayer.Color.Hex;
-		align-items: center;
-		justify-content: center;
 	}
 
 	.outer-circle {
 		position: absolute;
-		font-size: 50px;
-		font-weight: 600;
 		bottom: 10px;
 		left: 25px;
 		width: 225px;
 		height: 225px;
 		border-radius: 50%;
-		transition: all 0.1s ease-out;
 		align-items: center;
 		justify-content: center;
 	}
@@ -83,8 +75,6 @@
 	.inner-circle {
 		position: absolute;
 		border-radius: 50%;
-		width: 50%;
-		height: 50%;
 		background-color: @Hud.DisplayedPlayer.Color.Hex;
 		transition: all 0.1s ease-out;
 	}

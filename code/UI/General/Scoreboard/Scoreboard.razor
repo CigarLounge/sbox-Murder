@@ -4,41 +4,55 @@
 
 @namespace Murder.UI
 
+@if (!Input.Down(InputButton.Score))
+{
+	return;
+}
+
 <root>
-    <ScoreboardInfo />
-    <div class="background-color-secondary rounded-bottom groups">
-        @foreach(var client in Game.Clients)
-        {
-            <ScoreboardEntry @Client=@client />
-        }
-    </div>
+	<ScoreboardInfo />
+	<div class="background-color-secondary rounded-bottom groups">
+		@foreach (var client in Game.Clients)
+		{
+			<ScoreboardEntry @Client=@client />
+		}
+	</div>
 </root>
 
-@code 
+@code
 {
-    protected override int BuildHash()
-    {
-        return Game.Clients.Count.GetHashCode();
-    }
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(Input.Down(InputButton.Score), Game.Clients.Count.GetHashCode());
+	}
 }
 
 <style>
-    Scoreboard 
-    {
-        flex-direction: column;
-        transition: bottom 0.2s ease-out;
-        max-height: 70%;
+	Scoreboard {
+		position: absolute;
+		pointer-events: all;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        z-index: 1;
+        justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		transition: bottom 0.2s ease-out;
+		max-height: 70%;
+		background-color: green;
+		&: intro
 
-        .groups 
-        {
-            flex-direction: column;
-            padding: 8 8 12 8;
-            overflow: scroll;
-        }
-        
-        &:intro 
-        {
-            bottom: 25px;
-        }
-    }
-</style>
+	{
+		bottom: 25px;
+	}
+
+	}
+
+	.groups {
+		flex-direction: column;
+		padding: 8 8 12 8;
+		overflow: scroll;
+	}
+
+	}</style>
