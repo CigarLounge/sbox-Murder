@@ -15,8 +15,7 @@ public partial class Player
 	[Net] public string BystanderName { get; set; }
 	[Net] public Color Color { get; set; }
 	[Net] public int CluesCollected { get; set; }
-	[Net] public string SteamName { get; private set; }
-	public Corpse Corpse { get; set; }
+	public Corpse Corpse { get; internal set; }
 	public bool IsIdentityHidden => this.IsAlive() && GameState.Current is GameplayState;
 
 	private Role _role;

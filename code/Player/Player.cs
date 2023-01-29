@@ -12,7 +12,6 @@ public partial class Player : AnimatedEntity
 	public Player( IClient client ) : this()
 	{
 		client.Pawn = this;
-		SteamName = client.Name;
 	}
 
 	public override void Spawn()
@@ -31,6 +30,8 @@ public partial class Player : AnimatedEntity
 		EnableLagCompensation = true;
 		EnableShadowInFirstPerson = true;
 		EnableTouch = false;
+
+		Controller = new WalkController();
 
 		SetModel( "models/citizen/citizen.vmdl" );
 	}
@@ -59,8 +60,6 @@ public partial class Player : AnimatedEntity
 			EnableAllCollisions = true;
 			EnableDrawing = true;
 			EnableTouch = true;
-
-			Controller = new WalkController();
 
 			CreateHull();
 			CreateFlashlight();

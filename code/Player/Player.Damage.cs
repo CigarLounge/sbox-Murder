@@ -19,10 +19,10 @@ public partial class Player
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
 
-		if ( LastAttacker is Player player && Role == player.Role )
+		if ( LastAttacker is Player killer && Role == killer.Role )
 		{
-			player.DropCarriable();
-			player.TimeUntilClean = 20f;
+			killer.DropCarriable();
+			killer.TimeUntilClean = 20f;
 		}
 
 		Corpse = new Corpse( this );

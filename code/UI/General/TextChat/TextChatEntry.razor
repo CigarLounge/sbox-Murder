@@ -3,15 +3,13 @@
 
 @namespace Murder.UI
 
-<root class="background-color-primary opacity-heavy rounded">
+<root>
 	@if (_client?.Pawn is Murder.Player player)
 	{
 		<div style="flex-shrink: 0;">
 			@if (!player.IsIdentityHidden)
 			{
-				<div>
-					<img class="circle" src="avatar:@_client.SteamId" />
-				</div>
+				<img class="circle" src="avatar:@_client.SteamId" />
 			}
 			<text class="name" style="color: @(player.IsIdentityHidden ? player.Color.Hex : "white")">
 				@(player.IsIdentityHidden ? player.BystanderName : _client.Name)
@@ -50,9 +48,9 @@
 <style>
 	TextChatEntry {
 		max-width: 100%;
-		padding: 4px 10px;
 		transition: opacity 0.15s ease;
 		margin-bottom: 6px;
+		font-size: 20px;
 		flex-shrink: 0;
 		img
 
@@ -64,13 +62,11 @@
 
 	.name {
 		font-weight: 700;
-		font-size: 16px;
 		margin-top: 3px;
 		margin-right: 4px;
 	}
 
 	.message {
-		font-size: 16px;
 		margin-top: 3px;
 		flex-shrink: 0;
 	}

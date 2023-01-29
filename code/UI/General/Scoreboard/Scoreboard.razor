@@ -1,6 +1,5 @@
 @using Sandbox;
 @using System;
-@using System.Collections.Generic;
 
 @namespace Murder.UI
 
@@ -10,12 +9,17 @@
 }
 
 <root>
-	<ScoreboardInfo />
-	<div class="background-color-secondary rounded-bottom groups">
-		@foreach (var client in Game.Clients)
-		{
-			<ScoreboardEntry @Client=@client />
-		}
+	<div class="container">
+		<div class="temp">
+			<ScoreboardInfo />
+			<div class="background-color-primary rounded-bottom groups">
+				<ScoreboardGroup />
+				@foreach (var client in Game.Clients)
+				{
+					<ScoreboardEntry Client=@client />
+				}
+			</div>
+		</div>
 	</div>
 </root>
 
@@ -23,36 +27,38 @@
 {
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(Input.Down(InputButton.Score), Game.Clients.Count.GetHashCode());
+		var player = Game.LocalPawn as Murder.Player;
+
+		return HashCode.Combine(Input.Down(InputButton.Score));
 	}
 }
 
 <style>
 	Scoreboard {
-		position: absolute;
-		pointer-events: all;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        z-index: 1;
-        justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		transition: bottom 0.2s ease-out;
-		max-height: 70%;
-		background-color: green;
-		&: intro
+		width: 100%;
+		height: 100%;
+		bottom: -25px;
+		z-index: 1;
+		justify-content: center;
+		.container
 
 	{
-		bottom: 25px;
+		width: 45%;
+		flex-direction: column;
+		justify-content: center;
+		opacity: 0.985;
 	}
 
-	}
+	.temp {
+		flex-direction: column;
+		max-height: 70%;
+		.groups
 
-	.groups {
+	{
 		flex-direction: column;
 		padding: 8 8 12 8;
 		overflow: scroll;
 	}
 
+	}
 	}</style>

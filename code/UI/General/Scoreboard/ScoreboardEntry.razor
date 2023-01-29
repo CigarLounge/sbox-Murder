@@ -3,9 +3,9 @@
 
 @namespace Murder.UI
 
-<root class="text-shadow @(Client == Game.LocalClient ? "local" : "")">
+<root class="text-shadow @(Client == Game.LocalClient ? "local" : "")" style="background-color: #4b4b4b15">
 	<div class="entry">
-		<img src="avatar:@Client..SteamId" class="avatar rounded" />
+		<img src="avatar:@Client.SteamId" class="avatar circle" />
 		<text class="name">@Client.Name</text>
 		<text class="stat">@(Client.IsBot ? "BOT" : Client.Ping.ToString())</text>
 	</div>
@@ -20,6 +20,7 @@
 		return HashCode.Combine(Client.Ping);
 	}
 }
+
 
 <style>
 	ScoreboardEntry {
