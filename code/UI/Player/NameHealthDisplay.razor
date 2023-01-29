@@ -1,0 +1,83 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using System;
+
+@namespace Murder.UI
+
+
+<root class="text-shadow">
+	<text class="name">@Hud.DisplayedPlayer.BystanderName</text>
+	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
+		<div @ref="InnerCircle" class="inner-circle box-shadow"></div>
+		<text class="clues">@Hud.DisplayedPlayer.CluesCollected</text>
+	</div>
+</root>
+
+@code
+{
+	private Panel InnerCircle { get; set; }
+
+	protected override void OnAfterTreeRender(bool firstTime)
+	{
+		base.OnAfterTreeRender(firstTime);
+
+		if (InnerCircle is null)
+			return;
+
+		var player = Hud.DisplayedPlayer;
+
+		InnerCircle.Style.Height = Length.Percent(player.Health - 5);
+		InnerCircle.Style.Width = Length.Percent(player.Health - 5);
+	}
+
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
+
+		return HashCode.Combine(player.Health.GetHashCode(), player.CluesCollected.GetHashCode());
+	}
+}
+
+<style>
+	NameHealthDisplay {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		font-size: 35;
+		font-weight: 600;
+	}
+
+	.name {
+		position: absolute;
+		bottom: 240px;
+		left: 135px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Color.Hex;
+	}
+
+	.outer-circle {
+		position: absolute;
+		bottom: 10px;
+		left: 25px;
+		width: 225px;
+		height: 225px;
+		border-radius: 50%;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.inner-circle {
+		position: absolute;
+		border-radius: 50%;
+		background-color: @Hud.DisplayedPlayer.Color.Hex;
+		transition: all 0.1s ease-out;
+	}
+
+	.role {
+		position: absolute;
+		left: 50%;
+		bottom: 10px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
+	}
+</style>

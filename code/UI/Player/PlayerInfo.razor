@@ -10,12 +10,8 @@
 }
 
 <root class="text-shadow">
-	<text class="name">@Hud.DisplayedPlayer.BystanderName</text>
-	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
-		<div @ref="InnerCircle" class="inner-circle box-shadow"></div>
-		<text class="clues">@Hud.DisplayedPlayer.CluesCollected</text>
-	</div>
-	<text class="role text-shadow">@Hud.DisplayedPlayer.Role.GetTitle()</text>
+	<NameHealthDisplay />
+	<RoleDisplay />
 	<CarriableDisplay />
 </root>
 
