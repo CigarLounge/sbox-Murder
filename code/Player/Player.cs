@@ -106,13 +106,13 @@ public partial class Player : AnimatedEntity
 			MuteFilter = MuteFilter.None;
 		}
 
-		if ( !this.IsAlive() )
-			return;
-
 		temp = true;
 		if ( IsLocalPawn )
 			CameraMode.Current = new FirstPersonCamera();
 		temp = false;
+
+		if ( !this.IsAlive() )
+			return;
 
 		CreateFlashlight();
 

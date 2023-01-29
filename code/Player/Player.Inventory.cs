@@ -19,9 +19,10 @@ public partial class Player
 
 		carriable.SetParent( this, true );
 		carriable.OnCarryStart( this );
-		Carriable = carriable;
 
+		_wasHolstered = true;
 		IsHolstered = !makeActive;
+		Carriable = carriable;
 	}
 
 	public Carriable DropCarriable()
@@ -36,8 +37,8 @@ public partial class Player
 		Carriable.OnCarryDrop( this );
 
 		var dropped = Carriable;
-		Carriable = null;
 		IsHolstered = true;
+		Carriable = null;
 
 		return dropped;
 	}
@@ -67,13 +68,14 @@ public partial class Player
 	{
 		if ( oldVal.IsValid() )
 		{
-			if ( !IsHolstered )
-				oldVal.ActiveEnd( this, true );
-
+			oldVal.ActiveEnd( this, true );
 			oldVal.OnCarryDrop( this );
 		}
 
 		if ( newVal.IsValid() )
+		{
+			_wasHolstered = true;
 			newVal.OnCarryStart( this );
+		}
 	}
 }

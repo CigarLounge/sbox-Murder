@@ -18,13 +18,11 @@ public partial class Player
 
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
-		Client.AddInt( "deaths" );
 
 		if ( LastAttacker is Player player && Role == player.Role )
 		{
 			player.DropCarriable();
 			player.TimeUntilClean = 20f;
-			player.Client.AddInt( "kills" );
 		}
 
 		Corpse = new Corpse( this );
@@ -49,7 +47,12 @@ public partial class Player
 		Game.AssertClient();
 
 		if ( IsLocalPawn )
+		{
 			CurrentChannel = Channel.Spectator;
+
+			if ( Corpse.IsValid() )
+				CameraMode.Current = new FollowEntityCamera( Corpse );
+		}
 
 		DeleteFlashlight();
 		Event.Run( GameEvent.Player.Killed, this );
@@ -61,12 +64,6 @@ public partial class Player
 
 		if ( !this.IsAlive() )
 			return;
-
-		if ( info.Attacker is Player attacker && attacker != this )
-		{
-			if ( GameManager.Instance.State is not GameplayState and not PostRound )
-				return;
-		}
 
 		if ( info.HasTag( "blast" ) )
 			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );

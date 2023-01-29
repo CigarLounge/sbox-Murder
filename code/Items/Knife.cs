@@ -23,12 +23,12 @@ public partial class Knife : Carriable
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
 	private float _gravityModifier;
 
-	public override void ClientSpawn()
+/*	public override void ClientSpawn()
 	{
 		var glow = Components.GetOrCreate<Glow>();
 		glow.Color = Role.Murderer.GetColor();
 		glow.ObscuredColor = Color.Transparent;
-	}
+	}*/
 
 	public override void Simulate( IClient client )
 	{
@@ -63,7 +63,7 @@ public partial class Knife : Carriable
 		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
 	}
 
-	public override void OnCarryStart( Player carrier )
+/*	public override void OnCarryStart( Player carrier )
 	{
 		if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
@@ -77,7 +77,7 @@ public partial class Knife : Carriable
 			Components.GetOrCreate<Glow>().Enabled = true;
 
 		base.OnCarryDrop( dropper );
-	}
+	}*/
 
 	private void MeleeAttack( float damage, float range, float radius )
 	{

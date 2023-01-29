@@ -1,5 +1,4 @@
 using Sandbox;
-using Sandbox.Component;
 using Sandbox.UI;
 
 namespace Murder;
@@ -13,6 +12,12 @@ public partial class Player
 
 	private void DisplayEntityHints()
 	{
+		if ( !UI.Hud.DisplayedPlayer.IsFirstPersonMode )
+		{
+			DeleteHint();
+			return;
+		}
+		
 		var hint = FindHintableEntity();
 
 		if ( hint is null || !hint.CanHint( UI.Hud.DisplayedPlayer ) )
@@ -34,13 +39,6 @@ public partial class Player
 		_currentHintPanel.Enabled( true );
 
 		_currentHint = hint;
-
-		if ( _currentHint is Entity entity && _currentHint.ShowGlow )
-		{
-			var glow = entity.Components.GetOrCreate<Glow>();
-			glow.Width = 0.25f;
-			glow.Enabled = true;
-		}
 	}
 
 	private static void DeleteHint()
@@ -48,12 +46,6 @@ public partial class Player
 		_currentHintPanel?.Delete();
 		_currentHintPanel = null;
 		UI.FullScreenHintMenu.Instance?.Close();
-
-		if ( _currentHint is Entity entity && _currentHint.ShowGlow )
-		{
-			if ( entity.Components.TryGet<Glow>( out var activeGlow ) )
-				activeGlow.Enabled = false;
-		}
 
 		_currentHint = null;
 	}

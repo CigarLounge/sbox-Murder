@@ -1,5 +1,6 @@
 using Sandbox;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Murder;
 
@@ -16,6 +17,6 @@ public partial class Player
 		ClothingContainer.DressEntity( this );
 
 		// This is inconsistent.
-		ColoredClothing = Children[^3] as AnimatedEntity;
+		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault(x => x is AnimatedEntity m && m.Model.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
 	}
 }

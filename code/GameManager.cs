@@ -27,7 +27,12 @@ public partial class GameManager : Sandbox.GameManager
 		LoadResources();
 
 		if ( Game.IsClient )
-			_ = new UI.Hud();	
+		{
+			_ = new UI.Hud();
+
+			Camera.FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
+			Camera.Main.SetViewModelCamera( 95f );
+		}
 	}
 
 	public override void FrameSimulate( IClient client )

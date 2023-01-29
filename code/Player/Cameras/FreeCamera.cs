@@ -12,7 +12,7 @@ public class FreeCamera : CameraMode
 	public FreeCamera()
 	{
 		Spectating.Player = null;
-		Camera.FirstPersonViewer = null;
+		Camera.FirstPersonViewer = Game.LocalPawn;
 	}
 
 	public override void BuildInput()

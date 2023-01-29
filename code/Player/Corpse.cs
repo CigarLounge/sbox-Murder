@@ -44,6 +44,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 			clothing.CopyBodyGroups( modelEntity );
 			clothing.CopyMaterialGroup( modelEntity );
 			clothing.SetParent( this, true );
+			clothing.Tags.Add("corpse" );
 		}
 	}
 
@@ -51,7 +52,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		base.Spawn();
 
-		Tags.Add( "interactable" );
+		Tags.Add( "interactable", "corpse" );
 
 		PhysicsEnabled = true;
 		UsePhysicsCollision = true;

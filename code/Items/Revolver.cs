@@ -27,12 +27,12 @@ public partial class Revolver : Carriable
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
 
-	public override void ClientSpawn()
+	/*public override void ClientSpawn()
 	{
 		var glow = Components.GetOrCreate<Glow>();
 		glow.Color = Role.Bystander.GetColor();
 		glow.ObscuredColor = Color.Transparent;
-	}
+	}*/
 
 	public override void ActiveStart( Player player )
 	{
@@ -102,7 +102,7 @@ public partial class Revolver : Carriable
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
 	}
 
-	public override void OnCarryStart( Player carrier )
+	/*public override void OnCarryStart( Player carrier )
 	{
 		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = false;
@@ -116,7 +116,7 @@ public partial class Revolver : Carriable
 			Components.GetOrCreate<Glow>().Enabled = true;
 
 		base.OnCarryDrop( dropper );
-	}
+	}*/
 
 	protected void ShootBullet( float force, float damage, float bulletSize )
 	{

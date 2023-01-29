@@ -12,8 +12,11 @@ public class FirstPersonCamera : CameraMode
 
 	public override void BuildInput()
 	{
-		if ( Game.LocalPawn is Player player && (player.IsAlive() || !player.temp) )
+		if ( Game.LocalPawn is Player player && (player.IsAlive() || player.temp) )
+		{
+			player.temp = false;
 			return;
+		}
 
 		if ( !Spectating.Player.IsValid() || Input.Pressed( InputButton.Jump ) )
 		{
@@ -35,7 +38,5 @@ public class FirstPersonCamera : CameraMode
 		Camera.Position = target.EyePosition;
 		Camera.Rotation = !target.IsLocalPawn ? Rotation.Slerp( Camera.Rotation, target.EyeRotation, Time.Delta * 20f ) : target.EyeRotation;
 		Camera.FirstPersonViewer = target;
-		Camera.FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
-		Camera.Main.SetViewModelCamera( 95f );
 	}
 }

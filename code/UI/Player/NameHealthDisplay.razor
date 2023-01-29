@@ -33,7 +33,7 @@
 	{
 		var player = Hud.DisplayedPlayer;
 
-		return HashCode.Combine(player.Health.GetHashCode(), player.Color.GetHashCode(), player.CluesCollected.GetHashCode());
+		return HashCode.Combine(player.Health.GetHashCode(), player.Color.Hex.GetHashCode(), player.CluesCollected.GetHashCode());
 	}
 }
 
@@ -70,13 +70,5 @@
 		border-radius: 50%;
 		background-color: @Hud.DisplayedPlayer.Color.Hex;
 		transition: all 0.1s ease-out;
-	}
-
-	.role {
-		position: absolute;
-		left: 50%;
-		bottom: 10px;
-		transform: translateX(-50%);
-		color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
 	}
 </style>

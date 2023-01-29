@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using Sandbox;
+using Sandbox.Component;
+using System.Collections.Generic;
 
 namespace Murder;
 
-public class Clue : Prop
+public class Clue : Prop, IUse
 {
 	private static readonly List<Model> _models = new()
 	{
@@ -20,7 +21,38 @@ public class Clue : Prop
 
 		PhysicsEnabled = true;
 		UsePhysicsCollision = true;
-		EnableHideInFirstPerson = true;
-		EnableShadowInFirstPerson = true;
+
+		var glow = new Glow
+		{
+			Color = Color.Green,
+			ObscuredColor = Color.Transparent,
+		};
+
+		Components.Add( glow );
+	}
+
+	bool IUse.IsUsable( Entity user )
+	{
+		return user is Player;
+	}
+
+	bool IUse.OnUse( Entity user )
+	{
+		var player = (Player)user;
+
+		player.CluesCollected++;
+
+		if ( player.Role != Role.Murderer )
+		{
+			if ( player.CluesCollected == 5 )
+				player.SetCarriable( new Revolver() );
+			else if ( player.CluesCollected % 15 == 0 )
+				player.SetCarriable( new Revolver() );
+		}
+
+		PlaySound( "clue_collected" );
+		Delete();
+
+		return false;
 	}
 }
