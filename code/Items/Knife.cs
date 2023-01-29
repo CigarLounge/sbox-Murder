@@ -127,16 +127,14 @@ public partial class Knife : Carriable
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
 
-		Velocity = PreviousOwner.EyeRotation.Forward * (700f + PreviousOwner.Velocity.Length) + Vector3.Up * 200;
+		Velocity = PreviousOwner.EyeRotation.Forward * 700f  + Vector3.Up * 200;
 		ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
 	}
 
 	public override void StartTouch( Entity other )
 	{
-		if ( other is Player player && player != PreviousOwner )
+		if ( _isThrown && other is Player player && player != PreviousOwner )
 		{
-			_isThrown = false;
-
 			var damageInfo = DamageInfo.Generic( 200f )
 				.WithPosition( Position )
 				.WithForce( Position.Normal * 20f )
