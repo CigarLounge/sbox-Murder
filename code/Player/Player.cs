@@ -90,7 +90,7 @@ public partial class Player : AnimatedEntity
 		LifeState = LifeState.Dead;
 	}
 
-	public bool temp;
+	internal bool temp;
 	private void ClientRespawn()
 	{
 		Game.AssertClient();
@@ -109,7 +109,6 @@ public partial class Player : AnimatedEntity
 		temp = true;
 		if ( IsLocalPawn )
 			CameraMode.Current = new FirstPersonCamera();
-		temp = false;
 
 		if ( !this.IsAlive() )
 			return;

@@ -23,12 +23,12 @@ public partial class Knife : Carriable
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
 	private float _gravityModifier;
 
-/*	public override void ClientSpawn()
-	{
-		var glow = Components.GetOrCreate<Glow>();
-		glow.Color = Role.Murderer.GetColor();
-		glow.ObscuredColor = Color.Transparent;
-	}*/
+	/*	public override void ClientSpawn()
+		{
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Color = Role.Murderer.GetColor();
+			glow.ObscuredColor = Color.Transparent;
+		}*/
 
 	public override void Simulate( IClient client )
 	{
@@ -63,21 +63,21 @@ public partial class Knife : Carriable
 		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
 	}
 
-/*	public override void OnCarryStart( Player carrier )
-	{
-		if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
-			Components.GetOrCreate<Glow>().Enabled = false;
+	/*	public override void OnCarryStart( Player carrier )
+		{
+			if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
+				Components.GetOrCreate<Glow>().Enabled = false;
 
-		base.OnCarryStart( carrier );
-	}
+			base.OnCarryStart( carrier );
+		}
 
-	public override void OnCarryDrop( Player dropper )
-	{
-		if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
-			Components.GetOrCreate<Glow>().Enabled = true;
+		public override void OnCarryDrop( Player dropper )
+		{
+			if ( Game.LocalPawn is Player local && local.Role == Role.Murderer )
+				Components.GetOrCreate<Glow>().Enabled = true;
 
-		base.OnCarryDrop( dropper );
-	}*/
+			base.OnCarryDrop( dropper );
+		}*/
 
 	private void MeleeAttack( float damage, float range, float radius )
 	{
@@ -106,6 +106,7 @@ public partial class Knife : Carriable
 		var damageInfo = DamageInfo.Generic( damage )
 			.WithPosition( trace.EndPosition )
 			.UsingTraceResult( trace )
+			.WithForce( trace.Direction * 200f )
 			.WithAttacker( Owner )
 			.WithWeapon( this )
 			.WithTag( "slash" );

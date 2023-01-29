@@ -85,7 +85,7 @@ public partial class Revolver : Carriable
 		ShootEffects();
 		PlaySound( "sounds/weapons/mr96/mr96_fire-1.sound" );
 
-		ShootBullet( 1.5f, 200, 3.0f );
+		ShootBullet();
 	}
 
 	private void Reload()
@@ -118,18 +118,18 @@ public partial class Revolver : Carriable
 		base.OnCarryDrop( dropper );
 	}*/
 
-	protected void ShootBullet( float force, float damage, float bulletSize )
+	protected void ShootBullet()
 	{
 		// Seed rand using the tick, so bullet cones match on client and server
 		Game.SetRandomSeed( Time.Tick );
 
 		var forward = Owner.EyeRotation.Forward;
 
-		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, bulletSize ) )
+		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, 3.0f ) )
 		{
 			trace.Surface.DoBulletImpact( trace );
 
-			var fullEndPosition = trace.EndPosition + trace.Direction * bulletSize;
+			var fullEndPosition = trace.EndPosition + trace.Direction * 3.0f;
 
 			if ( !Game.IsServer )
 				continue;
@@ -139,7 +139,7 @@ public partial class Revolver : Carriable
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 100f * force, damage )
+				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 250f, 200f )
 					.UsingTraceResult( trace )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
