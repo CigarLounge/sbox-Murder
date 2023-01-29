@@ -12,7 +12,7 @@ public class FirstPersonCamera : CameraMode
 
 	public override void BuildInput()
 	{
-		if ( Game.LocalPawn is Player player && (player.IsAlive() || player.Health > 0) )
+		if ( Game.LocalPawn is Player player && (player.IsAlive() || !player.temp) )
 			return;
 
 		if ( !Spectating.Player.IsValid() || Input.Pressed( InputButton.Jump ) )

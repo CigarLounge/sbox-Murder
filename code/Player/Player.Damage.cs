@@ -5,21 +5,12 @@ namespace Murder;
 
 public partial class Player
 {
-	public const float MaxHealth = 100f;
-
-	[Net]
-	public TimeSince TimeSinceDeath { get; private set; }
-
-	[Net]
-	public TimeUntil TimeUntilClean { get; private set; }
-
+	[Net] public TimeSince TimeSinceDeath { get; private set; }
+	/// <summary>
+	/// This gets set when a player teamkills.
+	/// </summary>
+	[Net] public TimeUntil TimeUntilClean { get; private set; }
 	public DamageInfo LastDamage { get; private set; }
-
-	public new float Health
-	{
-		get => base.Health;
-		set => base.Health = Math.Clamp( value, 0, MaxHealth );
-	}
 
 	public override void OnKilled()
 	{
@@ -77,8 +68,8 @@ public partial class Player
 				return;
 		}
 
-		//if ( info.Tags.Contains( "blast" ) )
-			//Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
+		if ( info.HasTag( "blast" ) )
+			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
 
 		info.Damage = Math.Min( Health, info.Damage );
 

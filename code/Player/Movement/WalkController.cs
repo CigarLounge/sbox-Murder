@@ -10,6 +10,7 @@ public partial class WalkController : BaseNetworkable
 	internal HashSet<string> _tags;
 
 	[Net] public float WalkSpeed { get; set; } = 110f;
+	[Net] public float SprintSpeed { get; set; } = 310f;
 	[Net] public float DefaultSpeed { get; set; } = 230f;
 	[Net] public float Acceleration { get; set; } = 8.0f;
 	[Net] public float AirAcceleration { get; set; } = 65f;
@@ -107,13 +108,16 @@ public partial class WalkController : BaseNetworkable
 	private float GetWishSpeed()
 	{
 		var ws = Duck.GetWishSpeed();
+
 		if ( ws >= 0 )
 			return ws;
 
-		if ( Input.Down( InputButton.Run ) )
-			return WalkSpeed;
+		var speed = Input.Down( InputButton.Run ) && Player.Role == Role.Murderer ? SprintSpeed : DefaultSpeed;
 
-		return DefaultSpeed;
+		if ( !Player.TimeUntilClean )
+			speed *= 0.5f;
+
+		return speed;
 	}
 
 	private void WalkMove()

@@ -52,7 +52,7 @@ public partial class Player : AnimatedEntity
 
 		if ( !IsForcedSpectator )
 		{
-			Health = MaxHealth;
+			Health = 100f;
 			LifeState = LifeState.Alive;
 			TimeUntilClean = 0;
 
@@ -90,6 +90,7 @@ public partial class Player : AnimatedEntity
 		LifeState = LifeState.Dead;
 	}
 
+	public bool temp;
 	private void ClientRespawn()
 	{
 		Game.AssertClient();
@@ -108,8 +109,10 @@ public partial class Player : AnimatedEntity
 		if ( !this.IsAlive() )
 			return;
 
+		temp = true;
 		if ( IsLocalPawn )
 			CameraMode.Current = new FirstPersonCamera();
+		temp = false;
 
 		CreateFlashlight();
 
@@ -119,6 +122,10 @@ public partial class Player : AnimatedEntity
 	public override void Simulate( IClient client )
 	{
 		if ( !this.IsAlive() )
+			return;
+
+		// We are frozen.
+		if ( GameState.Current is GameplayState && !GameState.Current.TimeLeft )
 			return;
 
 		var controller = GetActiveController();
