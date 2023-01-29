@@ -17,26 +17,11 @@
 
 @code
 {
-	private Panel InnerCircle { get; set; }
-
-	protected override void OnAfterTreeRender(bool firstTime)
-	{
-		base.OnAfterTreeRender(firstTime);
-
-		if (InnerCircle is null)
-			return;
-
-		var player = Hud.DisplayedPlayer;
-
-		InnerCircle.Style.Height = Length.Percent(player.Health - 5);
-		InnerCircle.Style.Width = Length.Percent(player.Health - 5);
-	}
-
 	protected override int BuildHash()
 	{
 		var player = Hud.DisplayedPlayer;
 
-		return HashCode.Combine(player.Health.GetHashCode(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.CluesCollected.GetHashCode());
+		return HashCode.Combine(player.GetHashCode(), player.IsAlive());
 	}
 }
 

@@ -4,7 +4,6 @@
 
 @namespace Murder.UI
 
-
 <root class="text-shadow">
 	<text class="name">@Hud.DisplayedPlayer.BystanderName</text>
 	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
@@ -34,7 +33,7 @@
 	{
 		var player = Hud.DisplayedPlayer;
 
-		return HashCode.Combine(player.Health.GetHashCode(), player.CluesCollected.GetHashCode());
+		return HashCode.Combine(player.Health.GetHashCode(), player.Color.GetHashCode(), player.CluesCollected.GetHashCode());
 	}
 }
 

@@ -3,23 +3,23 @@
 
 @namespace Murder.UI
 
-
 @if (!Hud.DisplayedPlayer.Carriable.IsValid())
 {
 	return;
 }
 
 <root class="text-shadow">
-	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
-		<div class="inner-circle box-shadow"></div>
-		<img src=@Hud.DisplayedPlayer.Carriable.IconPath class=@(!Hud.DisplayedPlayer.IsHolstered ? "active" : "") />
-	</div>
 	<div class="info">
 		<InputGlyph button="Slot1" />
 		<text>Holster</text>
 		<InputGlyph button="Slot2" />
 		<text>Equip</text>
 	</div>
+	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
+		<div class="inner-circle box-shadow"></div>
+		<img src=@Hud.DisplayedPlayer.Carriable.IconPath class=@(!Hud.DisplayedPlayer.IsHolstered ? "active" : "") />
+	</div>
+
 </root>
 
 @code
@@ -53,10 +53,12 @@
 		justify-content: center;
 		right: 25px;
 		bottom: 10px;
+		&:intro, &:outro
 
-		&:intro{
-			bottom: -200px;
-		}
+	{
+		bottom: -200px;
+	}
+
 	}
 
 	.inner-circle {

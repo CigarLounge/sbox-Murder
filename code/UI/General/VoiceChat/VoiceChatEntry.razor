@@ -10,13 +10,16 @@
 }
 
 <root class="rounded opacity-heavy text-shadow">
-	<img src="avatar:@_client.SteamId" class="avatar" />
-	<text class="name">@(player.IsAlive() ? player.BystanderName : _client.Name)</text>
+	<img @ref="Avatar" class="avatar" />
+	<text @ref="Name" class="name"></text>
 </root>
 
 @code
 {
 	public Friend Friend;
+
+	private Image Avatar { get; set; }
+	private Label Name { get; set; }
 
 	private readonly WorldPanel _indicator;
 	private readonly IClient _client;
@@ -31,19 +34,27 @@
 		_client = client;
 		Friend = new(client.SteamId);
 
-		/*
-		if (player.IsAlive())
+		_indicator = new VoiceChatIndicator(_client);
+	}
+
+	protected override void OnAfterTreeRender(bool firstTime)
+	{
+		base.OnAfterTreeRender(firstTime);
+
+		var player = (Murder.Player)_client.Pawn;
+
+		if (HideIdentity())
 		{
+			Avatar.Texture = null;
 			Avatar.Style.BackgroundColor = player.Color;
 			Name.Text = player.BystanderName;
 		}
 		else
 		{
-			Avatar.SetTexture($"avatar:{client.PlayerId}");
-			Name.Text = Friend.Name;
+			Avatar.SetTexture($"avatar:{_client.SteamId}");
+			Avatar.Style.BackgroundColor = null;
+			Name.Text = _client.Name;
 		}
-		*/
-		_indicator = new VoiceChatIndicator(_client);
 	}
 
 	public void Update(float level)
@@ -86,9 +97,7 @@
 
 	protected override int BuildHash()
 	{
-		var player = (Murder.Player)_client.Pawn;
-
-		return HashCode.Combine(player?.IsAlive(), player.Color.GetHashCode());
+		return HashCode.Combine(HideIdentity());
 	}
 
 	private string BackgroundColor()
@@ -98,11 +107,15 @@
 
 		return "#303030";
 	}
+
+	private bool HideIdentity()
+	{
+		return ((Murder.Player)_client.Pawn).IsAlive() && GameState.Current is GameplayState;
+	}
 }
 
 <style>
-	VoiceChatEntry 
-	{
+	VoiceChatEntry {
 		flex-direction: row;
 		padding: 8px 8px;
 		margin-bottom: 5px;
@@ -111,27 +124,24 @@
 		background-color: @BackgroundColor();
 	}
 
-	VoiceChatEntry:intro 
-	{
-		opacity: 0;
-		left: 10px;
-	}
+		VoiceChatEntry:intro {
+			opacity: 0;
+			left: 10px;
+		}
 
-	VoiceChatEntry:outro 
-	{
-		opacity: 0;
-		left: 10px;
-	}
+		VoiceChatEntry:outro {
+			opacity: 0;
+			left: 10px;
+		}
 
-	.avatar 
-	{
+	.avatar {
+		background-color: green;
 		width: 25px;
 		height: 25px;
 		border-radius: 4px;
 	}
 
-	.name 
-	{
+	.name {
 		margin-left: 5px;
 	}
 </style>
