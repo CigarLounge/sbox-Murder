@@ -7,12 +7,12 @@
 	@if (_client?.Pawn is Murder.Player player)
 	{
 		<div style="flex-shrink: 0;">
-			@if (!player.IsIdentityHidden)
+			@if (!player.IsIncognito)
 			{
 				<img class="circle" src="avatar:@_client.SteamId" />
 			}
-			<text class="name" style="color: @(player.IsIdentityHidden ? player.Color.Hex : "white")">
-				@(player.IsIdentityHidden ? player.BystanderName : _client.Name)
+			<text class="name" style="color: @(player.IsIncognito ? player.Color.Hex : "white")">
+				@(player.IsIncognito ? player.BystanderName : _client.Name)
 			</text>
 		</div>
 	}

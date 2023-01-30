@@ -45,7 +45,6 @@ public partial class Player
 	{
 		_currentHintPanel?.Delete();
 		_currentHintPanel = null;
-		UI.FullScreenHintMenu.Instance?.Close();
 
 		_currentHint = null;
 	}
