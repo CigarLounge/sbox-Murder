@@ -11,13 +11,6 @@ $button-secondary: #282828 !default;
 $button-secondary-fg: #dadada !default;
 $button-size: 45px;
 
-@import "/ui/styles/button.scss";
-@import "/ui/styles/checkbox.scss";
-@import "/ui/styles/dropdown.scss";
-@import "/ui/styles/label.scss";
-@import "/ui/styles/textentry.scss";
-@import "/ui/styles/slider.scss";
-
 Hud {
     flex-shrink: 0;
     color: #fafafa;

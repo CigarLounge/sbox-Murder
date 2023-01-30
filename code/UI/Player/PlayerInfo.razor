@@ -2,7 +2,8 @@
 
 @namespace Murder.UI
 
-@if (!Hud.DisplayedPlayer.IsAlive())
+@* TODO CHANGE *@
+@if (!Hud.DisplayedPlayer.IsAlive() || Hud.DisplayedPlayer.Role is Role.None)
 {
     return;
 }
@@ -36,7 +37,7 @@
     protected override int BuildHash()
     {
         var player = Hud.DisplayedPlayer;
-        return HashCode.Combine(player.IsAlive(), player.BystanderName.GetHashCode(), player.Role.GetHashCode(), player.Health, player.CluesCollected);
+        return HashCode.Combine(player.IsAlive(), player.BystanderName?.GetHashCode(), player.Role.GetHashCode(), player.Health, player.CluesCollected);
     }
 }
 
