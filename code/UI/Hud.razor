@@ -9,15 +9,11 @@
 <root class="panel fullscreen">
 	<Scoreboard />
 	<HintDisplay />
-	@*<PlayerInfo />
-	<InventoryWrapper />
-	<TextChat />
-	<QuickChat />*@
+	<PlayerInfo />
 	<Crosshair />
 	<TextChat />
 	<VoiceChat />
 	<FullScreenHintMenu />
-	<PlayerInfo />
 </root>
 
 @code
@@ -29,7 +25,6 @@
 
 	public Hud()
 	{
-		Game.RootPanel?.Delete(true);
 		Game.RootPanel = this;
 	}
 }
