@@ -5,7 +5,7 @@ namespace Murder;
 
 public partial class GameManager
 {
-	[ConCmd.Admin( Name = "murder_takedamage" )]
+	[ConCmd.Admin( Name = "mur_takedamage" )]
 	public static void GiveItem( float damage )
 	{
 		var player = ConsoleSystem.Caller.Pawn as Player;
@@ -16,7 +16,7 @@ public partial class GameManager
 		player.TakeDamage( new DamageInfo { Damage = damage } );
 	}
 
-	[ConCmd.Admin( Name = "murder_giveitem" )]
+	[ConCmd.Admin( Name = "mur_giveitem" )]
 	public static void GiveItem( string itemName )
 	{
 		if ( string.IsNullOrEmpty( itemName ) )
@@ -33,7 +33,7 @@ public partial class GameManager
 			player.SetCarriable( new Knife() );
 	}
 
-	[ConCmd.Admin( Name = "murder_setrole" )]
+	[ConCmd.Admin( Name = "mur_setrole" )]
 	public static void SetRole( Role role )
 	{
 		if ( Instance.State is not GameplayState )
@@ -47,13 +47,13 @@ public partial class GameManager
 		player.Role = role;
 	}
 
-	[ConCmd.Admin( Name = "murder_force_restart" )]
+	[ConCmd.Admin( Name = "mur_force_restart" )]
 	public static void ForceRestart()
 	{
 		Instance.ChangeState( new GameplayState() );
 	}
 
-	[ConCmd.Server( Name = "murder_rtv" )]
+	[ConCmd.Server( Name = "mur_rtv" )]
 	public static void RockTheVote()
 	{
 		var client = ConsoleSystem.Caller;
