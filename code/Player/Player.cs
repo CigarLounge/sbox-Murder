@@ -134,9 +134,7 @@ public partial class Player : AnimatedEntity
 			if ( Input.Pressed( InputButton.Menu ) && Carriable.IsValid() )
 				IsHolstered = !IsHolstered;
 			else if ( Input.Pressed( InputButton.Slot1 ) )
-				IsHolstered = true;
-			else if ( Input.Pressed( InputButton.Slot2 ) )
-				IsHolstered = false;
+				IsHolstered = !IsHolstered;
 		}
 
 		SimulateCarriable();
