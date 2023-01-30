@@ -22,7 +22,7 @@ public partial class MapVotePanel : Panel
 				continue;
 
 			//if ( panel is not TextChat and not VoiceChat )
-				//panel.Delete( true );
+			//panel.Delete( true );
 		}
 
 		var mapIdents = GameManager.Instance.MapVoteIdents;

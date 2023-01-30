@@ -17,7 +17,7 @@ public partial class Player
 			DeleteHint();
 			return;
 		}
-		
+
 		var hint = FindHintableEntity();
 
 		if ( hint is null || !hint.CanHint( UI.Hud.DisplayedPlayer ) )

@@ -52,7 +52,7 @@ public class FreeCamera : CameraMode
 	private void FindSpectateTarget( Player player )
 	{
 		//if ( player.HoveredEntity is Prop prop && prop.PhysicsBody is not null )
-			//Player.Possess( prop.NetworkIdent );
+		//Player.Possess( prop.NetworkIdent );
 		///else 
 		if ( player.HoveredEntity is Player hoveredPlayer )
 			Current = new FirstPersonCamera( hoveredPlayer );

@@ -44,7 +44,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 			clothing.CopyBodyGroups( modelEntity );
 			clothing.CopyMaterialGroup( modelEntity );
 			clothing.SetParent( this, true );
-			clothing.Tags.Add("corpse" );
+			clothing.Tags.Add( "corpse" );
 		}
 	}
 

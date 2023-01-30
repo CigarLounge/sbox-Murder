@@ -127,7 +127,7 @@ public partial class Knife : Carriable
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
 
-		Velocity = PreviousOwner.EyeRotation.Forward * 700f  + Vector3.Up * 200;
+		Velocity = PreviousOwner.EyeRotation.Forward * 700f + Vector3.Up * 200;
 		ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
 	}
 

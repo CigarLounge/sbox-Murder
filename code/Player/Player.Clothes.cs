@@ -17,6 +17,6 @@ public partial class Player
 		ClothingContainer.DressEntity( this );
 
 		// This is inconsistent.
-		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault(x => x is AnimatedEntity m && m.Model.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
+		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault( x => x is AnimatedEntity m && m.Model.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
 	}
 }

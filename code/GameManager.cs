@@ -95,7 +95,7 @@ public partial class GameManager : Sandbox.GameManager
 		State.OnPlayerLeave( client.Pawn as Player );
 
 		//UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
-	
+
 		var player = (Player)client.Pawn;
 
 		// Only delete the pawn if they are alive.
