@@ -6,7 +6,7 @@ public static class MapHandler
 {
 	public static void Cleanup()
 	{
-		Map.Reset( Sandbox.Game.DefaultCleanupFilter );
+		Game.ResetMap( System.Array.Empty<Entity>() );
 		Decal.Clear( true, true );
 	}
 }

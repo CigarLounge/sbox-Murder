@@ -1,0 +1,35 @@
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Murder.UI
+
+@inherits WorldPanel;
+
+<root>
+    @*<img src="ui/voicechat.png" />*@
+</root>
+
+@code 
+{
+    public VoiceChatIndicator(IClient client)
+    {
+        this.SceneObject.Flags.ViewModelLayer = true;
+        this.Enabled( client!= Game.LocalClient);
+    }
+}
+
+<style>
+    VoiceChatIndicator
+    {
+        justify-content: center;
+        align-items: center;
+
+        img 
+        {
+            background-size: contain;
+            width: 64px;
+            height: 64px;
+            font-size: 500px;
+        }
+    }
+</style>

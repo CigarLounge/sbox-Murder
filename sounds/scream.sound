@@ -3,16 +3,14 @@
 	data = 
 	{
 		UI = true
-		Volume = 1
-		VolumeRandom = 0
-		Pitch = 1
-		PitchRandom = 0
+		Volume = "1.00,1.00,0"
+		Pitch = "0.70,1.10,1"
 		Decibels = 145
+		SelectionMode = "Random"
 		Sounds = 
 		[
 			resource:"sounds/scream.vsnd",
 		]
-		SelectionMode = "Random"
 		MaximumDistance = 4803.1025
 		MinimumDistance = 240.15514
 	}

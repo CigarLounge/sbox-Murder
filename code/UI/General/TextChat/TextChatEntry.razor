@@ -1,0 +1,79 @@
+@using Sandbox;
+@using System;
+
+@namespace Murder.UI
+
+<root>
+	@if (_client?.Pawn is Murder.Player player)
+	{
+		<div style="flex-shrink: 0;">
+			@if (!player.IsIdentityHidden)
+			{
+				<img class="circle" src="avatar:@_client.SteamId" />
+			}
+			<text class="name" style="color: @(player.IsIdentityHidden ? player.Color.Hex : "white")">
+				@(player.IsIdentityHidden ? player.BystanderName : _client.Name)
+			</text>
+		</div>
+	}
+	@if (!string.IsNullOrEmpty(_message))
+	{
+		<div>
+			<text class="message">@_message</text>
+		</div>
+	}
+</root>
+
+@code
+{
+	private readonly IClient _client;
+	private readonly string _message;
+	private readonly Color _color;
+
+	public TimeSince Lifetime { get; init; } = 0;
+
+	public TextChatEntry(IClient client, string message)
+	{
+		_client = client;
+		_message = message;
+	}
+
+	public TextChatEntry(string message, Color color)
+	{
+		_message = message; // Use Name field since it is bold & colored.
+		_color = color;
+	}
+}
+
+<style>
+	TextChatEntry {
+		max-width: 100%;
+		transition: opacity 0.15s ease;
+		margin-bottom: 6px;
+		font-size: 20px;
+		flex-shrink: 0;
+		img
+
+	{
+		height: 30px;
+		width: 30px;
+		margin-right: 3px;
+	}
+
+	.name {
+		font-weight: 700;
+		margin-top: 3px;
+		margin-right: 4px;
+	}
+
+	.message {
+		margin-top: 3px;
+		flex-shrink: 0;
+	}
+
+	&.stale {
+		transition: opacity 1s ease;
+		opacity: 0;
+	}
+
+	}</style>

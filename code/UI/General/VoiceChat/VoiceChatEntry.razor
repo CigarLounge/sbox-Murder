@@ -1,0 +1,142 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using System;
+
+@namespace Murder.UI
+
+@if (_client.Pawn is not Murder.Player player)
+{
+	return;
+}
+
+<root class="rounded opacity-heavy text-shadow">
+	<img @ref="Avatar" class="avatar" />
+	<text @ref="Name" class="name"></text>
+</root>
+
+@code
+{
+	public Friend Friend;
+
+	private Image Avatar { get; set; }
+	private Label Name { get; set; }
+
+	private readonly WorldPanel _indicator;
+	private readonly IClient _client;
+	private float _voiceLevel = 0.5f;
+	private float _targetVoiceLevel = 0;
+	private readonly float _voiceTimeout = 0.1f;
+
+	RealTimeSince _timeSincePlayed;
+
+	public VoiceChatEntry(IClient client)
+	{
+		_client = client;
+		Friend = new(client.SteamId);
+
+		_indicator = new VoiceChatIndicator(_client);
+	}
+
+	protected override void OnAfterTreeRender(bool firstTime)
+	{
+		base.OnAfterTreeRender(firstTime);
+
+		var player = (Murder.Player)_client.Pawn;
+
+		if (player.IsIdentityHidden)
+		{
+			Avatar.Texture = null;
+			Avatar.Style.BackgroundColor = player.Color;
+			Name.Text = player.BystanderName;
+		}
+		else
+		{
+			Avatar.SetTexture($"avatar:{_client.SteamId}");
+			Avatar.Style.BackgroundColor = null;
+			Name.Text = _client.Name;
+		}
+	}
+
+	public void Update(float level)
+	{
+		_timeSincePlayed = 0;
+		_targetVoiceLevel = level;
+	}
+
+	public override void Tick()
+	{
+		if (IsDeleting)
+			return;
+
+		var timeoutInv = 1 - (_timeSincePlayed / _voiceTimeout);
+		timeoutInv = MathF.Min(timeoutInv * 2.0f, 1.0f);
+
+		if (timeoutInv <= 0)
+		{
+			_indicator?.Delete();
+			Delete();
+			return;
+		}
+
+		_voiceLevel = _voiceLevel.LerpTo(_targetVoiceLevel, Time.Delta * 40.0f);
+
+		if (!_indicator.IsValid() || _client.Pawn is not Murder.Player player || !player.IsAlive())
+		{
+			_indicator?.Delete();
+			return;
+		}
+
+		if (!_indicator.IsEnabled())
+			return;
+
+		var tx = player.GetBoneTransform("head");
+		tx.Position += Vector3.Up * _voiceLevel;
+		tx.Rotation = Camera.Rotation.RotateAroundAxis(Vector3.Up, 180f);
+		_indicator.Transform = tx;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(((Murder.Player)_client.Pawn).IsIdentityHidden);
+	}
+
+	private string BackgroundColor()
+	{
+		if (_client.Pawn is not Murder.Player player || !player.IsAlive())
+			return "#fcdb38";
+
+		return "#303030";
+	}
+}
+
+<style>
+	VoiceChatEntry {
+		flex-direction: row;
+		padding: 8px 8px;
+		margin-bottom: 5px;
+		align-items: center;
+		transition: all 0.05s ease-out;
+		background-color: @BackgroundColor();
+	}
+
+		VoiceChatEntry:intro {
+			opacity: 0;
+			left: 10px;
+		}
+
+		VoiceChatEntry:outro {
+			opacity: 0;
+			left: 10px;
+		}
+
+	.avatar {
+		background-color: green;
+		width: 25px;
+		height: 25px;
+		border-radius: 4px;
+	}
+
+	.name {
+		margin-left: 5px;
+	}
+</style>

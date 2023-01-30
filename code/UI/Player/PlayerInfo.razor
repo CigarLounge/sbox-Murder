@@ -1,0 +1,70 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using System;
+
+@namespace Murder.UI
+
+@if (!Hud.DisplayedPlayer.IsAlive())
+{
+	return;
+}
+
+<root class="text-shadow">
+	<NameHealthDisplay />
+	<RoleDisplay />
+	<CarriableDisplay />
+</root>
+
+@code
+{
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
+
+		return HashCode.Combine(player.GetHashCode(), player.IsAlive());
+	}
+}
+
+<style>
+	PlayerInfo {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		font-size: 35;
+		font-weight: 600;
+	}
+
+	.name {
+		position: absolute;
+		bottom: 240px;
+		left: 135px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Color.Hex;
+	}
+
+	.outer-circle {
+		position: absolute;
+		bottom: 10px;
+		left: 25px;
+		width: 225px;
+		height: 225px;
+		border-radius: 50%;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.inner-circle {
+		position: absolute;
+		border-radius: 50%;
+		background-color: @Hud.DisplayedPlayer.Color.Hex;
+		transition: all 0.1s ease-out;
+	}
+
+	.role {
+		position: absolute;
+		left: 50%;
+		bottom: 10px;
+		transform: translateX(-50%);
+		color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
+	}
+</style>

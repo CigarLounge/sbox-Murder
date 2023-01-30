@@ -1,10 +1,13 @@
+using Sandbox.UI;
+
 namespace Murder;
 
 public partial class Player : IEntityHint
 {
 	public float HintDistance => MaxHintDistance;
+	public bool ShowGlow => false;
 
-	UI.EntityHintPanel IEntityHint.DisplayHint( Player player )
+	Panel IEntityHint.DisplayHint( Player player )
 	{
 		return new UI.Nameplate( this );
 	}

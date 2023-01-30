@@ -1,4 +1,4 @@
-using Sandbox.UI;
+/*using Sandbox.UI;
 
 namespace Murder.UI;
 
@@ -20,3 +20,4 @@ public class Entry : Panel
 		CluesCollected.Style.FontColor = color;
 	}
 }
+*/

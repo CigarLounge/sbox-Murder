@@ -1,38 +1,24 @@
 using Sandbox;
 using Sandbox.Component;
-using SandboxEditor;
+using System;
 
 namespace Murder;
 
 [Category( "Weapons" )]
 [ClassName( "murder_weapon_knife" )]
 [EditorModel( "models/weapons/w_knife.vmdl" )]
-[HammerEntity]
 [Title( "Knife" )]
 public partial class Knife : Carriable
 {
-	[Net, Local, Predicted]
-	public TimeSince TimeSinceStab { get; private set; }
-
-	public override string IconPath { get; } = "ui/weapons/knife.png";
+	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
+	public override string IconPath { get; } = "ui/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
-	private const string SwingSound = "knife_swing-1";
-	private const string FleshHit = "knife_flesh_hit-1";
-
 	private bool _isThrown = false;
 	private Rotation _throwRotation = Rotation.From( new Angles( 90, 0, 0 ) );
-	private float _gravityModifier;
 
-	public override void ClientSpawn()
-	{
-		var glow = Components.GetOrCreate<Glow>();
-		glow.Color = Role.Murderer.GetColor();
-		glow.ObscuredColor = Color.Transparent;
-	}
-
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
 		if ( TimeSinceStab < 1.5f )
 			return;
@@ -53,11 +39,11 @@ public partial class Knife : Carriable
 		}
 	}
 
-	public override void SimulateAnimator( PawnAnimator animator )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		base.SimulateAnimator( animator );
-
-		animator.SetAnimParameter( "holdtype", 5 );
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Punch;
+		anim.AimBodyWeight = 1.0f;
+		anim.Handedness = 0;
 	}
 
 	public override bool CanCarry( Player carrier )
@@ -67,7 +53,7 @@ public partial class Knife : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
+		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );
@@ -75,8 +61,13 @@ public partial class Knife : Carriable
 
 	public override void OnCarryDrop( Player dropper )
 	{
-		if ( Local.Pawn is Player local && local.Role == Role.Murderer )
-			Components.GetOrCreate<Glow>().Enabled = true;
+		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
+		{
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Enabled = true;
+			glow.Color = Role.Murderer.GetColor();
+			glow.ObscuredColor = Color.Transparent;
+		}
 
 		base.OnCarryDrop( dropper );
 	}
@@ -87,7 +78,7 @@ public partial class Knife : Carriable
 
 		Owner.SetAnimParameter( "b_attack", true );
 		SwingEffects();
-		PlaySound( SwingSound );
+		PlaySound( "knife_swing-1" );
 
 		var endPosition = Owner.EyePosition + Owner.EyeRotation.Forward * range;
 
@@ -102,18 +93,19 @@ public partial class Knife : Carriable
 
 		trace.Surface.DoBulletImpact( trace );
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		var damageInfo = DamageInfo.Generic( damage )
 			.WithPosition( trace.EndPosition )
 			.UsingTraceResult( trace )
+			.WithForce( trace.Direction * 200f )
 			.WithAttacker( Owner )
 			.WithWeapon( this )
-			.WithFlag( DamageFlags.Slash );
+			.WithTag( "slash" );
 
 		if ( trace.Entity is Player )
-			PlaySound( FleshHit );
+			PlaySound( "knife_flesh_hit-1" );
 
 		trace.Entity.TakeDamage( damageInfo );
 	}
@@ -125,18 +117,52 @@ public partial class Knife : Carriable
 			.Run();
 
 		_isThrown = true;
-		_gravityModifier = 0;
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		Owner.DropCarriable();
 
+		PhysicsEnabled = true;
 		Position = trace.EndPosition;
 		Rotation = PreviousOwner.EyeRotation * _throwRotation;
-		Velocity = PreviousOwner.EyeRotation.Forward * (1250f + PreviousOwner.Velocity.Length);
 
-		EnableTouch = false;
+		Velocity = PreviousOwner.EyeRotation.Forward * 700f  + Vector3.Up * 200;
+		ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
+	}
+
+	public override void StartTouch( Entity other )
+	{
+		if ( _isThrown && other is Player player && player != PreviousOwner )
+		{
+			var damageInfo = DamageInfo.Generic( 200f )
+				.WithPosition( Position )
+				.WithForce( Position.Normal * 20f )
+				.WithAttacker( PreviousOwner )
+				.WithWeapon( this )
+				.WithTag( "slash" );
+
+			player.TakeDamage( damageInfo );
+		}
+	}
+
+	protected override void OnPhysicsCollision( CollisionEventData eventData )
+	{
+		_isThrown = false;
+
+		if ( eventData.Speed < 500f )
+			return;
+
+		if ( !eventData.Other.Entity.IsWorld )
+			return;
+
+		var dot = Vector3.Dot( eventData.Normal, (Rotation * _throwRotation).Backward );
+
+		if ( dot < MathF.Cos( MathF.PI / 4f ) )
+			return;
+
+		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Ignore( this ).Run() );
+		Position = eventData.Position;
 		PhysicsEnabled = false;
 	}
 
@@ -144,75 +170,5 @@ public partial class Knife : Carriable
 	protected void SwingEffects()
 	{
 		ViewModelEntity?.SetAnimParameter( "fire", true );
-	}
-
-	[Event.Tick.Server]
-	private void ServerTick()
-	{
-		if ( !_isThrown )
-			return;
-
-		var oldPosition = Position;
-		var newPosition = Position;
-		newPosition += Velocity * Time.Delta;
-
-		_gravityModifier += 8;
-		newPosition -= new Vector3( 0f, 0f, _gravityModifier * Time.Delta );
-
-		var trace = Trace.Ray( Position, newPosition )
-			.Radius( 0f )
-			.UseHitboxes()
-			.WithAnyTags( "solid" )
-			.Ignore( PreviousOwner )
-			.Ignore( this )
-			.Run();
-
-		Position = trace.EndPosition;
-		Rotation = Rotation.From( trace.Direction.EulerAngles ) * _throwRotation;
-
-		if ( !trace.Hit )
-			return;
-
-		switch ( trace.Entity )
-		{
-			case Player player:
-			{
-				trace.Surface.DoBulletImpact( trace );
-
-				var damageInfo = DamageInfo.Generic( 100f )
-					.WithPosition( trace.EndPosition )
-					.UsingTraceResult( trace )
-					.WithFlag( DamageFlags.Slash )
-					.WithAttacker( PreviousOwner )
-					.WithWeapon( this );
-
-				player.TakeDamage( damageInfo );
-
-				Delete();
-
-				break;
-			}
-			case WorldEntity:
-			{
-				if ( Vector3.GetAngle( trace.Normal, trace.Direction ) < 120 )
-					goto default;
-
-				trace.Surface.DoBulletImpact( trace );
-
-				Position -= trace.Direction * 4f; // Make the knife stuck in the terrain.			
-
-				break;
-			}
-			default:
-			{
-				Position = oldPosition - trace.Direction * 5;
-				Velocity = trace.Direction * 500f * PhysicsBody.Mass;
-				PhysicsEnabled = true;
-				break;
-			}
-		}
-
-		EnableTouch = true;
-		_isThrown = false;
 	}
 }

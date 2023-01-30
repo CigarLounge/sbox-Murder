@@ -5,35 +5,24 @@ namespace Murder;
 
 public partial class Player
 {
-	public const float MaxHealth = 100f;
-
-	[Net]
-	public TimeSince TimeSinceDeath { get; private set; }
-
-	[Net]
-	public TimeUntil TimeUntilClean { get; private set; }
-
+	[Net] public TimeSince TimeSinceDeath { get; private set; }
+	/// <summary>
+	/// This gets set when a player teamkills.
+	/// </summary>
+	[Net] public TimeUntil TimeUntilClean { get; private set; }
 	public DamageInfo LastDamage { get; private set; }
-
-	public new float Health
-	{
-		get => base.Health;
-		set => base.Health = Math.Clamp( value, 0, MaxHealth );
-	}
 
 	public override void OnKilled()
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
-		Client.AddInt( "deaths" );
 
-		if ( LastAttacker is Player player && Role == player.Role )
+		if ( LastAttacker is Player killer && Role == killer.Role )
 		{
-			player.DropCarriable();
-			player.TimeUntilClean = 20f;
-			player.Client.AddInt( "kills" );
+			killer.DropCarriable();
+			killer.TimeUntilClean = 20f;
 		}
 
 		Corpse = new Corpse( this );
@@ -48,17 +37,20 @@ public partial class Player
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
-		Game.Current.State.OnPlayerKilled( this );
+		GameManager.Instance.State.OnPlayerKilled( this );
 
 		ClientOnKilled( this );
 	}
 
 	private void ClientOnKilled()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if ( IsLocalPawn )
-			CurrentChannel = Channel.Spectator;
+		{
+			if ( Corpse.IsValid() )
+				CameraMode.Current = new FollowEntityCamera( Corpse );
+		}
 
 		DeleteFlashlight();
 		Event.Run( GameEvent.Player.Killed, this );
@@ -66,18 +58,12 @@ public partial class Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		if ( !this.IsAlive() )
 			return;
 
-		if ( info.Attacker is Player attacker && attacker != this )
-		{
-			if ( Game.Current.State is not GameplayState and not PostRound )
-				return;
-		}
-
-		if ( info.Flags.HasFlag( DamageFlags.Blast ) )
+		if ( info.HasTag( "blast" ) )
 			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
 
 		info.Damage = Math.Min( Health, info.Damage );
@@ -87,7 +73,6 @@ public partial class Player
 		LastDamage = info;
 
 		Health -= info.Damage;
-		Event.Run( GameEvent.Player.TookDamage, this );
 
 		this.ProceduralHitReaction( info );
 

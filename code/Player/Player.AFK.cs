@@ -1,29 +1,32 @@
+using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sandbox;
 
 namespace Murder;
 
 public partial class Player
 {
-	public static readonly List<InputButton> Buttons = Enum.GetValues( typeof( InputButton ) ).Cast<InputButton>().ToList();
+	private static readonly List<InputButton> _buttons = Enum.GetValues( typeof( InputButton ) ).Cast<InputButton>().ToList();
+	private static TimeSince _timeSinceLastAction = 0f;
 
-	private TimeSince _timeSinceLastAction = 0f;
-
+	/// <summary>
+	/// Checks if we were active clientside. If not then we will
+	/// start spectating.
+	/// </summary>
 	private void CheckAFK()
 	{
-		if ( Client.IsBot )
+		if ( Client.IsBot || Spectating.IsForced )
 			return;
 
-		if ( IsForcedSpectator || !this.IsAlive() )
+		if ( !this.IsAlive() )
 		{
 			_timeSinceLastAction = 0;
 			return;
 		}
 
-		var isAnyKeyPressed = Buttons.Any( button => Input.Down( button ) );
-		var isMouseMoving = Input.MouseDelta != Vector3.Zero;
+		var isAnyKeyPressed = _buttons.Any( Input.Down );
+		var isMouseMoving = Input.MouseDelta != Vector2.Zero;
 
 		if ( isAnyKeyPressed || isMouseMoving )
 		{
@@ -31,18 +34,10 @@ public partial class Player
 			return;
 		}
 
-		if ( _timeSinceLastAction > Game.AFKTimer )
+		if ( _timeSinceLastAction > GameManager.AFKTimer )
 		{
-			if ( Game.KickAFKPlayers )
-			{
-				Log.Warning( $"Player ID: {Client.PlayerId}, Name: {Client.Name} was kicked from the server for being AFK." );
-				Client.Kick();
-			}
-			else
-			{
-				Log.Warning( $"Player ID: {Client.PlayerId}, Name: {Client.Name} was moved to spectating for being AFK." );
-				ToggleForcedSpectator();
-			}
+			Spectating.IsForced = true;
+			Input.StopProcessing = true;
 		}
 	}
 }

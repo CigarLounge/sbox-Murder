@@ -1,6 +1,5 @@
 using Sandbox;
 using Sandbox.Component;
-using SandboxEditor;
 using System.Collections.Generic;
 
 namespace Murder;
@@ -8,33 +7,17 @@ namespace Murder;
 [Category( "Weapons" )]
 [ClassName( "murder_weapon_revolver" )]
 [EditorModel( "models/weapons/w_mr96.vmdl" )]
-[HammerEntity]
 [Title( "Revolver" )]
 public partial class Revolver : Carriable
 {
-	[Net, Predicted]
-	public bool BulletInClip { get; private set; } = true;
-
-	[Net, Local, Predicted]
-	public TimeSince TimeSincePrimaryAttack { get; private set; }
-
-	[Net, Local, Predicted]
-	public bool IsReloading { get; private set; }
-
-	[Net, Local, Predicted]
-	public TimeSince TimeSinceReload { get; private set; }
-
+	[Net, Local, Predicted] public bool BulletInClip { get; private set; } = true;
+	[Net, Local, Predicted] public TimeSince TimeSincePrimaryAttack { get; private set; }
+	[Net, Local, Predicted] public bool IsReloading { get; private set; }
+	[Net, Local, Predicted] public TimeSince TimeSinceReload { get; private set; }
 	public override float DeployTime => 1.2f;
-	public override string IconPath { get; } = "ui/weapons/revolver.png";
+	public override string IconPath { get; } = "ui/revolver.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
-
-	public override void ClientSpawn()
-	{
-		var glow = Components.GetOrCreate<Glow>();
-		glow.Color = Role.Bystander.GetColor();
-		glow.ObscuredColor = Color.Transparent;
-	}
 
 	public override void ActiveStart( Player player )
 	{
@@ -43,7 +26,7 @@ public partial class Revolver : Carriable
 		IsReloading = false;
 	}
 
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
 		if ( TimeSincePrimaryAttack <= 0.5f )
 			return;
@@ -71,6 +54,13 @@ public partial class Revolver : Carriable
 		}
 	}
 
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
+	{
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
+		anim.AimBodyWeight = 1.0f;
+		anim.Handedness = 0;
+	}
+
 	private void AttackPrimary()
 	{
 		BulletInClip = false;
@@ -80,7 +70,7 @@ public partial class Revolver : Carriable
 		ShootEffects();
 		PlaySound( "sounds/weapons/mr96/mr96_fire-1.sound" );
 
-		ShootBullet( 1.5f, 200, 3.0f );
+		ShootBullet();
 	}
 
 	private void Reload()
@@ -92,13 +82,6 @@ public partial class Revolver : Carriable
 		ReloadEffects();
 	}
 
-	public override void SimulateAnimator( PawnAnimator animator )
-	{
-		base.SimulateAnimator( animator );
-
-		animator.SetAnimParameter( "holdtype", 1 );
-	}
-
 	public override bool CanCarry( Player carrier )
 	{
 		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
@@ -106,7 +89,7 @@ public partial class Revolver : Carriable
 
 	public override void OnCarryStart( Player carrier )
 	{
-		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
+		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
 		base.OnCarryStart( carrier );
@@ -114,26 +97,31 @@ public partial class Revolver : Carriable
 
 	public override void OnCarryDrop( Player dropper )
 	{
-		if ( Local.Pawn is Player player && player.Role == Role.Bystander )
-			Components.GetOrCreate<Glow>().Enabled = true;
+		if ( Game.LocalPawn is Player player && player.Role == Role.Bystander )
+		{
+			var glow = Components.GetOrCreate<Glow>();
+			glow.Enabled = true;
+			glow.Color = Role.Bystander.GetColor();
+			glow.ObscuredColor = Color.Transparent;
+		}
 
 		base.OnCarryDrop( dropper );
 	}
 
-	protected void ShootBullet( float force, float damage, float bulletSize )
+	protected void ShootBullet()
 	{
 		// Seed rand using the tick, so bullet cones match on client and server
-		Rand.SetSeed( Time.Tick );
+		Game.SetRandomSeed( Time.Tick );
 
 		var forward = Owner.EyeRotation.Forward;
 
-		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, bulletSize ) )
+		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, 3.0f ) )
 		{
 			trace.Surface.DoBulletImpact( trace );
 
-			var fullEndPosition = trace.EndPosition + trace.Direction * bulletSize;
+			var fullEndPosition = trace.EndPosition + trace.Direction * 3.0f;
 
-			if ( !IsServer )
+			if ( !Game.IsServer )
 				continue;
 
 			if ( !trace.Entity.IsValid() )
@@ -141,7 +129,7 @@ public partial class Revolver : Carriable
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 100f * force, damage )
+				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 250f, 200f )
 					.UsingTraceResult( trace )
 					.WithAttacker( Owner )
 					.WithWeapon( this );

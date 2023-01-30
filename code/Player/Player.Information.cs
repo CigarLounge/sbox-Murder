@@ -12,19 +12,11 @@ public partial class Player
 		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
 	};
 
-	[Net]
-	public string BystanderName { get; set; }
-
-	[Net]
-	public Color Color { get; set; }
-
-	[Net]
-	public int CluesCollected { get; set; }
-
-	[Net]
-	public string SteamName { get; private set; }
-
-	public Corpse Corpse { get; set; }
+	[Net] public string BystanderName { get; set; }
+	[Net] public Color Color { get; set; }
+	[Net] public int CluesCollected { get; set; }
+	public Corpse Corpse { get; internal set; }
+	public bool IsIdentityHidden => this.IsAlive() && GameState.Current is GameplayState;
 
 	private Role _role;
 	public Role Role
@@ -39,7 +31,7 @@ public partial class Player
 			_role = value;
 
 			// Always send the role to this player's client
-			if ( IsServer )
+			if ( Game.IsServer )
 				SendRole( To.Single( this ) );
 
 			Event.Run( GameEvent.Player.RoleChanged, this, oldRole );
@@ -61,7 +53,7 @@ public partial class Player
 	/// <param name="to">The target. </param>
 	public void SendRole( To to )
 	{
-		Host.AssertServer();
+		Game.AssertServer();
 
 		ClientSetRole( to, Role );
 	}

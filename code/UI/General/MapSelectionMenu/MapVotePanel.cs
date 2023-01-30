@@ -16,16 +16,16 @@ public partial class MapVotePanel : Panel
 	public MapVotePanel()
 	{
 		// Delete unneeded UI elements.
-		foreach ( var panel in Local.Hud.Children.ToList() )
+		foreach ( var panel in Game.RootPanel.Children.ToList() )
 		{
 			if ( panel is FullScreenHintMenu )
 				continue;
 
-			if ( panel is not TextChat and not VoiceChat )
-				panel.Delete( true );
+			//if ( panel is not TextChat and not VoiceChat )
+				//panel.Delete( true );
 		}
 
-		var mapIdents = Game.Current.MapVoteIdents;
+		var mapIdents = GameManager.Instance.MapVoteIdents;
 		if ( mapIdents.IsNullOrEmpty() )
 			return;
 
@@ -50,7 +50,7 @@ public partial class MapVotePanel : Panel
 
 	public override void Tick()
 	{
-		var mapSelectionState = (MapSelectionState)Game.Current.State;
+		var mapSelectionState = (MapSelectionState)GameManager.Instance.State;
 
 		TimeText.Text = mapSelectionState.TimeLeftFormatted;
 

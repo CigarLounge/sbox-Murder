@@ -5,10 +5,17 @@ namespace Murder;
 [Title( "Carriable" ), Icon( "luggage" )]
 public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 {
-	[Net, Local, Predicted]
-	public TimeSince TimeSinceDeployed { get; private set; }
-
+	[Net, Local, Predicted] public TimeSince TimeSinceDeployed { get; private set; }
 	public TimeSince TimeSinceDropped { get; private set; }
+	public virtual float DeployTime => 0;
+	public BaseViewModel HandsModelEntity { get; private set; }
+	public Player PreviousOwner { get; private set; }
+	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
+	public BaseViewModel ViewModelEntity { get; protected set; }
+	public virtual string IconPath { get; }
+	public virtual string ViewModelPath { get; }
+	public virtual string WorldModelPath { get; }
+	public bool IsActive => !Owner?.IsHolstered ?? false;
 
 	public new Player Owner
 	{
@@ -16,26 +23,12 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		set => base.Owner = value;
 	}
 
-	public virtual float DeployTime => 0;
-	public BaseViewModel HandsModelEntity { get; private set; }
-	public Player PreviousOwner { get; private set; }
-	public BaseViewModel ViewModelEntity { get; protected set; }
-	public virtual string IconPath { get; }
-	public virtual string ViewModelPath { get; }
-	public virtual string WorldModelPath { get; }
-
-	/// <summary>
-	/// Return the entity we should be spawning particles from.
-	/// </summary>
-	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
-
-	public bool IsActive => !Owner?.IsHolstered ?? false;
-
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		Tags.Add( "interactable" );
+
 		PhysicsEnabled = true;
 		UsePhysicsCollision = true;
 		EnableHideInFirstPerson = true;
@@ -47,21 +40,14 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	public virtual void ActiveStart( Player player )
 	{
 		EnableDrawing = true;
-
-		var animator = player.Animator;
-
-		if ( animator is not null )
-			SimulateAnimator( animator );
+		TimeSinceDeployed = 0;
 
 		if ( IsLocalPawn )
 		{
 			CreateViewModel();
-			CreateHudElements();
 
 			ViewModelEntity?.SetAnimParameter( "deploy", true );
 		}
-
-		TimeSinceDeployed = 0;
 	}
 
 	public virtual void ActiveEnd( Player player, bool dropped )
@@ -69,14 +55,13 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		if ( !dropped )
 			EnableDrawing = false;
 
-		if ( IsClient )
-		{
+		if ( Game.IsClient )
 			DestroyViewModel();
-			DestroyHudElements();
-		}
 	}
 
-	public override void Simulate( Client client ) { }
+	public override void Simulate( IClient client ) { }
+
+	public virtual void SimulateAnimator( CitizenAnimationHelper anim ) { }
 
 	public virtual bool CanCarry( Player carrier )
 	{
@@ -91,7 +76,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public virtual void OnCarryStart( Player carrier )
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		Owner = carrier;
@@ -103,7 +88,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		PreviousOwner = dropper;
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		Owner = null;
@@ -120,21 +105,15 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		return base.PlaySound( soundName, attachment );
 	}
 
-	public virtual void SimulateAnimator( PawnAnimator animator )
-	{
-		animator.SetAnimParameter( "aim_body_weight", 1.0f );
-		animator.SetAnimParameter( "holdtype_handedness", 0 );
-	}
-
 	/// <summary>
 	/// Create the viewmodel. You can override this in your base classes if you want
 	/// to create a certain viewmodel entity.
 	/// </summary>
 	protected virtual void CreateViewModel()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
-		if ( ViewModelPath.IsNullOrEmpty() )
+		if ( string.IsNullOrEmpty( ViewModelPath ) )
 			return;
 
 		ViewModelEntity = new ViewModel
@@ -168,19 +147,12 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		HandsModelEntity = null;
 	}
 
-	protected virtual void CreateHudElements() { }
-
-	protected virtual void DestroyHudElements() { }
-
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
 
 		if ( IsFirstPersonMode )
-		{
 			DestroyViewModel();
-			DestroyHudElements();
-		}
 	}
 
 	bool IEntityHint.CanHint( Player player ) => Owner is null;
@@ -190,7 +162,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		var player = (Player)user;
 
 		if ( CanCarry( player ) )
-			player.SetCarriable( this );
+			player.SetCarriable( this, true );
 
 		return false;
 	}

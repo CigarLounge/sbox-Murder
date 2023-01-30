@@ -2,45 +2,64 @@ using Sandbox;
 
 namespace Murder;
 
-public partial class FollowEntityCamera : CameraMode, ISpectateCamera
+public class FollowEntityCamera : CameraMode
 {
-	[Net, Local]
-	public Entity FollowedEntity { get; private set; }
+	private Entity _followedEntity;
+	private Vector3 _focusPoint = Camera.Position;
 
-	private Vector3 _focusPoint;
-
-	public FollowEntityCamera() { }
-
-	public FollowEntityCamera( Entity followedEntity ) => FollowedEntity = followedEntity;
-
-	public override void Activated()
+	public FollowEntityCamera( Entity entity )
 	{
-		base.Activated();
+		_followedEntity = entity;
 
-		_focusPoint = CurrentView.Position - GetViewOffset();
+		if ( _followedEntity is Player player )
+			Spectating.Player = player;
 
-		Position = CurrentView.Position;
-		Rotation = CurrentView.Rotation;
+		Camera.FirstPersonViewer = null;
 	}
 
-	public override void Update()
+	public override void BuildInput()
 	{
-		if ( !FollowedEntity.IsValid() )
+		if ( !_followedEntity.IsValid() )
+		{
+			Current = new FreeCamera();
+			return;
+		}
+
+		if ( _followedEntity is Corpse && Input.Pressed( InputButton.Jump ) )
+		{
+			Current = new FreeCamera();
+			return;
+		}
+
+		if ( Spectating.Player.IsValid() )
+		{
+			if ( Input.Pressed( InputButton.Jump ) )
+			{
+				Current = new FirstPersonCamera( Spectating.Player );
+				return;
+			}
+
+			if ( Input.Pressed( InputButton.PrimaryAttack ) )
+				Spectating.FindPlayer( false );
+			else if ( Input.Pressed( InputButton.SecondaryAttack ) )
+				Spectating.FindPlayer( true );
+
+			_followedEntity = Spectating.Player;
+		}
+	}
+
+	public override void FrameSimulate( IClient client )
+	{
+		if ( client.Pawn is not Player player || !_followedEntity.IsValid() )
 			return;
 
-		Rotation = Input.Rotation;
+		_focusPoint = Vector3.Lerp( _focusPoint, _followedEntity.WorldSpaceBounds.Center, Time.Delta * 5.0f );
 
-		_focusPoint = Vector3.Lerp( _focusPoint, FollowedEntity.Position, 50f * RealTime.Delta );
-
-		var trace = Trace.Ray( _focusPoint, _focusPoint + GetViewOffset() )
+		var tr = Trace.Ray( _focusPoint, _focusPoint + player.ViewAngles.ToRotation().Forward * -130 )
 			.WorldOnly()
 			.Run();
 
-		Position = trace.EndPosition;
-	}
-
-	public virtual Vector3 GetViewOffset()
-	{
-		return Input.Rotation.Forward * -130 + Vector3.Up * 20;
+		Camera.Rotation = player.ViewAngles.ToRotation();
+		Camera.Position = tr.EndPosition;
 	}
 }

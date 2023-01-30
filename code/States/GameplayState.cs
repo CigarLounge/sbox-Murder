@@ -1,12 +1,14 @@
 using Sandbox;
+using Sandbox.Diagnostics;
 using System.Collections.Generic;
 
 namespace Murder;
 
-public sealed partial class GameplayState : BaseState
+public sealed partial class GameplayState : GameState
 {
 	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
+	// private TimeUntil _timeUntilNextClue = 20;
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -30,10 +32,10 @@ public sealed partial class GameplayState : BaseState
 	{
 		MapHandler.Cleanup();
 
-		if ( !Host.IsServer )
+		if ( !Game.IsServer )
 			return;
 
-		foreach ( var client in Client.All )
+		foreach ( var client in Game.Clients )
 		{
 			var player = (Player)client.Pawn;
 
@@ -49,27 +51,30 @@ public sealed partial class GameplayState : BaseState
 		RunEvent();
 	}
 
-	private Role IsRoundOver()
+	private bool IsRoundOver()
 	{
-		List<Role> aliveRoles = new();
+		var aliveRoles = new bool[2];
 
 		foreach ( var player in _alivePlayers )
-			if ( !aliveRoles.Contains( player.Role ) )
-				aliveRoles.Add( player.Role );
+			aliveRoles[(int)player.Role - 1] = true;
 
-		if ( aliveRoles.IsNullOrEmpty() )
-			return Role.None;
-
-		return aliveRoles.Count == 1 ? aliveRoles[0] : Role.None;
+		return aliveRoles[0] ^ aliveRoles[1];
 	}
 
 	public override void OnSecond()
 	{
-		if ( !Host.IsServer )
+		if ( !Game.IsServer )
 			return;
 
-		if ( !Utils.HasMinimumPlayers() && IsRoundOver() == Role.None )
-			Game.Current.ForceStateChange( new WaitingState() );
+		// TODO: Figure out how fast clues should spawn.
+		// if ( _timeUntilNextClue )
+		// {
+		// 	_ = new Clue();
+		// 	_timeUntilNextClue = 30;
+		// }
+
+		if ( !GameManager.HasMinimumPlayers() && IsRoundOver() )
+			GameManager.Instance.ForceStateChange( new WaitingState() );
 	}
 
 	private void AssignRoles()
@@ -91,24 +96,27 @@ public sealed partial class GameplayState : BaseState
 		for ( var i = 0; i < _alivePlayers.Count; i++ )
 		{
 			var player = _alivePlayers[i];
-
 			player.BystanderName = Player.Names[i];
-			player.Color = Color.FromBytes( Rand.Int( 0, 255 ), Rand.Int( 0, 255 ), Rand.Int( 0, 255 ) );
+			player.Color = Color.FromBytes( Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ) );
 			player.ColoredClothing.RenderColor = player.Color;
 		}
 	}
 
-	private void ChangeRoundIfOver()
+	private bool ChangeRoundIfOver()
 	{
-		var result = IsRoundOver();
-		if ( result != Role.None && !Game.PreventWin )
-			Game.Current.ForceStateChange( new PostRound( result ) );
+		if ( IsRoundOver() && !GameManager.PreventWin )
+		{
+			GameManager.Instance.ForceStateChange( new PostRound( _alivePlayers[0].Role ) );
+			return true;
+		}
+
+		return false;
 	}
 
 	[ClientRpc]
 	public static void RunEvent()
 	{
-		Assert.NotNull( Game.Current.State as GameplayState );
+		Assert.NotNull( Current as GameplayState );
 		Event.Run( GameEvent.Round.Start );
 	}
 }

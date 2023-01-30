@@ -1,5 +1,6 @@
 $alive: #17ad44;
 $spectator: #fcdb38;
+
 $primary: #303030;
 $secondary: #1a1a1a;
 $info: #55d4ff;
@@ -17,7 +18,7 @@ $button-size: 45px;
 @import "/ui/styles/textentry.scss";
 @import "/ui/styles/slider.scss";
 
-hud
+Hud
 {
     font-family: Poppins;
     flex-shrink: 0;

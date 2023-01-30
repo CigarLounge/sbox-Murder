@@ -1,0 +1,39 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using System.Linq;
+
+@namespace Murder.UI
+
+<root />
+
+@code
+{
+	private static VoiceChat Instance { get; set; }
+
+	public VoiceChat() => Instance = this;
+
+	public static void OnVoicePlayed(IClient client)
+	{
+		var entry = Instance.ChildrenOfType<VoiceChatEntry>().FirstOrDefault(x => x.Friend.Id == client.SteamId) ?? new VoiceChatEntry(client) { Parent = Instance };
+
+		entry.Update(client.Voice.CurrentLevel);
+	}
+
+	public override void Tick()
+	{
+		if (Voice.IsRecording)
+			OnVoicePlayed(Game.LocalClient);
+	}
+}
+
+<style>
+	VoiceChat 
+	{
+		position: absolute;
+		top: 25px;
+		left: 25px;
+		flex-direction: column;
+		width: 240px;
+		z-index: 100;
+	}
+</style>

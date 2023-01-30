@@ -1,14 +1,12 @@
 using Sandbox;
+using Sandbox.Diagnostics;
 
 namespace Murder;
 
 public partial class Player
 {
-	[Net, Change]
-	public Carriable Carriable { get; private set; }
-
-	[Net, Predicted]
-	public bool IsHolstered { get; private set; } = true;
+	[Net, Predicted] public bool IsHolstered { get; set; }
+	[Net, Change] public Carriable Carriable { get; private set; }
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
 	{
@@ -21,9 +19,10 @@ public partial class Player
 
 		carriable.SetParent( this, true );
 		carriable.OnCarryStart( this );
-		Carriable = carriable;
 
+		_wasHolstered = true;
 		IsHolstered = !makeActive;
+		Carriable = carriable;
 	}
 
 	public Carriable DropCarriable()
@@ -38,8 +37,8 @@ public partial class Player
 		Carriable.OnCarryDrop( this );
 
 		var dropped = Carriable;
-		Carriable = null;
 		IsHolstered = true;
+		Carriable = null;
 
 		return dropped;
 	}
@@ -69,13 +68,14 @@ public partial class Player
 	{
 		if ( oldVal.IsValid() )
 		{
-			if ( !IsHolstered )
-				oldVal.ActiveEnd( this, true );
-
+			oldVal.ActiveEnd( this, true );
 			oldVal.OnCarryDrop( this );
 		}
 
 		if ( newVal.IsValid() )
+		{
+			_wasHolstered = true;
 			newVal.OnCarryStart( this );
+		}
 	}
 }

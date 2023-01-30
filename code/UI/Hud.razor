@@ -1,0 +1,35 @@
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Murder.UI
+
+@inherits RootPanel
+@attribute [StyleSheet("/UI/Hud.scss")]
+
+<root class="panel fullscreen">
+	<Scoreboard />
+	<HintDisplay />
+	@*<PlayerInfo />
+	<InventoryWrapper />
+	<TextChat />
+	<QuickChat />*@
+	<Crosshair />
+	<TextChat />
+	<VoiceChat />
+	<FullScreenHintMenu />
+	<PlayerInfo />
+</root>
+
+@code
+{
+	/// <summary>
+	/// The player that we're currently displaying info about through UI elements.
+	/// </summary>
+	public static Murder.Player DisplayedPlayer => Spectating.Player.IsValid() ? Spectating.Player : (Murder.Player)Game.LocalPawn;
+
+	public Hud()
+	{
+		Game.RootPanel?.Delete(true);
+		Game.RootPanel = this;
+	}
+}
