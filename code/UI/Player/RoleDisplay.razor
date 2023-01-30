@@ -3,6 +3,11 @@
 
 @namespace Murder.UI
 
+@if (Hud.DisplayedPlayer.Role == Role.None)
+{
+	return;
+}
+
 <root class="text-shadow">
 	<text>@Hud.DisplayedPlayer.Role.GetTitle()</text>
 </root>
@@ -11,7 +16,9 @@
 {
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(Hud.DisplayedPlayer.Role);
+		var player = Hud.DisplayedPlayer;
+
+		return HashCode.Combine(player.Role.GetHashCode(), player.Role.GetColor().GetHashCode());
 	}
 }
 

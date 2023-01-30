@@ -81,7 +81,6 @@ public partial class Player : AnimatedEntity
 	public void MakeSpectator()
 	{
 		Client.Voice.WantsStereo = true;
-		Controller = null;
 		EnableAllCollisions = false;
 		EnableDrawing = false;
 		EnableTouch = false;
