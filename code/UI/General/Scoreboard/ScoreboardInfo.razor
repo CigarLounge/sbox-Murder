@@ -4,27 +4,26 @@
 @namespace Murder.UI
 
 <root class="background-color-primary rounded-top text-shadow">
-	<div class="server-information">
-		<text style="font-size: 25px; font-weight: bolder;">Murder</text>
-		<text style="font-weight: 500;">Contribute at github.com/CigarLounge/sbox-Murder</text>
-	</div>
-	<div class="server-data">
-		<text>@($"{Game.Clients.Count} / {Game.Server.MaxPlayers} Players")</text>
-		<text>@Game.Server.MapIdent</text>
-		<text>
-			@{
-				var roundsRemaining = Murder.GameManager.RoundLimit - Murder.GameManager.Instance.TotalRoundsPlayed;
-				var suffix = roundsRemaining == 1 ? "round" : "rounds";
-				<text>
-					@($"Map will change in {roundsRemaining} {suffix}")
-				</text>
-			}
-		</text>
-	</div>
+    <img src="/ui/cigarlounge-logo.png" class="logo rounded" />
+    <div class="server-information">
+        <text class="title">Murder</text>
+        <text class="url">github.com/CigarLounge/sbox-Murder<text>
+    </div>
+    <div class="server-data">
+        <text style="font-weight: bold;">@Game.Server.MapIdent</text>
+        <text>@($"{Game.Clients.Count} / {Game.Server.MaxPlayers} Players")</text>
+		@{
+			var roundsRemaining = Murder.GameManager.RoundLimit - Murder.GameManager.Instance.TotalRoundsPlayed;
+			var suffix = roundsRemaining == 1 ? "round" : "rounds";
+			<text>
+				@($"Map will change in {roundsRemaining} {suffix}")
+			</text>
+		}
+    </div>
 </root>
 
 @code {
-	protected override int BuildHash()
+    protected override int BuildHash()
 	{
 		return HashCode.Combine
 		(
@@ -37,34 +36,42 @@
 }
 
 <style>
-	ScoreboardInfo {
-		flex-direction: row;
-		max-height: 100px;
-		justify-content: space-between;
-		padding: 30 16 0 16;
-		flex-shrink: 0;
-		.terry-image
+    ScoreboardInfo {
+        flex-direction: row;
+        max-height: 100px;
+        justify-content: space-between;
+        padding: 15;
+        flex-shrink: 0;
+        align-items: center;
+        .logo {
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 75px;
+            height: 75px;
+        }
 
-	{
-		position: absolute;
-		top: -54px;
-		background-image: url("/ui/scoreboard-terry.png");
-		background-repeat: no-repeat;
-		background-size: cover;
-		width: 180px;
-		height: 150px;
-	}
+        .server-information {
+            flex-grow: 1;
+            flex-direction: column;
+            padding: 5px;
+            .title {
+                font-size: 30px;
+                font-weight: bolder;
+                left: -5px;
+                bottom: -10px;
+            }
 
-	.server-information {
-		flex-grow: 1;
-		flex-direction: column;
-		justify-content: flex-end;
-	}
+            .url {
+                font-weight: 300;
+                font-size: 15px;
+            }
+        }
 
-	.server-data {
-		flex-direction: column;
-		font-weight: 500;
-		align-items: flex-end;
-	}
-
-	}</style>
+        .server-data {
+            flex-direction: column;
+            align-items: flex-end;
+            font-weight: 300;
+            font-size: 15px;
+        }
+    }
+</style>
