@@ -12,7 +12,7 @@
 <root class="text-shadow">
     <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
         <div class="bar rounded">
-            <div class="icon text-shadow">@UI.Hud.DisplayedPlayer.Carriable.Icon</div>
+            <img class="icon" src="@UI.Hud.DisplayedPlayer.Carriable.IconPath" />
         </div>
         <inputglyph button="Slot1" style="light" style="margin-left: 5px;" />
     </div>
@@ -48,8 +48,8 @@
                 justify-content: center;
 
                 .icon {
-                    font-family: CustomIcons;
-                    font-size: 60px;
+                    height: 100px;
+                    width: 100px;
                 }
             }
 

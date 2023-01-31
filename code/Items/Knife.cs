@@ -11,7 +11,7 @@ namespace Murder;
 public partial class Knife : Carriable
 {
 	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
-	public override string Icon { get; } = "knife-kitchen";
+	public override string IconPath { get; } = "/UI/Knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
@@ -141,9 +141,9 @@ public partial class Knife : Carriable
 
 	public override void StartTouch( Entity other )
 	{
-		if ( !_isThrown || other is not Player player || player == PreviousOwner )	
+		if ( !_isThrown || other is not Player player || player == PreviousOwner )
 			return;
-		
+
 		var damageInfo = DamageInfo.Generic( 200f )
 			.WithPosition( Position )
 			.WithForce( Position.Normal * 20f )

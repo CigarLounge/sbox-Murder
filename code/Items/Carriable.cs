@@ -12,7 +12,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	public Player PreviousOwner { get; private set; }
 	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
 	public BaseViewModel ViewModelEntity { get; protected set; }
-	public virtual string Icon { get; }
+	public virtual string IconPath { get; }
 	public virtual string ViewModelPath { get; }
 	public virtual string WorldModelPath { get; }
 	public bool IsActive => !Owner?.IsHolstered ?? false;
