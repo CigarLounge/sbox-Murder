@@ -94,7 +94,7 @@ public partial class Player : AnimatedEntity
 	private void ClientRespawn()
 	{
 		Game.AssertClient();
-	
+
 		_blackSmoke?.Destroy();
 		_blackSmoke = null;
 		DeleteFlashlight();
@@ -152,12 +152,12 @@ public partial class Player : AnimatedEntity
 	private void MurdererFog()
 	{
 		if ( TimeUntilClean > -GameManager.MurdererFogTime )
-		{		
+		{
 			_blackSmoke?.Destroy();
 			_blackSmoke = null;
 			return;
 		}
-		
+
 		_blackSmoke ??= Particles.Create( "particles/black_smoke.vpcf", this, "arm_lower_L" );
 	}
 
