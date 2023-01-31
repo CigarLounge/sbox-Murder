@@ -45,6 +45,8 @@ public partial class Player : AnimatedEntity
 		IsHolstered = true;
 		Carriable?.Delete();
 		Carriable = null;
+		_blackSmoke?.Destroy();
+		_blackSmoke = null;
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
@@ -92,7 +94,9 @@ public partial class Player : AnimatedEntity
 	private void ClientRespawn()
 	{
 		Game.AssertClient();
-
+	
+		_blackSmoke?.Destroy();
+		_blackSmoke = null;
 		DeleteFlashlight();
 		ResetDamageData();
 
@@ -114,6 +118,8 @@ public partial class Player : AnimatedEntity
 
 		Event.Run( GameEvent.Player.Spawned, this );
 	}
+
+	private Particles _blackSmoke;
 
 	public override void Simulate( IClient client )
 	{
@@ -144,6 +150,21 @@ public partial class Player : AnimatedEntity
 
 		if ( Game.IsServer )
 			PlayerUse();
+
+		if ( Role == Role.Murderer )
+			MurdererFog();
+	}
+
+	private void MurdererFog()
+	{
+		if ( TimeUntilClean > -GameManager.MurdererFogTime )
+		{		
+			_blackSmoke?.Destroy();
+			_blackSmoke = null;
+			return;
+		}
+		
+		_blackSmoke ??= Particles.Create( "particles/black_smoke.vpcf", this, "arm_lower_L" );
 	}
 
 	public override void FrameSimulate( IClient client )

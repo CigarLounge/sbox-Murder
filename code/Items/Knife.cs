@@ -16,6 +16,7 @@ public partial class Knife : Carriable
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
 	private bool _isThrown = false;
+	private Particles _blackSmoke;
 
 	public override void Simulate( IClient client )
 	{
@@ -54,6 +55,8 @@ public partial class Knife : Carriable
 	{
 		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
+
+		_blackSmoke?.Destroy();
 
 		base.OnCarryStart( carrier );
 	}
@@ -115,34 +118,40 @@ public partial class Knife : Carriable
 			.Ignore( Owner )
 			.Run();
 
+		Owner.IsHolstered = true; // small prediction fix
 		_isThrown = true;
 
 		if ( !Game.IsServer )
 			return;
 
-		Owner.DropCarriable();
+		using ( Prediction.Off() )
+		{
+			Owner.DropCarriable();
 
-		PhysicsEnabled = true;
-		Position = trace.EndPosition;
-		Rotation = PreviousOwner.EyeRotation;
+			PhysicsEnabled = true;
+			Position = trace.EndPosition;
+			Rotation = PreviousOwner.EyeRotation;
 
-		Velocity = PreviousOwner.EyeRotation.Forward * 700f + Vector3.Up * 200;
-		ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
+			_blackSmoke = Particles.Create( "particles/black_smoke.vpcf", this );
+
+			Velocity = PreviousOwner.EyeRotation.Forward * 700f + Vector3.Up * 200;
+			ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
+		}
 	}
 
 	public override void StartTouch( Entity other )
 	{
-		if ( _isThrown && other is Player player && player != PreviousOwner )
-		{
-			var damageInfo = DamageInfo.Generic( 200f )
-				.WithPosition( Position )
-				.WithForce( Position.Normal * 20f )
-				.WithAttacker( PreviousOwner )
-				.WithWeapon( this )
-				.WithTag( "slash" );
+		if ( !_isThrown || other is not Player player || player == PreviousOwner )	
+			return;
+		
+		var damageInfo = DamageInfo.Generic( 200f )
+			.WithPosition( Position )
+			.WithForce( Position.Normal * 20f )
+			.WithAttacker( PreviousOwner )
+			.WithWeapon( this )
+			.WithTag( "slash" );
 
-			player.TakeDamage( damageInfo );
-		}
+		player.TakeDamage( damageInfo );
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )

@@ -19,10 +19,15 @@ public partial class Player
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
 
-		if ( LastAttacker is Player killer && Role == killer.Role )
+		if ( LastAttacker is Player killer )
 		{
-			killer.DropCarriable();
-			killer.TimeUntilClean = 20f;
+			if ( killer.Role == Role )
+			{
+				killer.DropCarriable();
+				killer.TimeUntilClean = 20f;
+			}
+			else
+				killer.TimeUntilClean = 0f;
 		}
 
 		Corpse = new Corpse( this );
@@ -33,6 +38,7 @@ public partial class Player
 		EnableDrawing = false;
 		EnableTouch = false;
 
+		_blackSmoke?.Destroy();
 		DropCarriable();
 		DeleteFlashlight();
 
