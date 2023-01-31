@@ -1,4 +1,5 @@
-$primary: #303030;
+$primary: #1a1a1a;
+$info: #55d4ff;
 
 Hud {
     flex-shrink: 0;
@@ -60,4 +61,12 @@ label {
 
 .background-color-primary {
     background-color: $primary;
+}
+
+.background-color-info {
+    background-color: $info;
+}
+
+.text-color-info {
+    color: $info;
 }
