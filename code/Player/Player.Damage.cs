@@ -72,6 +72,8 @@ public partial class Player
 		if ( info.HasTag( "blast" ) )
 			Deafen( To.Single( this ), info.Damage.LerpInverse( 0, 60 ) );
 
+		CreateBloodSplatter( info, 180f );
+
 		info.Damage = Math.Min( Health, info.Damage );
 
 		LastAttacker = info.Attacker;
@@ -84,6 +86,19 @@ public partial class Player
 
 		if ( Health <= 0f )
 			OnKilled();
+	}
+
+	private void CreateBloodSplatter( DamageInfo info, float maxDistance )
+	{
+		var trace = Trace.Ray( new Ray( info.Position, info.Force.Normal ), maxDistance )
+			.Ignore( this )
+			.Run();
+
+		if ( !trace.Hit )
+			return;
+
+		var decal = ResourceLibrary.Get<DecalDefinition>( "decals/blood_splatter.decal" );
+		Decal.Place( To.Everyone, decal, null, 0, trace.EndPosition - trace.Direction * 1f, Rotation.LookAt( trace.Normal ), Color.White );
 	}
 
 	private void ResetDamageData()
