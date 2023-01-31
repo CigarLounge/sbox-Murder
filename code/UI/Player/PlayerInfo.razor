@@ -2,7 +2,6 @@
 
 @namespace Murder.UI
 
-@* TODO CHANGE *@
 @if (!Hud.DisplayedPlayer.IsAlive() || Hud.DisplayedPlayer.Role is Role.None)
 {
     return;
@@ -11,7 +10,7 @@
 <root class="text-shadow">
     <div style="flex-direction: column;">
         <text class="name">@Hud.DisplayedPlayer.BystanderName</text>
-        <text class="role">Bystander</text>
+        <text class="role">@Hud.DisplayedPlayer.Role.GetTitle()</text>
     </div>
     <div>
         <div class="health-icon">health_and_safety</div>
