@@ -106,7 +106,7 @@
 		if (_client.Pawn is not Murder.Player player || !player.IsAlive())
 			return "#fcdb38";
 
-		return "#303030";
+		return player.Color.Hex;
 	}
 }
 
@@ -114,7 +114,6 @@
 	VoiceChatEntry {
 		flex-direction: row;
 		padding: 8px 8px;
-		margin-bottom: 5px;
 		align-items: center;
 		transition: all 0.05s ease-out;
 		border-color: @BackgroundColor();
