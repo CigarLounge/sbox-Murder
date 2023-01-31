@@ -11,7 +11,7 @@
 <root class="text-shadow">
     <text class="name">@Hud.DisplayedPlayer.BystanderName</text>
     <div>
-        <text class="health-icon">health_and_safety</text>
+        <div class="health-icon">health_and_safety</div>
         <div>
             @for(var i = 0; i < 5; ++i) 
             {
@@ -22,7 +22,7 @@
     @if (@Hud.DisplayedPlayer.Role == Role.Bystander)
     {
         <div>
-            <text class="clue-icon">search</text>
+            <div class="clue-icon">search</div>
             <div>
                 @for(var i = 0; i < 5; ++i) 
                 {
@@ -45,9 +45,10 @@
     PlayerInfo {
         position: absolute;
         bottom: 50px;
+        left: 25px;
         transform: skew(0deg, -5deg);
         flex-direction: column;
-		align-items: center;
+		align-items: flex-start;
 
         .name {
             color: @Hud.DisplayedPlayer.Color.Hex;
