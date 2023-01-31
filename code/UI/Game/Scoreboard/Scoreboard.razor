@@ -10,15 +10,13 @@
 
 <root>
 	<div class="container">
-		<div class="temp">
-			<ScoreboardInfo />
-			<div class="background-color-primary rounded-bottom groups">
-				<ScoreboardGroup />
-				@foreach (var client in Game.Clients)
-				{
-					<ScoreboardEntry Client=@client />
-				}
-			</div>
+		<ScoreboardInfo />
+		<div class="background-color-primary rounded-bottom groups">
+			<ScoreboardGroup />
+			@foreach (var client in Game.Clients)
+			{
+				<ScoreboardEntry Client=@client />
+			}
 		</div>
 	</div>
 </root>
@@ -27,8 +25,6 @@
 {
 	protected override int BuildHash()
 	{
-		var player = Game.LocalPawn as Murder.Player;
-
 		return HashCode.Combine(Input.Down(InputButton.Score));
 	}
 }
@@ -40,25 +36,18 @@
 		bottom: -25px;
 		z-index: 1;
 		justify-content: center;
-		.container
+		align-items: center;
 
-	{
-		width: 45%;
-		flex-direction: column;
-		justify-content: center;
-		opacity: 0.985;
+		.container {
+			flex-direction: column;
+			max-height: 70%;
+			width: 45%;
+
+			.groups {
+				flex-direction: column;
+				padding: 8 8 12 8;
+				overflow: scroll;
+			}
+		}
 	}
-
-	.temp {
-		flex-direction: column;
-		max-height: 70%;
-		.groups
-
-	{
-		flex-direction: column;
-		padding: 8 8 12 8;
-		overflow: scroll;
-	}
-
-	}
-	}</style>
+</style>
