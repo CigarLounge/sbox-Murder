@@ -1,6 +1,8 @@
 $primary: #1a1a1a;
 $info: #55d4ff;
 
+$dead: #fcdb38;
+
 Hud {
     flex-shrink: 0;
     color: #fafafa;
@@ -57,6 +59,10 @@ label {
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+.opacity-heavy {
+    opacity: 0.9;
 }
 
 .background-color-primary {

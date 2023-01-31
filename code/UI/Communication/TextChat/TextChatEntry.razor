@@ -11,7 +11,7 @@
 			{
 				<img class="circle" src="avatar:@_client.SteamId" />
 			}
-			<text class="name" style="color: @(player.IsIncognito ? player.Color.Hex : "white")">
+			<text class="name" style="color: @(player.IsIncognito ? player.Color.Hex : "#fcdb38")">
 				@(player.IsIncognito ? player.BystanderName : _client.Name)
 			</text>
 		</div>
@@ -50,30 +50,30 @@
 		max-width: 100%;
 		transition: opacity 0.15s ease;
 		margin-bottom: 6px;
-		font-size: 20px;
 		flex-shrink: 0;
-		img
 
-	{
-		height: 30px;
-		width: 30px;
-		margin-right: 3px;
+		img {
+			height: 30px;
+			width: 30px;
+			margin-right: 3px;
+		}
+
+		.name {
+			font-weight: 700;
+			font-size: 16px;
+			margin-top: 3px;
+			margin-right: 4px;
+		}
+
+		.message {
+			font-size: 16px;
+			margin-top: 3px;
+			flex-shrink: 0;
+		}
+
+		&.stale {
+			transition: opacity 1s ease;
+			opacity: 0;
+		}
 	}
-
-	.name {
-		font-weight: 700;
-		margin-top: 3px;
-		margin-right: 4px;
-	}
-
-	.message {
-		margin-top: 3px;
-		flex-shrink: 0;
-	}
-
-	&.stale {
-		transition: opacity 1s ease;
-		opacity: 0;
-	}
-
-	}</style>
+</style>
