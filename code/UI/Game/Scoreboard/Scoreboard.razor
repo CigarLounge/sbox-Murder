@@ -9,9 +9,9 @@
 }
 
 <root>
-	<div class="container">
+	<div class="container rounded">
 		<ScoreboardInfo />
-		<div class="background-color-primary rounded-bottom groups">
+		<div class="groups">
 			<ScoreboardGroup />
 			@foreach (var client in Game.Clients)
 			{
@@ -42,6 +42,7 @@
 			flex-direction: column;
 			max-height: 70%;
 			width: 45%;
+			backdrop-filter-blur: 20px;
 
 			.groups {
 				flex-direction: column;
