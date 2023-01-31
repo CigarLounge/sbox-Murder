@@ -9,7 +9,7 @@
     return;
 }
 
-<root>
+<root class="text-shadow">
     <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
         <div class="bar rounded">
             <div class="icon text-shadow">@UI.Hud.DisplayedPlayer.Carriable.Icon</div>
@@ -31,6 +31,8 @@
         bottom: 50px;
         right: 25px;
         transform: skew(0deg, 5deg);
+        flex-direction: column;
+        align-items: flex-end;
 
         .slot {
             transition: all 0.15s ease-out;

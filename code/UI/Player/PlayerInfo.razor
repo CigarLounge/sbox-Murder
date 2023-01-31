@@ -9,7 +9,10 @@
 }
 
 <root class="text-shadow">
-    <text class="name">@Hud.DisplayedPlayer.BystanderName</text>
+    <div style="flex-direction: column;">
+        <text class="name">@Hud.DisplayedPlayer.BystanderName</text>
+        <text class="role">Bystander</text>
+    </div>
     <div>
         <div class="health-icon">health_and_safety</div>
         <div>
@@ -54,6 +57,14 @@
             color: @Hud.DisplayedPlayer.Color.Hex;
             font-size: 50px;
             font-weight: 500;
+            top: 10px;
+        }
+
+        .role {
+            font-size: 23px;
+            top: -10px;
+            padding-left: 20px;
+            color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
         }
 
         .health-icon {
