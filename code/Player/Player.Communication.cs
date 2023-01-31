@@ -18,7 +18,7 @@ public partial class Player
 	[ConVar.ClientData( "mute_filter" )]
 	public MuteFilter MuteFilter { get; set; } = MuteFilter.None;
 
-	public bool CanHearSpectators => !IsIdentityHidden && MuteFilter != MuteFilter.Spectators && MuteFilter != MuteFilter.All;
+	public bool CanHearSpectators => !IsIncognito && MuteFilter != MuteFilter.Spectators && MuteFilter != MuteFilter.All;
 	public bool CanHearAlivePlayers => MuteFilter != MuteFilter.AlivePlayers && MuteFilter != MuteFilter.All;
 
 	public static void ToggleMute()

@@ -40,4 +40,7 @@ public partial class GameManager
 	[ConVar.Server( "mur_afk_kick", Help = "Kick any players that get marked AFK.", Saved = true )]
 	public static bool KickAFKPlayers { get; set; }
 	#endregion
+
+	[ConVar.Replicated( "mur_murderer_fogtime", Help = "Time (in seconds) it takes for a Murderer to show fog for no kills, 0 to disable.", Saved = true )]
+	public static int MurdererFogTime { get; set; } = 120;
 }

@@ -15,7 +15,7 @@ public sealed partial class MapSelectionState : GameState
 	{
 		if ( Votes.Count == 0 )
 		{
-			//Game.ChangeLevel( Game.Random.FromList( GameManager.Current.MapVoteIdents.ToList() ) ?? GameManager.DefaultMap );
+			Game.ChangeLevel( Game.Random.FromList( GameManager.Instance.MapVoteIdents.ToList() ) ?? GameManager.DefaultMap );
 			return;
 		}
 
@@ -29,7 +29,7 @@ public sealed partial class MapSelectionState : GameState
 
 	protected override void OnStart()
 	{
-		//UI.FullScreenHintMenu.Instance?.ForceOpen( new UI.MapSelectionMenu() );
+		Game.RootPanel?.AddChild<UI.MapSelect>();
 	}
 
 	[ConCmd.Server]
@@ -48,11 +48,12 @@ public sealed partial class MapSelectionState : GameState
 	private static async void OnFinishedLoading()
 	{
 		var maps = await GetLocalMapIdents();
+
 		if ( maps.IsNullOrEmpty() )
 			maps = await GetRemoteMapIdents();
 
 		maps.Shuffle();
-		//GameManager.Current.MapVoteIdents = maps;
+		GameManager.Instance.MapVoteIdents = maps;
 	}
 
 	private static async Task<List<string>> GetLocalMapIdents()
@@ -81,7 +82,7 @@ public sealed partial class MapSelectionState : GameState
 
 	private static async Task<List<string>> GetRemoteMapIdents()
 	{
-		var queryResult = await Package.FindAsync( $"type:map game:{Game.Server.GameIdent.Replace( "#local", "" )}", take: 99 );
+		var queryResult = await Package.FindAsync( "type:map game:matt.ttt", take: 99 );
 
 		return queryResult.Packages.Select( ( p ) => p.FullIdent ).ToList();
 	}

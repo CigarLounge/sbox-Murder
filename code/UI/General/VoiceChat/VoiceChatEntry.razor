@@ -43,11 +43,12 @@
 
 		var player = (Murder.Player)_client.Pawn;
 
-		if (player.IsIdentityHidden)
+		if (player.IsIncognito)
 		{
 			Avatar.Texture = null;
 			Avatar.Style.BackgroundColor = player.Color;
 			Name.Text = player.BystanderName;
+			Name.Style.FontColor = player.Color;
 		}
 		else
 		{
@@ -97,7 +98,7 @@
 
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(((Murder.Player)_client.Pawn).IsIdentityHidden);
+		return HashCode.Combine(((Murder.Player)_client.Pawn).IsIncognito);
 	}
 
 	private string BackgroundColor()

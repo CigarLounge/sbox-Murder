@@ -14,9 +14,7 @@
 						game_class = "prop_data"
 						game_keys = 
 						{
-							allowstatic = false
 							bakelighting = true
-							spawn_motion_disabled = false
 							health = -1.0
 							min_impact_damage_speed = -1.0
 							impact_damage = -1.0
@@ -37,8 +35,8 @@
 						surface_prop = "default"
 						collision_tags = "solid"
 						recenter_on_parent_bone = true
-						offset_origin = [ 0.0, -0.12, 0.0 ]
-						offset_angles = [ 0.0, 0.0, -5.0 ]
+						offset_origin = [ -4.0, -0.24, 0.5 ]
+						offset_angles = [ 85.0, 0.0, -5.0 ]
 						align_origin_x_type = "BoundsCenter"
 						align_origin_y_type = "BoundsCenter"
 						align_origin_z_type = "BoundsCenter"
@@ -73,7 +71,7 @@
 								parent_bone = "cylinder01"
 								surface_property = "Pistol_Metal"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ -0.81387, -4.264537, 0.0 ]
 								hitbox_maxs = [ 1.25793, 3.557474, 4.064414 ]
 							},
@@ -82,7 +80,7 @@
 								parent_bone = "ak47_bolt"
 								surface_property = "Pistol_Metal"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -6.680564, -1.153198 ]
 								hitbox_maxs = [ 1.268569, 1.006528, 1.061804 ]
 							},
@@ -98,8 +96,8 @@
 						_class = "RenderMeshFile"
 						name = "w_knife_bg_studio_lod0"
 						filename = "models\\weapons\\w_knife_fbx\\mesh\\w_knife_bg_studio_lod0.fbx"
-						import_translation = [ 0.0, 0.0, 0.0 ]
-						import_rotation = [ 0.0, 0.0, -5.0 ]
+						import_translation = [ -4.0, -0.11, 0.5 ]
+						import_rotation = [ 85.0, 0.0, -5.0 ]
 						import_scale = 1.0
 						align_origin_x_type = "BoundsCenter"
 						align_origin_y_type = "BoundsCenter"
@@ -148,8 +146,8 @@
 					{
 						_class = "Bone"
 						name = "hold_R"
-						origin = [ 2.5, 0.5, -1.5 ]
-						angles = [ 0.0, 0.0, 10.0 ]
+						origin = [ -0.5, 0.5, -3.0 ]
+						angles = [ 85.0, 0.0, 10.0 ]
 						do_not_discard = true
 					},
 					{
@@ -158,18 +156,6 @@
 						origin = [ 0.0, 0.0, 0.0 ]
 						angles = [ 0.0, 0.0, 0.0 ]
 						do_not_discard = true
-					},
-				]
-			},
-			{
-				_class = "MaterialGroupList"
-				children = 
-				[
-					{
-						_class = "DefaultMaterialGroup"
-						remaps = [  ]
-						use_global_default = false
-						global_default_material = ""
 					},
 				]
 			},
