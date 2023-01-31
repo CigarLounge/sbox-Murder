@@ -11,7 +11,7 @@ namespace Murder;
 public partial class Knife : Carriable
 {
 	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
-	public override string IconPath { get; } = "ui/knife.png";
+	public override string Icon { get; } = "knife-kitchen";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 

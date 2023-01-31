@@ -1,5 +1,63 @@
+@using Murder;
+@using Sandbox;
+@using System;
+
 @namespace Murder.UI
 
-<root>
+@if (!UI.Hud.DisplayedPlayer.Carriable.IsValid())
+{
+    return;
+}
 
+<root>
+    <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
+        <div class="bar rounded">
+            <div class="icon text-shadow">@UI.Hud.DisplayedPlayer.Carriable.Icon</div>
+        </div>
+        <inputglyph button="Slot1" style="light" style="margin-left: 5px;" />
+    </div>
 </root>
+
+@code {
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(UI.Hud.DisplayedPlayer.Carriable.IsValid(), UI.Hud.DisplayedPlayer.IsHolstered);
+    }
+}
+
+<style>
+    CarriableDisplay {
+        position: absolute;
+        bottom: 50px;
+        right: 25px;
+        transform: skew(0deg, 5deg);
+
+        .slot {
+            transition: all 0.15s ease-out;
+            align-items: center;
+
+            .bar {
+                background-image: linear-gradient(to left, rgba( @UI.Hud.DisplayedPlayer.Role.GetColor().Hex, 1 ), rgba( black, 0 ));
+                height: 80px;
+                width: 130px;
+                border-right: 4px;
+                border-color: white;
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    font-family: CustomIcons;
+                    font-size: 60px;
+                }
+            }
+
+            &.inactive {
+                opacity: 0.5;
+            }
+
+            &:intro {
+                right: -25px;
+            }
+        }
+    }
+</style>
