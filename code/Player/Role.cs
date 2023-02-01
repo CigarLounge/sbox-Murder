@@ -11,7 +11,7 @@ public enum Role
 
 public static class RoleExtensions
 {
-	private static readonly HashSet<Player>[] _players;
+	internal static readonly HashSet<Player>[] _players;
 
 	static RoleExtensions()
 	{

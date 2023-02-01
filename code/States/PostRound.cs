@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.Diagnostics;
 using System;
 using System.Collections.Generic;
 
@@ -14,36 +15,24 @@ public partial class PostRound : GameState
 	public PostRound( Role winningRole )
 	{
 		WinningRole = winningRole;
-
-		/*List<UI.PostRoundPopup.PostRoundData.PlayerData> playerData = new();
-
-		foreach ( var client in Game.Clients )
-		{
-			if ( client.Pawn is not Player player )
-				return;
-
-			playerData.Add( new UI.PostRoundPopup.PostRoundData.PlayerData
-			{
-				Name = player.Client.Name,
-				AssignedName = player.BystanderName,
-				CluesCollected = player.CluesCollected,
-				Color = player.Color,
-				Role = player.Role
-			} );
-		}
-
-		UI.PostRoundPopup.Display( Utils.Serialize( new UI.PostRoundPopup.PostRoundData
-		{
-			WinningRole = WinningRole,
-			Players = playerData
-		} ) );*/
 	}
 
 	protected override void OnStart()
 	{
 		GameManager.Instance.TotalRoundsPlayed++;
 
+		if ( !Game.IsServer )
+			return;
+
+		foreach ( var client in Game.Clients )
+		{
+			var player = (Player)client.Pawn;
+
+			player.SendRole( To.Everyone );
+		}
+
 		Event.Run( GameEvent.Round.End, WinningRole );
+		RunEvent();
 	}
 
 	protected override void OnTimeUp()
@@ -57,6 +46,15 @@ public partial class PostRound : GameState
 			GameManager.Instance.ForceStateChange( new MapSelectionState() );
 		else
 			GameManager.Instance.ChangeState( new GameplayState() );
+	}
+
+	[ClientRpc]
+	public static void RunEvent()
+	{
+		var state = Current as PostRound;
+
+		Assert.NotNull( state );
+		Event.Run( GameEvent.Round.End, state.WinningRole );
 	}
 }
 

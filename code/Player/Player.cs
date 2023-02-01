@@ -308,6 +308,7 @@ public partial class Player : AnimatedEntity
 			Corpse = null;
 		}
 
+		RoleExtensions._players[(int)Role].Remove( this );
 		DeleteFlashlight();
 
 		base.OnDestroy();
