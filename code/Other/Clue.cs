@@ -1,7 +1,6 @@
-using Editor;
 using Sandbox;
 using Sandbox.Component;
-using System.Collections.Generic;
+using Editor;
 
 namespace Murder;
 

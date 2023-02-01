@@ -24,6 +24,9 @@ public partial class PostRound : GameState
 		if ( !Game.IsServer )
 			return;
 
+		Event.Run( GameEvent.Round.End, WinningRole );
+
+
 		foreach ( var client in Game.Clients )
 		{
 			var player = (Player)client.Pawn;
@@ -31,7 +34,6 @@ public partial class PostRound : GameState
 			player.SendRole( To.Everyone );
 		}
 
-		Event.Run( GameEvent.Round.End, WinningRole );
 		RunEvent( WinningRole );
 	}
 
