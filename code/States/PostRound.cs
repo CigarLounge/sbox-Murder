@@ -1,11 +1,9 @@
 using Sandbox;
-using Sandbox.Diagnostics;
 using System;
-using System.Collections.Generic;
 
 namespace Murder;
 
-public partial class PostRound : GameState
+public sealed partial class PostRound : GameState
 {
 	[Net] public Role WinningRole { get; private set; }
 	public override int Duration => GameManager.PostRoundTime;
@@ -25,7 +23,6 @@ public partial class PostRound : GameState
 			return;
 
 		Event.Run( GameEvent.Round.End, WinningRole );
-
 
 		foreach ( var client in Game.Clients )
 		{
@@ -51,7 +48,7 @@ public partial class PostRound : GameState
 	}
 
 	[ClientRpc]
-	public static void RunEvent(Role winningRole)
+	public static void RunEvent( Role winningRole )
 	{
 		Event.Run( GameEvent.Round.End, winningRole );
 	}

@@ -8,7 +8,6 @@ public sealed class Disguise : EntityComponent<Player>
 	private string _bystanderName;
 	private Color _color;
 	private int _cluesCollected;
-
 	private Player _murderer;
 
 	public Disguise()

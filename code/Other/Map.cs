@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Murder;
 
-// TODO: MOVE THIS SHIT TO GAMEMANAGER
 internal static class Map
 {
 	internal static List<Clue> Clues { get; private set; }
@@ -16,10 +15,16 @@ internal static class Map
 		Decal.Clear( true, true );
 	}
 
+	private static int _index = 0;
 	internal static void SpawnClue()
 	{
-		if ( !Clues.IsNullOrEmpty() )
-			Game.Random.FromList( Clues ).Show();
+		if ( Clues.IsNullOrEmpty() )
+			return;
+
+		if ( _index >= Clues.Count )
+			_index = 0;
+
+		Clues[_index++].Show();
 	}
 
 	[Event.Entity.PostSpawn]
