@@ -57,6 +57,7 @@ public partial class Player
 			.UseHitboxes()
 			.Run();
 
+		_traceDistance = tr.Distance;
 		HoveredEntity = tr.Entity;
 
 		if ( HoveredEntity is IEntityHint hint && tr.Distance <= hint.HintDistance )
