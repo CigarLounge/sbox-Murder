@@ -5,6 +5,7 @@ namespace Murder;
 
 public partial class Player
 {
+	[Net] public Player Killer { get; private set; }
 	[Net] public TimeSince TimeSinceDeath { get; private set; }
 	/// <summary>
 	/// This gets set when a player teamkills.
@@ -21,6 +22,8 @@ public partial class Player
 
 		if ( LastAttacker is Player killer )
 		{
+			Killer = killer;
+
 			if ( killer.Role == Role )
 			{
 				killer.DropCarriable();
@@ -91,6 +94,7 @@ public partial class Player
 		LastAttacker = null;
 		LastAttackerWeapon = null;
 		LastDamage = default;
+		Killer = null;
 	}
 
 	[ClientRpc]

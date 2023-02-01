@@ -15,7 +15,7 @@ public class WaitingState : GameState
 		if ( GameManager.Instance.TotalRoundsPlayed == 0 )
 			return;
 
-		MapHandler.Cleanup();
+		Map.Cleanup();
 
 		foreach ( var client in Game.Clients )
 		{

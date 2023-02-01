@@ -1,37 +1,46 @@
+using Editor;
 using Sandbox;
 using Sandbox.Component;
 using System.Collections.Generic;
 
 namespace Murder;
 
-[ClassName( "mur_entity_clue" )]
-[HideInEditor]
+[ClassName( "mur_ent_clue" )]
+[Description( "A clue that will randomly spawn during gameplay." )]
+[HammerEntity]
 [Title( "Clue" )]
 public class Clue : Prop, IUse
 {
-	private static readonly List<Model> _models = new()
-	{
-		Model.Load( "models/sbox_props/bin/rubbish_bag.vmdl" ),
-		Model.Load( "models/sbox_props/bin/rubbish_can.vmdl" ),
-		Model.Load( "models/sbox_props/bin/pizza_box.vmdl" ),
-		Model.Load( "models/sbox_props/grit_box/grit_box.vmdl" ),
-	};
-
 	public override void Spawn()
 	{
-		Model = Game.Random.FromList( _models );
-		SetupPhysicsFromModel( PhysicsMotionType.Static );
+		base.Spawn();
 
-		PhysicsEnabled = true;
+		Tags.Add( "ignorereset" );
+
+		PhysicsEnabled = false;
+
+		var glow = Components.GetOrCreate<Glow>();
+
+		glow.Color = Color.Green;
+		glow.ObscuredColor = Color.Transparent;
+		glow.Enabled = true;
+
+		Hide();
+	}
+
+	internal void Show()
+	{
+		EnableDrawing = true;
+		EnableAllCollisions = true;
 		UsePhysicsCollision = true;
+	}
 
-		var glow = new Glow
-		{
-			Color = Color.Green,
-			ObscuredColor = Color.Transparent,
-		};
-
-		Components.Add( glow );
+	[Event.Entity.PostCleanup]
+	internal void Hide()
+	{
+		EnableDrawing = false;
+		EnableAllCollisions = false;
+		UsePhysicsCollision = false;
 	}
 
 	bool IUse.IsUsable( Entity user )
@@ -54,7 +63,7 @@ public class Clue : Prop, IUse
 		}
 
 		PlaySound( "clue_collected" );
-		Delete();
+		Hide();
 
 		return false;
 	}

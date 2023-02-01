@@ -8,7 +8,7 @@ public sealed partial class GameplayState : GameState
 {
 	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
-	// private TimeUntil _timeUntilNextClue = 20;
+	private TimeUntil _timeUntilNextClue = 17;
 
 	public override void OnPlayerKilled( Player player )
 	{
@@ -30,7 +30,7 @@ public sealed partial class GameplayState : GameState
 
 	protected override void OnStart()
 	{
-		MapHandler.Cleanup();
+		Map.Cleanup();
 
 		if ( !Game.IsServer )
 			return;
@@ -46,6 +46,7 @@ public sealed partial class GameplayState : GameState
 		}
 
 		AssignRoles();
+		Map.Clues.Shuffle();
 
 		Event.Run( GameEvent.Round.Start );
 		RunEvent();
@@ -66,12 +67,11 @@ public sealed partial class GameplayState : GameState
 		if ( !Game.IsServer )
 			return;
 
-		// TODO: Figure out how fast clues should spawn.
-		// if ( _timeUntilNextClue )
-		// {
-		// 	_ = new Clue();
-		// 	_timeUntilNextClue = 30;
-		// }
+		if ( _timeUntilNextClue )
+		{
+			Map.SpawnClue();
+			_timeUntilNextClue = 12;
+		}
 
 		if ( !GameManager.HasMinimumPlayers() && IsRoundOver() )
 			GameManager.Instance.ForceStateChange( new WaitingState() );
