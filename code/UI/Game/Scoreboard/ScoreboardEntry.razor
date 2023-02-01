@@ -7,6 +7,13 @@
 	<div class="entry">
 		<img src="avatar:@Client.SteamId" class="avatar circle" />
 		<text class="name">@Client.Name</text>
+		@if (GameState.Current is PostRound)
+		{
+			var player = (Murder.Player)Client.Pawn;
+
+			<label class="stat" style="color: @player.Color.Hex">@player.BystanderName</label>
+			<label class="stat">@player.CluesCollected</label>
+		}
 		<text class="stat">@(Client.IsBot ? "BOT" : Client.Ping.ToString())</text>
 	</div>
 </root>
@@ -17,7 +24,7 @@
 
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(Client.Ping);
+		return HashCode.Combine(Client.Ping, GameState.Current is PostRound);
 	}
 }
 
