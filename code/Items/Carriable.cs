@@ -76,23 +76,24 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 
 	public virtual void OnCarryStart( Player carrier )
 	{
+		EnableDrawing = false;
+
 		if ( !Game.IsServer )
 			return;
 
 		Owner = carrier;
 		EnableAllCollisions = false;
-		EnableDrawing = false;
 	}
 
 	public virtual void OnCarryDrop( Player dropper )
 	{
 		PreviousOwner = dropper;
+		EnableDrawing = true;
 
 		if ( !Game.IsServer )
 			return;
 
 		Owner = null;
-		EnableDrawing = true;
 		EnableAllCollisions = true;
 		TimeSinceDropped = 0;
 	}

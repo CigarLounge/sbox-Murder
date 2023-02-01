@@ -118,7 +118,6 @@ public partial class Knife : Carriable
 			.Ignore( Owner )
 			.Run();
 
-		Owner.IsHolstered = true; // small prediction fix
 		_isThrown = true;
 
 		if ( !Game.IsServer )

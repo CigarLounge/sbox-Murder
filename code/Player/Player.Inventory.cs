@@ -5,7 +5,7 @@ namespace Murder;
 
 public partial class Player
 {
-	[Net, Predicted] public bool IsHolstered { get; set; }
+	[Net, Predicted] public bool IsHolstered { get; set; } = true;
 	[Net, Change] public Carriable Carriable { get; private set; }
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
@@ -68,7 +68,9 @@ public partial class Player
 	{
 		if ( oldVal.IsValid() )
 		{
-			oldVal.ActiveEnd( this, true );
+			if ( !_wasHolstered )
+				oldVal.ActiveEnd( this, true );
+
 			oldVal.OnCarryDrop( this );
 		}
 
