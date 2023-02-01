@@ -136,14 +136,8 @@ public partial class Player : AnimatedEntity
 		SimulateAnimation( Controller );
 
 		if ( Carriable.IsValid() )
-		{
-			if ( Input.Pressed( InputButton.Menu ) && Carriable.IsValid() )
+			if ( Input.Pressed( InputButton.Menu ) || Input.Pressed( InputButton.Slot1 ) )
 				IsHolstered = !IsHolstered;
-			else if ( Input.Pressed( InputButton.Slot1 ) )
-				IsHolstered = true;
-			else if ( Input.Pressed( InputButton.Slot2 ) )
-				IsHolstered = false;
-		}
 
 		SimulateCarriable();
 		SimulateFlashlight();

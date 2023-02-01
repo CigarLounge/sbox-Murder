@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Sandbox;
 
 namespace Murder;
 
@@ -19,5 +18,15 @@ public static class ListExtensions
 			var k = _random.Next( 0, n + 1 );
 			(list[n], list[k]) = (list[k], list[n]);
 		}
+	}
+
+	public static int HashCombine<T>( this IEnumerable<T> e, Func<T, decimal> selector )
+	{
+		var result = 0;
+
+		foreach ( var el in e )
+			result = HashCode.Combine( result, selector.Invoke( el ) );
+
+		return result;
 	}
 }

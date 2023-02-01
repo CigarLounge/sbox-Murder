@@ -1,140 +1,78 @@
-$alive: #17ad44;
-$spectator: #fcdb38;
-
-$primary: #303030;
-$secondary: #1a1a1a;
+$primary: #1a1a1a;
 $info: #55d4ff;
 
-$button-primary: #ffffff !default;
-$button-primary-fg: #ffffff !default;
-$button-secondary: #282828 !default;
-$button-secondary-fg: #dadada !default;
-$button-size: 45px;
+$dead: #fcdb38;
 
-@import "/ui/styles/button.scss";
-@import "/ui/styles/checkbox.scss";
-@import "/ui/styles/dropdown.scss";
-@import "/ui/styles/label.scss";
-@import "/ui/styles/textentry.scss";
-@import "/ui/styles/slider.scss";
-
-Hud
-{
-    font-family: Poppins;
+Hud {
     flex-shrink: 0;
     color: #fafafa;
     letter-spacing: 0.5px;
+    font-family: Poppins;
 }
 
-.iconpanel,
-.icon
-{
-    font-size: 21px;
-    font-family: MaterialIcons;
+label {
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
 }
 
-.disabled
-{
-    display: none;
-    pointer-events: none;
+.circle {
+    border-radius: 50%;
 }
 
-.fade-in
-{
-    opacity: 0.75;
-}
-
-.fade-out
-{
-    opacity: 0;
-}
-
-.rounded
-{
+.rounded {
     border-radius: 4px;
 }
 
-.rounded-top
-{
+.rounded-top {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
-.rounded-bottom
-{
+.rounded-bottom {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
-.opacity-medium
-{
-    opacity: 0.75;
-}
-
-.opacity-heavy
-{
-    opacity: 0.9;
-}
-
-.centered
-{
+.centered {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
 
-.centered-vertical-75
-{
+.centered-vertical-75 {
     position: absolute;
     left: 50%;
     top: 75%;
     transform: translateX(-50%) translateY(-50%);
 }
 
-.text-shadow
-{
+.text-shadow {
     text-shadow: 1px 1px 1px black;
 }
 
-.box-shadow
-{
+.box-shadow {
     box-shadow: 0px 0px 10px black;
 }
 
-.fullscreen
-{
+.fullscreen {
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-.fullscreen-dark-background
-{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    opacity: 0.75;
-    backdrop-filter-blur: 5px;
+.opacity-heavy {
+    opacity: 0.9;
 }
 
-.text-color-info
-{
+.background-color-primary {
+    background-color: $primary;
+}
+
+.background-color-info {
+    background-color: $info;
+}
+
+.text-color-info {
     color: $info;
-}
-
-.background-color-gradient
-{
-    background: linear-gradient($primary, $secondary);
-}
-
-.background-color-primary
-{
-    background-color: $secondary;
-}
-
-.background-color-secondary
-{
-    background-color: $secondary;
 }
