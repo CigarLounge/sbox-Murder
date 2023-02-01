@@ -58,8 +58,6 @@ public class Clue : Prop, IUse
 		{
 			if ( player.CluesCollected == 5 )
 				player.SetCarriable( new Revolver() );
-			else if ( player.CluesCollected % 15 == 0 )
-				player.SetCarriable( new Revolver() );
 		}
 
 		PlaySound( "clue_collected" );
