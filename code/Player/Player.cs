@@ -6,6 +6,7 @@ namespace Murder;
 public partial class Player : AnimatedEntity
 {
 	public bool IsForcedSpectator => Client.GetClientData<bool>( "forced_spectator" );
+	public bool IsFrozen => (GameState.Current is GameplayState or MapSelectionState) && !GameState.Current.TimeLeft;
 
 	public Player() { }
 
@@ -123,11 +124,7 @@ public partial class Player : AnimatedEntity
 
 	public override void Simulate( IClient client )
 	{
-		if ( !this.IsAlive() )
-			return;
-
-		// We are frozen.
-		if ( GameState.Current is GameplayState && !GameState.Current.TimeLeft )
+		if ( !this.IsAlive() || IsFrozen )
 			return;
 
 		var controller = GetActiveController();

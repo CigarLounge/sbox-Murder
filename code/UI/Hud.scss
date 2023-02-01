@@ -3,76 +3,101 @@ $info: #55d4ff;
 
 $dead: #fcdb38;
 
-Hud {
+Hud
+{
     flex-shrink: 0;
     color: #fafafa;
     letter-spacing: 0.5px;
     font-family: Poppins;
 }
 
-label {
+label
+{
     flex-shrink: 0;
     letter-spacing: 0.5px;
 }
 
-.circle {
+.circle
+{
     border-radius: 50%;
 }
 
-.rounded {
+.rounded
+{
     border-radius: 4px;
 }
 
-.rounded-top {
+.rounded-top
+{
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
-.rounded-bottom {
+.rounded-bottom
+{
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
-.centered {
+.centered
+{
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
 
-.centered-vertical-75 {
+.centered-vertical-75
+{
     position: absolute;
     left: 50%;
     top: 75%;
     transform: translateX(-50%) translateY(-50%);
 }
 
-.text-shadow {
+.text-shadow
+{
     text-shadow: 1px 1px 1px black;
 }
 
-.box-shadow {
+.box-shadow
+{
     box-shadow: 0px 0px 10px black;
 }
 
-.fullscreen {
+.fullscreen
+{
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-.opacity-heavy {
+.fullscreen-dark-background
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.75;
+    backdrop-filter-blur: 5px;
+}
+
+.opacity-heavy
+{
     opacity: 0.9;
 }
 
-.background-color-primary {
+.background-color-primary
+{
     background-color: $primary;
 }
 
-.background-color-info {
+.background-color-info
+{
     background-color: $info;
 }
 
-.text-color-info {
+.text-color-info
+{
     color: $info;
 }
