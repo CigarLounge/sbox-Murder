@@ -11,7 +11,7 @@
 
 <root class="text-shadow">
     <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
-        <div class="bar rounded">
+        <div class="bar rounded" style="background-image: linear-gradient(to left, rgba( @UI.Hud.DisplayedPlayer.Role.GetColor().Hex, 1 ), rgba( black, 0 ));">
             <img class="icon" src="@UI.Hud.DisplayedPlayer.Carriable.IconPath" />
         </div>
         <inputglyph button="Slot1" style="light" style="margin-left: 5px;" />
@@ -21,7 +21,7 @@
 @code {
     protected override int BuildHash()
     {
-        return HashCode.Combine(UI.Hud.DisplayedPlayer.Carriable.IsValid(), UI.Hud.DisplayedPlayer.IsHolstered);
+        return HashCode.Combine(UI.Hud.DisplayedPlayer.Carriable.IsValid(), UI.Hud.DisplayedPlayer.IsHolstered, UI.Hud.DisplayedPlayer.Role.GetHashCode());
     }
 }
 
@@ -39,7 +39,6 @@
             align-items: center;
 
             .bar {
-                background-image: linear-gradient(to left, rgba( @UI.Hud.DisplayedPlayer.Role.GetColor().Hex, 1 ), rgba( black, 0 ));
                 height: 80px;
                 width: 130px;
                 border-right: 4px;

@@ -9,15 +9,15 @@
 
 <root class="text-shadow">
     <div style="flex-direction: column;">
-        <text class="name">@Hud.DisplayedPlayer.BystanderName</text>
-        <text class="role">@Hud.DisplayedPlayer.Role.GetTitle()</text>
+        <text class="name" style="color: @Hud.DisplayedPlayer.Color.Hex">@Hud.DisplayedPlayer.BystanderName</text>
+        <text class="role" style="color: @Hud.DisplayedPlayer.Role.GetColor().Hex">@Hud.DisplayedPlayer.Role.GetTitle()</text>
     </div>
     <div>
         <div class="health-icon">health_and_safety</div>
         <div>
             @for(var i = 0; i < 5; ++i) 
             {
-                <div class="segment rounded @(Hud.DisplayedPlayer.CluesCollected >= i ? "health-filled" : "")"></div>
+                <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, true, true)"></div>
             }
         </div>
     </div>
@@ -28,7 +28,7 @@
             <div>
                 @for(var i = 0; i < 5; ++i) 
                 {
-                    <div class="segment rounded @(Hud.DisplayedPlayer.CluesCollected >= i ? "clue-filled" : "")"></div>
+                    <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, true, false)"></div>
                 }
             </div>
         </div>
@@ -36,6 +36,14 @@
 </root>
 
 @code {
+    private string GetSegmentColor(Murder.Player player, bool isFilled, bool isHealth)
+    {
+        if (!isFilled)
+            return "#00000066";
+
+        return isHealth ? player.Color.Hex : player.Role.GetColor().Hex;
+    }
+
     protected override int BuildHash()
     {
         var player = Hud.DisplayedPlayer;
@@ -53,7 +61,6 @@
 		align-items: flex-start;
 
         .name {
-            color: @Hud.DisplayedPlayer.Color.Hex;
             font-size: 50px;
             font-weight: 500;
             top: 10px;
@@ -63,7 +70,6 @@
             font-size: 23px;
             top: -10px;
             padding-left: 20px;
-            color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
         }
 
         .health-icon {
@@ -81,17 +87,9 @@
         .segment {
             width: 26px;
             height: 48px;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: #00000066;
             margin-right: 4px;
             box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
-
-            &.clue-filled {
-                background-color: @Hud.DisplayedPlayer.Role.GetColor().Hex;
-            }
-
-            &.health-filled {
-                background-color: @Hud.DisplayedPlayer.Color.Hex;
-            }
         }
     }
 </style>
