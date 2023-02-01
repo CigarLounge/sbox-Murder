@@ -115,7 +115,7 @@ public partial class Revolver : Carriable
 
 		var forward = Owner.EyeRotation.Forward;
 
-		foreach ( var trace in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 20000f, 3.0f ) )
+		foreach ( var trace in TraceBullet( Owner.AimRay ) )
 		{
 			trace.Surface.DoBulletImpact( trace );
 
@@ -143,15 +143,15 @@ public partial class Revolver : Carriable
 	/// Does a trace from start to end, does bullet impact effects. Coded as an IEnumerable so you can return multiple
 	/// hits, like if you're going through layers or ricocet'ing or something.
 	/// </summary>
-	protected IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2.0f )
+	protected IEnumerable<TraceResult> TraceBullet( Ray ray )
 	{
-		var underWater = Trace.TestPoint( start, "water" );
+		var underWater = Trace.TestPoint( ray.Position, "water" );
 
-		var trace = Trace.Ray( start, end )
+		var trace = Trace.Ray( ray, 20000f )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player", "glass", "interactable" )
 				.Ignore( this )
-				.Size( radius );
+				.Size( 3.0f );
 
 		//
 		// If we're not underwater then we can hit water

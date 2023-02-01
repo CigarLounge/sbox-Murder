@@ -82,9 +82,7 @@ public partial class Knife : Carriable
 		SwingEffects();
 		PlaySound( "knife_swing-1" );
 
-		var endPosition = Owner.EyePosition + Owner.EyeRotation.Forward * range;
-
-		var trace = Trace.Ray( Owner.EyePosition, endPosition )
+		var trace = Trace.Ray( Owner.AimRay, range )
 			.UseHitboxes( true )
 			.Ignore( Owner )
 			.Radius( radius )
@@ -114,7 +112,7 @@ public partial class Knife : Carriable
 
 	private void Throw()
 	{
-		var trace = Trace.Ray( Owner.EyePosition, Owner.EyePosition )
+		var tr = Trace.Ray( Owner.AimRay, 1f )
 			.Ignore( Owner )
 			.Run();
 
@@ -128,7 +126,7 @@ public partial class Knife : Carriable
 			Owner.DropCarriable();
 
 			PhysicsEnabled = true;
-			Position = trace.EndPosition;
+			Position = tr.EndPosition;
 			Rotation = PreviousOwner.EyeRotation;
 
 			_blackSmoke = Particles.Create( "particles/black_smoke.vpcf", this );
