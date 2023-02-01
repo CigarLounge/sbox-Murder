@@ -56,8 +56,8 @@ public class Clue : Prop, IUse
 
 		if ( player.Role != Role.Murderer )
 		{
-			if ( player.CluesCollected == 5 )
-				player.SetCarriable( new Revolver() );
+			if ( player.CluesCollected % 5 == 0 )
+				player.SetCarriable( new Revolver(), true );
 		}
 
 		PlaySound( "clue_collected" );

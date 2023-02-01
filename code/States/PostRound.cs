@@ -32,7 +32,7 @@ public partial class PostRound : GameState
 		}
 
 		Event.Run( GameEvent.Round.End, WinningRole );
-		RunEvent();
+		RunEvent( WinningRole );
 	}
 
 	protected override void OnTimeUp()
@@ -49,12 +49,9 @@ public partial class PostRound : GameState
 	}
 
 	[ClientRpc]
-	public static void RunEvent()
+	public static void RunEvent(Role winningRole)
 	{
-		var state = Current as PostRound;
-
-		Assert.NotNull( state );
-		Event.Run( GameEvent.Round.End, state.WinningRole );
+		Event.Run( GameEvent.Round.End, winningRole );
 	}
 }
 

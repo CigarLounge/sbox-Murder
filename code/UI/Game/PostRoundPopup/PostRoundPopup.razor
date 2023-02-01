@@ -1,5 +1,123 @@
+@using Sandbox;
+@using System.Linq;
+
 @namespace Murder.UI
 
-<root class="background-color-primary">
+<root class="text-shadow">
+    <div class="background-banner background-color-primary opacity-heavy">
+        <div class="container">
+            <text class="header" style="color: @WinningRole.GetColor().Hex">
+                @(WinningRole == Role.Murderer ? "The Murderer wins!" : "The Bystanders win!")
+            </text>
+            <div class="content">
+                @{
+                    var murderer = Role.Murderer.GetPlayers().First();
+                    var killer = murderer.Killer;
 
+                    if (WinningRole == Role.Bystander)
+                    {
+                        
+
+                        <label style="color: @killer.Color.Hex">@killer.BystanderName </label>
+                        <label>killed the murderer.</label>
+                    }
+                    else
+                    {
+                        <label>The murderer was </label>
+                        <label style="color: @murderer.Color.Hex">@murderer.BystanderName</label>
+                        <label>.</label>
+                    }
+                }
+            </div>
+        </div>
+    </div>
 </root>
+
+@code
+{
+	private static PostRoundPopup Instance { get; set; }
+	private Role WinningRole { get; init; }
+
+	public PostRoundPopup(Role winningRole)
+	{
+		WinningRole = winningRole;
+
+		Instance = this;
+	}
+
+	[GameEvent.Round.End]
+	private static void DisplayWinner(Role winningRole)
+	{
+		if (!Game.IsClient)
+			return;
+
+		Game.RootPanel.AddChild(new PostRoundPopup(winningRole));
+	}
+
+	[Event.Entity.PostCleanup]
+	private void Close()
+	{
+		Delete();
+		Instance = null;
+	}
+}
+
+<style>
+    PostRoundPopup 
+    {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: opacity 1s ease-in-out;
+        justify-content: center;
+        text-align: center;
+        pointer-events: none;
+        opacity: 1;
+        z-index: 7;
+
+        .background-banner
+        {
+            position: absolute;
+            top: 100px;
+            width: 100%;
+            height: 150px;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px black;
+        }
+
+        .container
+        {
+            max-height: 250px;
+            flex-direction: column;
+            transition: transform 2s ease-in-out;
+            transform: scale(1);
+        }
+
+        .header
+        {
+            text-transform: uppercase;
+            font-weight: bolder;
+            font-size: 50px;
+            width: 100%;
+        }
+
+        .content 
+        {
+            font-size: 30px;
+            font-weight: 600;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &:intro 
+        {
+            opacity: 0;
+
+            .container
+            {
+                transform: scale(0.75);
+            }
+        }
+    }
+</style>
