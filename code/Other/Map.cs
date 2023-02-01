@@ -18,7 +18,8 @@ internal static class Map
 
 	internal static void SpawnClue()
 	{
-		Game.Random.FromList( Clues ).Show();
+		if ( !Clues.IsNullOrEmpty() )
+			Game.Random.FromList( Clues ).Show();
 	}
 
 	[Event.Entity.PostSpawn]
