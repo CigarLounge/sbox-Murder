@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Murder;
 
+[ClassName( "mur_entity_clue" )]
+[HideInEditor]
+[Title( "Clue" )]
 public class Clue : Prop, IUse
 {
 	private static readonly List<Model> _models = new()

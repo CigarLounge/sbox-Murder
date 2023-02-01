@@ -3,7 +3,7 @@ using Sandbox.UI;
 
 namespace Murder;
 
-[ClassName( "murder_entity_corpse" )]
+[ClassName( "mur_entity_corpse" )]
 [HideInEditor]
 [Title( "Player corpse" )]
 public partial class Corpse : ModelEntity, IEntityHint, IUse

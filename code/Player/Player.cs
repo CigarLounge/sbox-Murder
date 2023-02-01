@@ -94,7 +94,7 @@ public partial class Player : AnimatedEntity
 	private void ClientRespawn()
 	{
 		Game.AssertClient();
-	
+
 		_blackSmoke?.Destroy();
 		_blackSmoke = null;
 		DeleteFlashlight();
@@ -158,12 +158,12 @@ public partial class Player : AnimatedEntity
 	private void MurdererFog()
 	{
 		if ( TimeUntilClean > -GameManager.MurdererFogTime )
-		{		
+		{
 			_blackSmoke?.Destroy();
 			_blackSmoke = null;
 			return;
 		}
-		
+
 		_blackSmoke ??= Particles.Create( "particles/black_smoke.vpcf", this, "arm_lower_L" );
 	}
 
@@ -237,9 +237,6 @@ public partial class Player : AnimatedEntity
 	/// </summary>
 	public override void OnAnimEventFootstep( Vector3 pos, int foot, float volume )
 	{
-		if ( !this.IsAlive() )
-			return;
-
 		if ( !Game.IsClient )
 			return;
 
@@ -250,6 +247,12 @@ public partial class Player : AnimatedEntity
 
 		_timeSinceLastFootstep = 0;
 
+		DoFootstep( pos, foot, volume );
+	}
+
+	[ClientRpc]
+	private void DoFootstep( Vector3 pos, int foot, float volume )
+	{
 		var trace = Trace.Ray( pos, pos + Vector3.Down * 20 )
 			.Radius( 1 )
 			.Ignore( this )
@@ -263,7 +266,7 @@ public partial class Player : AnimatedEntity
 		if ( ((Player)Game.LocalPawn).Role != Role.Murderer )
 			return;
 
-		if ( volume < 5 )
+		if ( Controller.Duck.IsActive )
 			return;
 
 		Decal.Place( Footprint, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), Color );

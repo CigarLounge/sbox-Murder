@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Murder;
 
 [Category( "Weapons" )]
-[ClassName( "murder_weapon_revolver" )]
+[ClassName( "mur_weapon_revolver" )]
 [EditorModel( "models/weapons/w_mr96.vmdl" )]
 [Title( "Revolver" )]
 public partial class Revolver : Carriable

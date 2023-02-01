@@ -5,7 +5,7 @@ using System;
 namespace Murder;
 
 [Category( "Weapons" )]
-[ClassName( "murder_weapon_knife" )]
+[ClassName( "mur_weapon_knife" )]
 [EditorModel( "models/weapons/w_knife.vmdl" )]
 [Title( "Knife" )]
 public partial class Knife : Carriable
