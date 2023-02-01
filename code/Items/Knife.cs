@@ -140,9 +140,9 @@ public partial class Knife : Carriable
 
 	public override void StartTouch( Entity other )
 	{
-		if ( !_isThrown || other is not Player player || player == PreviousOwner )	
+		if ( !_isThrown || other is not Player player || player == PreviousOwner )
 			return;
-		
+
 		var damageInfo = DamageInfo.Generic( 200f )
 			.WithPosition( Position )
 			.WithForce( Position.Normal * 20f )
@@ -171,6 +171,16 @@ public partial class Knife : Carriable
 		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Ignore( this ).Run() );
 		Position = eventData.Position;
 		PhysicsEnabled = false;
+
+		Unstuck();
+	}
+
+	private async void Unstuck()
+	{
+		await GameTask.Delay( 10000 );
+
+		if ( !Parent.IsValid() )
+			PhysicsEnabled = true;
 	}
 
 	[ClientRpc]
