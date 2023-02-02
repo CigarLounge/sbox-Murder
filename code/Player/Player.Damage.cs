@@ -58,7 +58,7 @@ public partial class Player
 		if ( IsLocalPawn )
 		{
 			if ( Corpse.IsValid() )
-				CameraMode.Current = new FollowEntityCamera( Corpse );
+				CameraMode.Current = new DeathCamera();
 		}
 
 		DeleteFlashlight();

@@ -11,13 +11,13 @@ namespace Murder;
 public partial class Knife : Carriable
 {
 	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
-	public override string IconPath { get; } = "/UI/Knife.png";
+	public override string IconPath { get; } = "/ui/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
-	private bool _isThrown = false;
-	private Particles _blackSmoke;
-
+	private Particles _fog;
+	private bool _isThrown;
+	
 	public override void Simulate( IClient client )
 	{
 		if ( TimeSinceStab < 1.5f )
@@ -56,7 +56,7 @@ public partial class Knife : Carriable
 		if ( Game.LocalPawn is Player player && player.Role == Role.Murderer )
 			Components.GetOrCreate<Glow>().Enabled = false;
 
-		_blackSmoke?.Destroy();
+		_fog?.Destroy();
 
 		base.OnCarryStart( carrier );
 	}
@@ -129,7 +129,7 @@ public partial class Knife : Carriable
 			Position = tr.EndPosition;
 			Rotation = PreviousOwner.EyeRotation;
 
-			_blackSmoke = Particles.Create( "particles/black_smoke.vpcf", this );
+			_fog = Particles.Create( "particles/black_smoke.vpcf", this );
 
 			Velocity = PreviousOwner.EyeRotation.Forward * 700f + Vector3.Up * 200;
 			ApplyLocalAngularImpulse( new Vector3( 0, 1500, 0 ) );
@@ -138,7 +138,7 @@ public partial class Knife : Carriable
 
 	public override void StartTouch( Entity other )
 	{
-		if ( !_isThrown || other is not Player player || player == PreviousOwner )
+		if ( !Game.IsServer || !_isThrown || other is not Player player || player == PreviousOwner )
 			return;
 
 		var damageInfo = DamageInfo.Generic( 200f )
