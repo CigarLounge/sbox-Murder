@@ -129,7 +129,7 @@ public partial class Revolver : Carriable
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 250f, 200f )
+				var damageInfo = DamageInfo.FromBullet( trace.EndPosition, forward * 500f, 200f )
 					.UsingTraceResult( trace )
 					.WithAttacker( Owner )
 					.WithWeapon( this );

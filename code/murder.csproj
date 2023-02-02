@@ -30,7 +30,7 @@
   <PropertyGroup>
 	<OutputPath>..\..\../.vs/output/</OutputPath>
 	<DocumentationFile>..\..\../.vs/output/murder.xml</DocumentationFile>
-	<RootNamespace>Sandbox</RootNamespace>
+	<RootNamespace>Murder</RootNamespace>
 	<Nullable>disable</Nullable>
   </PropertyGroup>
 

@@ -2,6 +2,10 @@ using Sandbox;
 
 namespace Murder;
 
+/// <summary>
+/// Murderer fog appears when a murderer doesn't kill someone for
+/// a time period. <br/>The time needed is determined by <see cref="GameManager.MurdererFogTime"/>.
+/// </summary>
 internal sealed class MurdererFog : EntityComponent<Player>
 {
 	private Particles _fog;
