@@ -4,7 +4,7 @@
 @namespace Murder.UI
 
 <root class="text-shadow">
-    <div class="background-banner background-color-primary opacity-heavy">
+    <div class="background-banner">
         <div class="container">
             <text class="header" style="color: @WinningRole.GetColor().Hex">
                 @(WinningRole == Role.Murderer ? "The Murderer wins!" : "The Bystanders win!")
@@ -84,7 +84,6 @@
             height: 150px;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 10px black;
         }
 
         .container

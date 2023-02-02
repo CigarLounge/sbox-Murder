@@ -19,7 +19,7 @@
 								parent_bone = "bip01_spine4"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ -1.93761, 0.0, 0.0 ]
 								hitbox_maxs = [ 1.93766, 1.822822, 1.346623 ]
 							},
@@ -28,7 +28,7 @@
 								parent_bone = "bip01_r_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -2.988829, -1.343 ]
 								hitbox_maxs = [ 3.502897, 0.2884, 1.4083 ]
 							},
@@ -37,7 +37,7 @@
 								parent_bone = "bip01_l_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -3.689481, -2.077465 ]
 								hitbox_maxs = [ 4.667017, 0.34668, 4.83757 ]
 							},
@@ -46,7 +46,7 @@
 								parent_bone = "bip01_spine4"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ -1.93761, 0.0, 0.0 ]
 								hitbox_maxs = [ 1.93766, 1.822822, 1.346623 ]
 							},
@@ -55,7 +55,7 @@
 								parent_bone = "bip01_r_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -2.988829, -1.343 ]
 								hitbox_maxs = [ 3.502897, 0.2884, 1.4083 ]
 							},
@@ -64,7 +64,7 @@
 								parent_bone = "bip01_l_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -3.689481, -2.077465 ]
 								hitbox_maxs = [ 4.667017, 0.34668, 4.83757 ]
 							},
@@ -73,7 +73,7 @@
 								parent_bone = "bip01_spine4"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ -1.93761, 0.0, 0.0 ]
 								hitbox_maxs = [ 1.93766, 1.822822, 1.346623 ]
 							},
@@ -82,7 +82,7 @@
 								parent_bone = "bip01_r_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -2.988829, -1.343 ]
 								hitbox_maxs = [ 3.502897, 0.2884, 1.4083 ]
 							},
@@ -91,7 +91,7 @@
 								parent_bone = "bip01_l_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -3.689481, -2.077465 ]
 								hitbox_maxs = [ 4.667017, 0.34668, 4.83757 ]
 							},
@@ -100,7 +100,7 @@
 								parent_bone = "bip01_spine4"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ -1.93761, 0.0, 0.0 ]
 								hitbox_maxs = [ 1.93766, 1.822822, 1.346623 ]
 							},
@@ -109,7 +109,7 @@
 								parent_bone = "bip01_r_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -2.988829, -1.343 ]
 								hitbox_maxs = [ 3.502897, 0.2884, 1.4083 ]
 							},
@@ -118,7 +118,7 @@
 								parent_bone = "bip01_l_hand"
 								surface_property = "default"
 								translation_only = false
-								group_id = 0
+								tags = ""
 								hitbox_mins = [ 0.0, -3.689481, -2.077465 ]
 								hitbox_maxs = [ 4.667017, 0.34668, 4.83757 ]
 							},
