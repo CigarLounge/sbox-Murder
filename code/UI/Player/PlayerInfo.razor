@@ -15,9 +15,9 @@
     <div>
         <div class="health-icon">health_and_safety</div>
         <div>
-            @for(var i = 0; i < 5; ++i) 
+            @for (var i = 0; i < 5; ++i) 
             {
-                <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, true, true)"></div>
+                <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, i <= Hud.DisplayedPlayer.Health / 20, true)"></div>
             }
         </div>
     </div>
@@ -26,16 +26,17 @@
         <div>
             <div class="clue-icon">search</div>
             <div>
-                @for(var i = 0; i < 5; ++i) 
+                @for (var i = 0; i < 5; ++i) 
                 {
-                    <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, true, false)"></div>
+                    <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, i < Hud.DisplayedPlayer.CluesCollected % 5, false)"></div>
                 }
             </div>
         </div>
     }
 </root>
 
-@code {
+@code 
+{
     private string GetSegmentColor(Murder.Player player, bool isFilled, bool isHealth)
     {
         if (!isFilled)

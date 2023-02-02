@@ -236,6 +236,9 @@ public partial class Player : AnimatedEntity
 
 		volume *= FootstepVolume();
 
+		if ( volume <= 1f )
+			return;
+
 		_timeSinceLastFootstep = 0;
 
 		DoFootstep( pos, foot, volume );
