@@ -41,7 +41,6 @@ public partial class Player
 		EnableDrawing = false;
 		EnableTouch = false;
 
-		_blackSmoke?.Destroy();
 		DropCarriable();
 		DeleteFlashlight();
 
@@ -93,15 +92,15 @@ public partial class Player
 
 	private void CreateBloodSplatter( DamageInfo info, float maxDistance )
 	{
-		var trace = Trace.Ray( new Ray( info.Position, info.Force.Normal ), maxDistance )
+		var tr = Trace.Ray( new Ray( info.Position, info.Force.Normal ), maxDistance )
 			.Ignore( this )
 			.Run();
 
-		if ( !trace.Hit )
+		if ( !tr.Hit )
 			return;
 
 		var decal = ResourceLibrary.Get<DecalDefinition>( "decals/blood_splatter.decal" );
-		Decal.Place( To.Everyone, decal, null, 0, trace.EndPosition - trace.Direction * 1f, Rotation.LookAt( trace.Normal ), Color.White );
+		Decal.Place( To.Everyone, decal, null, 0, tr.EndPosition - tr.Direction * 1f, Rotation.LookAt( tr.Normal ), Color.White );
 	}
 
 	private void ResetDamageData()
