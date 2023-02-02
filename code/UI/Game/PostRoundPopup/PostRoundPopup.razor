@@ -36,15 +36,16 @@
 
 @code
 {
-	private static PostRoundPopup Instance { get; set; }
-	private Role WinningRole { get; init; }
+    private static PostRoundPopup Instance { get; set; }
+    private Role WinningRole { get; init; }
 
-	public PostRoundPopup(Role winningRole)
-	{
-		WinningRole = winningRole;
+    public PostRoundPopup(Role winningRole)
+    {
+        WinningRole = winningRole;
+        Instance = this;
 
-		Instance = this;
-	}
+        PlaySound("round_end");
+    }
 
 	[GameEvent.Round.End]
 	private static void DisplayWinner(Role winningRole)

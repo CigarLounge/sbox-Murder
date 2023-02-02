@@ -3,38 +3,42 @@
 
 @namespace Murder.UI
 
-<root class="text-shadow">
-    <div class="header rounded-top background-color-primary">
-        <text style="font-size: 14px; flex-grow: 1;">Players</text>
-        <text class="stat">Name</text>
-        <text class="stat">Clues</text>
-        <text class="stat">Ping</text>
-    </div>
+<root class="text-shadow header rounded-top background-color-primary">
+    <text class="name">Players</text>
+    <text class="stat">Name</text>
+    <text class="stat">Clues</text>
+    <text class="stat">Ping</text>
 </root>
 
 <style>
-    ScoreboardGroup {
-        display: flex;
-        flex-direction: column;
-        margin-top: 15px;
-        flex-shrink: 0;
-        flex-grow: 0;
+    ScoreboardGroup 
+    {
+		flex-direction: row;
+		flex-shrink: 0;
+		width: 100%;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 14px;
+		font-weight: 600;
+		height: 25px;
+        
+        .name 
+		{
+			margin-left: 16px;
+			font-size: 16px;
+			font-weight: 600;
+			flex-grow: 1;
+		}
 
-        .header {
-            height: 25px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-            align-items: center;
-            padding: 8px;
-        }
+		.stat 
+		{
+			width: 125px;
+			font-weight: 700;
+			justify-content: center;
+		}
 
-        .stat {
-            width: 125px;
-            justify-content: center;
-        }
-
-        &:first-child {
+        &:first-child 
+        {
             margin-top: 0;
         }
     }
