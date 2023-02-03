@@ -12,7 +12,9 @@ public partial class Player
 
 	private void DisplayEntityHints()
 	{
-		if ( !UI.Hud.DisplayedPlayer.IsFirstPersonMode )
+		var player = UI.Hud.DisplayedPlayer;
+
+		if ( !player.IsFirstPersonMode || !player.TimeUntilClean )
 		{
 			DeleteHint();
 			return;
@@ -20,7 +22,7 @@ public partial class Player
 
 		var hint = FindHintableEntity();
 
-		if ( hint is null || !hint.CanHint( UI.Hud.DisplayedPlayer ) )
+		if ( hint is null || !hint.CanHint( player ) )
 		{
 			DeleteHint();
 			return;
@@ -28,13 +30,13 @@ public partial class Player
 
 		if ( hint == _currentHint )
 		{
-			hint.Tick( UI.Hud.DisplayedPlayer );
+			hint.Tick( player );
 			return;
 		}
 
 		DeleteHint();
 
-		_currentHintPanel = hint.DisplayHint( UI.Hud.DisplayedPlayer );
+		_currentHintPanel = hint.DisplayHint( player );
 		_currentHintPanel.Parent = UI.HintDisplay.Instance;
 		_currentHintPanel.Enabled( true );
 
