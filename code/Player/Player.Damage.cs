@@ -29,8 +29,8 @@ public partial class Player
 				killer.DropCarriable();
 				killer.TimeUntilClean = 20f;
 			}
-			else
-				killer.TimeUntilClean = 0f;
+			else if ( killer.Role == Role.Murderer )
+				killer.TimeUntilClean = -0.1f;
 		}
 
 		Corpse = new Corpse( this );
