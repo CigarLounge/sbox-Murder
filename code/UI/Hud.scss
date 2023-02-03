@@ -1,25 +1,39 @@
-$primary: #1a1a1a;
+$primary: #303030;
+$secondary: #1a1a1a;
 $info: #55d4ff;
+
 
 $dead: #fcdb38;
 
 Hud
 {
+    font-family: Poppins;
     flex-shrink: 0;
     color: #fafafa;
     letter-spacing: 0.5px;
-    font-family: Poppins;
 }
 
-label
+.iconpanel,
+.icon
 {
-    flex-shrink: 0;
-    letter-spacing: 0.5px;
+    font-size: 21px;
+    font-family: MaterialIcons;
 }
 
-.circle
+.disabled
 {
-    border-radius: 50%;
+    display: none;
+    pointer-events: none;
+}
+
+.fade-in
+{
+    opacity: 0.75;
+}
+
+.fade-out
+{
+    opacity: 0;
 }
 
 .rounded
@@ -37,6 +51,16 @@ label
 {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+}
+
+.opacity-medium
+{
+    opacity: 0.75;
+}
+
+.opacity-heavy
+{
+    opacity: 0.9;
 }
 
 .centered
@@ -82,22 +106,22 @@ label
     backdrop-filter-blur: 5px;
 }
 
-.opacity-heavy
+.text-color-info
 {
-    opacity: 0.9;
+    color: $info;
+}
+
+.background-color-gradient
+{
+    background: linear-gradient($primary, $secondary);
 }
 
 .background-color-primary
 {
-    background-color: $primary;
+    background-color: $secondary;
 }
 
-.background-color-info
+.background-color-secondary
 {
-    background-color: $info;
-}
-
-.text-color-info
-{
-    color: $info;
+    background-color: $secondary;
 }

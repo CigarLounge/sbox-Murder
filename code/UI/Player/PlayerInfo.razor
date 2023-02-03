@@ -1,96 +1,37 @@
+@using Sandbox;
+@using Sandbox.UI;
 @using System;
 
 @namespace Murder.UI
 
-@if (!Hud.DisplayedPlayer.IsAlive() || Hud.DisplayedPlayer.Role is Role.None)
+@if (!Hud.DisplayedPlayer.IsAlive())
 {
-    return;
+	return;
 }
 
 <root class="text-shadow">
-    <div style="flex-direction: column;">
-        <text class="name" style="color: @Hud.DisplayedPlayer.Color.Hex">@Hud.DisplayedPlayer.BystanderName</text>
-        <text class="role" style="color: @Hud.DisplayedPlayer.Role.GetColor().Hex">@Hud.DisplayedPlayer.Role.GetTitle()</text>
-    </div>
-    <div>
-        <div class="health-icon">health_and_safety</div>
-        <div>
-            @for (var i = 0; i < 5; ++i) 
-            {
-                <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, i <= Hud.DisplayedPlayer.Health / 20, true)"></div>
-            }
-        </div>
-    </div>
-    @if (@Hud.DisplayedPlayer.Role == Role.Bystander)
-    {
-        <div>
-            <div class="clue-icon">search</div>
-            <div>
-                @for (var i = 0; i < 5; ++i) 
-                {
-                    <div class="segment rounded" style="background-color: @GetSegmentColor(Hud.DisplayedPlayer, i < Hud.DisplayedPlayer.CluesCollected % 5, false)"></div>
-                }
-            </div>
-        </div>
-    }
+	<NameHealthDisplay />
+	<RoleDisplay />
+	<CarriableDisplay />
 </root>
 
-@code 
+@code
 {
-    private string GetSegmentColor(Murder.Player player, bool isFilled, bool isHealth)
-    {
-        if (!isFilled)
-            return "#00000066";
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
 
-        return isHealth ? player.Color.Hex : player.Role.GetColor().Hex;
-    }
-
-    protected override int BuildHash()
-    {
-        var player = Hud.DisplayedPlayer;
-        return HashCode.Combine(player.IsAlive(), player.BystanderName?.GetHashCode(), player.Role.GetHashCode(), player.Health, player.CluesCollected);
-    }
+		return HashCode.Combine(player.GetHashCode(), player.IsAlive());
+	}
 }
 
 <style>
-    PlayerInfo {
-        position: absolute;
-        bottom: 50px;
-        left: 25px;
-        transform: skew(0deg, -5deg);
-        flex-direction: column;
-		align-items: flex-start;
-
-        .name {
-            font-size: 50px;
-            font-weight: 500;
-            top: 10px;
-        }
-
-        .role {
-            font-size: 23px;
-            top: -10px;
-            padding-left: 20px;
-        }
-
-        .health-icon {
-            font-family: MaterialIcons;
-            font-size: 60px;
-            top: -4px;
-        }
-
-        .clue-icon {
-            font-family: MaterialIcons;
-            font-size: 60px;
-            top: -4px;
-        }
-
-        .segment {
-            width: 26px;
-            height: 48px;
-            background-color: #00000066;
-            margin-right: 4px;
-            box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
-        }
-    }
+	PlayerInfo 
+	{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		font-size: 35;
+		font-weight: 600;
+	}
 </style>

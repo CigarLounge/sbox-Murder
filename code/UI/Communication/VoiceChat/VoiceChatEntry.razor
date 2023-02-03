@@ -55,6 +55,7 @@
 			Avatar.SetTexture($"avatar:{_client.SteamId}");
 			Avatar.Style.BackgroundColor = null;
 			Name.Text = _client.Name;
+			Name.Style.FontColor = Color.White;
 		}
 	}
 
@@ -111,7 +112,8 @@
 }
 
 <style>
-	VoiceChatEntry {
+	VoiceChatEntry 
+	{
 		flex-direction: row;
 		padding: 8px 8px;
 		align-items: center;
