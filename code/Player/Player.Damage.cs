@@ -8,7 +8,7 @@ public partial class Player
 	[Net] public Player Killer { get; private set; }
 	[Net] public TimeSince TimeSinceDeath { get; private set; }
 	/// <summary>
-	/// This gets set when a player teamkills.
+	/// When a player teamkills, he will be blinded until he is clean.
 	/// </summary>
 	[Net] public TimeUntil TimeUntilClean { get; private set; }
 	public DamageInfo LastDamage { get; private set; }
@@ -33,6 +33,7 @@ public partial class Player
 				killer.TimeUntilClean = -0.1f;
 		}
 
+		Controller = null;
 		Corpse = new Corpse( this );
 		RemoveAllDecals();
 		StopUsing();

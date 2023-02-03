@@ -32,8 +32,6 @@ public partial class Player : AnimatedEntity
 		EnableShadowInFirstPerson = true;
 		EnableTouch = false;
 
-		Controller = new WalkController();
-
 		SetModel( "models/citizen/citizen.vmdl" );
 	}
 
@@ -57,6 +55,7 @@ public partial class Player : AnimatedEntity
 			Health = 100f;
 			LifeState = LifeState.Alive;
 			TimeUntilClean = 0;
+			Controller = new WalkController();
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -85,6 +84,7 @@ public partial class Player : AnimatedEntity
 		EnableAllCollisions = false;
 		EnableDrawing = false;
 		EnableTouch = false;
+		Controller = null;
 		Health = 0f;
 		LifeState = LifeState.Dead;
 	}
@@ -118,13 +118,13 @@ public partial class Player : AnimatedEntity
 
 	public override void Simulate( IClient client )
 	{
-		if ( !this.IsAlive() || IsFrozen )
-			return;
-
 		var controller = GetActiveController();
 		Controller?.SetActivePlayer( this );
 		controller?.Simulate();
 		SimulateAnimation( Controller );
+
+		if ( !this.IsAlive() )
+			return;
 
 		if ( Carriable.IsValid() )
 			if ( Input.Pressed( InputButton.Menu ) || Input.Pressed( InputButton.Slot1 ) )
