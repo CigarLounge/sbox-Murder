@@ -92,7 +92,11 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		var murderer = (Player)user;
 
-		murderer.Components.GetOrCreate<Disguise>().SetPlayer( Player );
+		if ( murderer.CluesCollected > 0 )
+		{
+			murderer.Components.GetOrCreate<Disguise>().SetPlayer( Player );
+			murderer.CluesCollected--;
+		}
 
 		return false;
 	}
@@ -105,6 +109,12 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 		if ( user is not Player player )
 			return false;
 
-		return player.Role == Role.Murderer;
+		if ( player.Role != Role.Murderer )
+			return false;
+
+		var isSame = player.BystanderName == Player.BystanderName;
+		isSame &= player.Color == Player.Color;
+
+		return !isSame;
 	}
 }

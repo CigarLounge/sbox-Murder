@@ -102,6 +102,8 @@ public partial class GameManager : Sandbox.GameManager
 		// Keep the dead body otherwise on disconnect.
 		if ( player.IsValid() && player.IsAlive() )
 			client.Pawn.Delete();
+
+		player.Tags.Remove( "ignorereset" );
 	}
 
 	public override bool CanHearPlayerVoice( IClient source, IClient dest )

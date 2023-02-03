@@ -7,7 +7,6 @@ public sealed class Disguise : EntityComponent<Player>
 	// Murderer's original information.
 	private string _bystanderName;
 	private Color _color;
-	private int _cluesCollected;
 	private Player _murderer;
 
 	public Disguise()
@@ -29,7 +28,6 @@ public sealed class Disguise : EntityComponent<Player>
 
 		_murderer.BystanderName = player.BystanderName;
 		_murderer.Color = player.Color;
-		_murderer.CluesCollected = player.CluesCollected;
 		_murderer.ColoredClothing.RenderColor = player.Color;
 	}
 
@@ -42,14 +40,12 @@ public sealed class Disguise : EntityComponent<Player>
 
 		_bystanderName = _murderer.BystanderName;
 		_color = _murderer.Color;
-		_cluesCollected = _murderer.CluesCollected;
 	}
 
 	protected override void OnDeactivate()
 	{
 		_murderer.BystanderName = _bystanderName;
 		_murderer.Color = _color;
-		_murderer.CluesCollected = _cluesCollected;
 		_murderer.ColoredClothing.RenderColor = _color;
 	}
 
