@@ -82,7 +82,7 @@ public sealed partial class MapSelectionState : GameState
 
 	private static async Task<List<string>> GetRemoteMapIdents()
 	{
-		var queryResult = await Package.FindAsync( "type:map game:matt.ttt", take: 99 );
+		var queryResult = await Package.FindAsync( "type:map game:matt.murder", take: 99 );
 
 		return queryResult.Packages.Select( ( p ) => p.FullIdent ).ToList();
 	}
