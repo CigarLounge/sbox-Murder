@@ -9,8 +9,8 @@ public partial class WalkController : BaseNetworkable
 	internal HashSet<string> _events;
 	internal HashSet<string> _tags;
 
-	[Net] public float SprintSpeed { get; set; } = 310f;
-	[Net] public float DefaultSpeed { get; set; } = 250f;
+	[Net] public float SprintSpeed { get; set; } = 280f;
+	[Net] public float DefaultSpeed { get; set; } = 220f;
 	[Net] public float Acceleration { get; set; } = 8.0f;
 	[Net] public float AirAcceleration { get; set; } = 65f;
 	[Net] public float FallSoundZ { get; set; } = -30.0f;
@@ -274,7 +274,7 @@ public partial class WalkController : BaseNetworkable
 
 		var flGroundFactor = 1.0f;
 
-		var flMul = 200f * 1.2f;
+		var flMul = (Player.TimeUntilClean ? 200f : 100f) * 1.2f;
 		var startz = Player.Velocity.z;
 
 		if ( Duck.IsActive )
