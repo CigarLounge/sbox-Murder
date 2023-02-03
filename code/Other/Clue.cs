@@ -59,7 +59,8 @@ public class Clue : Prop, IUse
 				player.SetCarriable( new Revolver(), true );
 		}
 
-		PlaySound( "clue_collected" );
+		Sound.FromScreen( To.Single( player ), "clue_collected" );
+
 		Hide();
 
 		return false;
