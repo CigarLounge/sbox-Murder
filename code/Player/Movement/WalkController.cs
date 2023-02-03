@@ -106,6 +106,9 @@ public partial class WalkController : BaseNetworkable
 
 	private float GetWishSpeed()
 	{
+		if ( Player.IsFrozen )
+			return 0;
+
 		var ws = Duck.GetWishSpeed();
 
 		if ( ws >= 0 )
@@ -272,16 +275,20 @@ public partial class WalkController : BaseNetworkable
 
 		PreventBhop();
 
+		Player.Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
+
+		if ( Player.IsFrozen )
+			return;
+
 		var flGroundFactor = 1.0f;
 
-		var flMul = (Player.TimeUntilClean ? 200f : 100f) * 1.2f;
+		var flMul = (Player.TimeUntilClean ? 268.3281572999747f : 100f) * 1.2f;
 		var startz = Player.Velocity.z;
 
 		if ( Duck.IsActive )
 			flMul *= 0.8f;
 
 		Player.Velocity = Player.Velocity.WithZ( startz + flMul * flGroundFactor );
-		Player.Velocity -= new Vector3( 0, 0, Gravity * 0.5f ) * Time.Delta;
 
 		AddEvent( "jump" );
 	}
