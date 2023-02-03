@@ -53,7 +53,7 @@ public class FirstPersonCamera : CameraMode
 			postProcess.Vignette.Roundness = 1f;
 			postProcess.Vignette.Smoothness = 1f;
 			postProcess.Vignette.Intensity = postProcess.Vignette.Intensity.LerpTo( 1.5f, 0.05f );
-			postProcess.FilmGrain.Intensity = postProcess.FilmGrain.Intensity.LerpTo( 0.5f, 0.05f );
+			postProcess.FilmGrain.Intensity = postProcess.FilmGrain.Intensity.LerpTo( 0.3f, 0.05f );
 		}
 
 		Camera.Position = target.EyePosition;
