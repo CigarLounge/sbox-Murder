@@ -170,7 +170,7 @@ public partial class Revolver : Carriable
 	}
 
 	[ClientRpc]
-	protected virtual void ShootEffects()
+	protected void ShootEffects()
 	{
 		Particles.Create( "particles/muzzle/flash_small.vpcf", EffectEntity, "muzzle" );
 
@@ -179,7 +179,7 @@ public partial class Revolver : Carriable
 	}
 
 	[ClientRpc]
-	protected virtual void ReloadEffects()
+	protected void ReloadEffects()
 	{
 		ViewModelEntity?.SetAnimParameter( "reload", true );
 	}

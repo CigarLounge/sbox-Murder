@@ -90,6 +90,9 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		PreviousOwner = dropper;
 		EnableDrawing = true;
 
+		if ( Game.IsClient )
+			DestroyViewModel(); // need this for spectating
+
 		if ( !Game.IsServer )
 			return;
 
@@ -110,7 +113,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// Create the viewmodel. You can override this in your base classes if you want
 	/// to create a certain viewmodel entity.
 	/// </summary>
-	protected virtual void CreateViewModel()
+	public virtual void CreateViewModel()
 	{
 		Game.AssertClient();
 
@@ -140,7 +143,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	/// <summary>
 	/// We're done with the viewmodel - delete it
 	/// </summary>
-	protected virtual void DestroyViewModel()
+	public virtual void DestroyViewModel()
 	{
 		ViewModelEntity?.Delete();
 		ViewModelEntity = null;
