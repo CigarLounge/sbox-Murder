@@ -131,6 +131,7 @@
       "RootNamespace": "Murder",
       "DefineConstants": "SANDBOX;ADDON;DEBUG",
       "NoWarn": "1701;1702;1591;"
-    }
+    },
+    "CsProjName": ""
   }
 }
