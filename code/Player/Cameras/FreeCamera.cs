@@ -30,7 +30,7 @@ public class FreeCamera : CameraMode
 			var alivePlayer = Game.Random.FromList( Utils.GetPlayersWhere( p => p.IsAlive() ) );
 
 			if ( alivePlayer.IsValid() )
-				Current = new FollowEntityCamera( alivePlayer );
+				Current = new FirstPersonCamera( alivePlayer );
 		}
 
 		if ( Input.Pressed( InputButton.Use ) )
