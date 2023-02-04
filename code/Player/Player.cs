@@ -213,7 +213,7 @@ public partial class Player : AnimatedEntity
 	/// </summary>
 	public override void OnAnimEventFootstep( Vector3 pos, int foot, float volume )
 	{
-		if ( !Game.IsClient )
+		if ( !Game.IsClient || !this.IsAlive() )
 			return;
 
 		if ( _timeSinceLastFootstep < 0.2f )
