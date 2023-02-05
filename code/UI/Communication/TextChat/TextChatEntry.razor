@@ -9,7 +9,7 @@
 		<div style="flex-shrink: 0;">
 			@if (!player.IsIncognito)
 			{
-				<img class="circle" src="avatar:@_client.SteamId" />
+				<img class="avatar" src="avatar:@_client.SteamId" />
 			}
 			<text class="name" style="color: @(player.IsIncognito ? player.Color.Hex : "#fcdb38")">
 				@(player.IsIncognito ? player.BystanderName : _client.Name)

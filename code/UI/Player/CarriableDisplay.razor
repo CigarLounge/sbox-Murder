@@ -1,80 +1,60 @@
+@using Murder;
 @using Sandbox;
 @using System;
 
 @namespace Murder.UI
 
-@if (!Hud.DisplayedPlayer.Carriable.IsValid())
+@if (!UI.Hud.DisplayedPlayer.Carriable.IsValid())
 {
-	return;
+    return;
 }
 
 <root class="text-shadow">
-	<InputGlyph button="Menu" style="light" />
-	<div class="outer-circle outline background-color-gradient opacity-heavy box-shadow">
-		<div class="inner-circle box-shadow"></div>
-		<img src=@Hud.DisplayedPlayer.Carriable.IconPath class=@(!Hud.DisplayedPlayer.IsHolstered ? "active" : "") />
-	</div>
+    <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
+        <div class="bar rounded">
+            <img class="icon" src="@UI.Hud.DisplayedPlayer.Carriable.IconPath" />
+        </div>
+        <inputglyph button="Slot1" style="light" style="margin-left: 5px;" />
+    </div>
 </root>
 
-@code
-{
-	protected override int BuildHash()
-	{
-		return HashCode.Combine(Hud.DisplayedPlayer.Carriable?.GetHashCode(), Hud.DisplayedPlayer.IsHolstered);
-	}
+@code {
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(UI.Hud.DisplayedPlayer.Carriable.IsValid(), UI.Hud.DisplayedPlayer.IsHolstered, UI.Hud.DisplayedPlayer.Role.GetHashCode());
+    }
 }
 
 <style>
-	CarriableDisplay 
-	{
-		position: absolute;
-		width: 225px;
-		min-height: 225px;
-		display: flex;
-		font-size: 20px;
-		transition: all 0.3s ease-out;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		right: 25px;
-		bottom: 10px;
+    CarriableDisplay {
+        position: absolute;
+        bottom: 50px;
+        right: 25px;
+        flex-direction: column;
+        align-items: flex-end;
 
-		.outer-circle
-		{
-			width: 100%;
-			height: 225px;
-			border-radius: 50%;	
-			align-items: center;
-			justify-content: center;
-			margin-top: 4px;
-		}
+        .slot {
+            transition: all 0.15s ease-out;
+            align-items: center;
 
-		.inner-circle 
-		{
-			position:absolute;
-			border-radius: 50%;
-			width: 95%;
-			height: 95%;
-			background-color: #1a1a1a;
-		}
+            .bar {
+                height: 80px;
+                align-items: center;
+                justify-content: center;
 
-		img 
-		{
-			position:absolute;
-			opacity: 0.3;
-			width: 200px;
-			height: 200px;
-			transition: opacity 0.1s linear;
+                .icon {
+                    height: 145px;
+                    width: 145px;
+                }
+            }
+            
+            &.inactive {
+                opacity: 0.5;
+            }
 
-			&.active
-			{
-				opacity: 1;
-			}
-		}
-
-		&:intro, &:outro 
-		{
-			bottom: -200px;
-		}
-	}
+            &:intro {
+                right: -25px;
+            }
+        }
+    }
 </style>
