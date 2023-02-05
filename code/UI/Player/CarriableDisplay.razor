@@ -1,8 +1,10 @@
-@using Murder;
 @using Sandbox;
+@using Sandbox.UI;
 @using System;
 
 @namespace Murder.UI
+
+@attribute [StyleSheet("UI/Player/CarriableDisplay.scss")]
 
 @if (!UI.Hud.DisplayedPlayer.Carriable.IsValid() || UI.Hud.DisplayedPlayer.Role == Role.None)
 {
@@ -14,47 +16,16 @@
         <div class="bar rounded">
             <img class="icon" src="@UI.Hud.DisplayedPlayer.Carriable.IconPath" />
         </div>
-        <inputglyph button="Slot1" style="light" style="margin-left: 5px;" />
+        <InputGlyph button="Slot1" style="light" style="margin-left: 5px;" />
     </div>
 </root>
 
-@code {
+@code 
+{
     protected override int BuildHash()
     {
-        return HashCode.Combine(UI.Hud.DisplayedPlayer.Carriable.IsValid(), UI.Hud.DisplayedPlayer.IsHolstered, UI.Hud.DisplayedPlayer.Role.GetHashCode());
+        var player = Hud.DisplayedPlayer;
+
+        return HashCode.Combine(player.Carriable.IsValid(), player.IsHolstered, player.Role.GetHashCode());
     }
 }
-
-<style>
-    CarriableDisplay {
-        position: absolute;
-        bottom: 50px;
-        right: 25px;
-        flex-direction: column;
-        align-items: flex-end;
-
-        .slot {
-            transition: all 0.15s ease-out;
-            align-items: center;
-
-            .bar {
-                height: 80px;
-                align-items: center;
-                justify-content: center;
-
-                .icon {
-                    height: 145px;
-                    width: 145px;
-                }
-            }
-            
-            &.inactive {
-                opacity: 0.5;
-            }
-
-            &:intro {
-                right: -25px;
-            }
-        }
-    }
-</style>

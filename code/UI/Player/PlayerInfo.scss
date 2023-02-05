@@ -1,0 +1,43 @@
+﻿PlayerInfo
+{
+    position: absolute;
+    bottom: 50px;
+    left: 25px;
+    flex-direction: column;
+
+    .name
+    {
+        font-size: 60px;
+        font-weight: 500;
+        top: 10px;
+    }
+
+    .role
+    {
+        font-size: 30px;
+        top: -10px;
+    }
+
+    .health-icon
+    {
+        font-family: MaterialIcons;
+        font-size: 60px;
+        top: -4px;
+    }
+
+    .clue-icon
+    {
+        font-family: MaterialIcons;
+        font-size: 60px;
+        top: -4px;
+    }
+
+    .segment
+    {
+        width: 26px;
+        height: 48px;
+        background-color: #00000066;
+        margin-right: 4px;
+        box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+    }
+}
