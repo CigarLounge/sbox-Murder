@@ -8,7 +8,7 @@
 	<text class="name">@_player.BystanderName</text>
 	@if (_player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
 	{
-		<div @ref=@DisguiseHint class="disguise-hint">
+		<div @ref="DisguiseHint" class="disguise-hint">
             <div style="align-items: center;">
                 <text>Press</text>
                 <InputGlyph button="Use" />
@@ -24,7 +24,7 @@
     private static Nameplate _previous;
     private readonly Murder.Player _player;
 
-    private Panel DisguiseHint { get; init; }
+    private Panel DisguiseHint { get; set; }
 
     public Nameplate(Murder.Player player)
     {

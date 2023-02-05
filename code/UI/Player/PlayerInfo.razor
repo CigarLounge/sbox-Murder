@@ -25,7 +25,7 @@
 		<div>
 			@for (var i = 0; i < 5; ++i)
 			{
-				var isFilled = i < player.Clues % 5;
+				var isFilled = i < player.Clues;
 				var filledColor = player.Role == Role.None ? player.Color.Hex : player.Role.GetColor().Hex;
 				<div class="segment rounded" style="background-color: @(isFilled ? filledColor : "#00000066")"></div>
 			}
