@@ -4,7 +4,7 @@
 
 @namespace Murder.UI
 
-@if (!UI.Hud.DisplayedPlayer.Carriable.IsValid())
+@if (!UI.Hud.DisplayedPlayer.Carriable.IsValid() || UI.Hud.DisplayedPlayer.Role == Role.None)
 {
     return;
 }
