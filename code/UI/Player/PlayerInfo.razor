@@ -1,78 +1,43 @@
+@using Sandbox.UI;
 @using System;
 
 @namespace Murder.UI
 
-@if (!Hud.DisplayedPlayer.IsAlive())
-{
-    return;
+@attribute [StyleSheet("UI/Player/PlayerInfo.scss")]
+
+@{
+	var player = Hud.DisplayedPlayer;
+
+	if (!player.IsAlive())
+		return;
 }
 
 <root class="text-shadow">
-    <div style="flex-direction: column;">
-        <text class="name" style="color: @Hud.DisplayedPlayer.Color.Hex" text=@Hud.DisplayedPlayer.BystanderName/>
-        @if (Hud.DisplayedPlayer.Role is not Role.None) 
-        {
-            <div><text class="role" style="color: @Hud.DisplayedPlayer.Role.GetColor().Hex" text=@Hud.DisplayedPlayer.Role.GetTitle()/></div>
-        }
-    </div>
-    <div>
-        <div class="clue-icon">search</div>
-        <div>
-            @for (var i = 0; i < 5; ++i) 
-            {
-                var isFilled = Hud.DisplayedPlayer.Role == Role.Bystander ? i < Hud.DisplayedPlayer.CluesCollected % 5 : i < Hud.DisplayedPlayer.CluesCollected;
-                var filledColor = Hud.DisplayedPlayer.Role == Role.None ? Hud.DisplayedPlayer.Color.Hex : Hud.DisplayedPlayer.Role.GetColor().Hex;
-                <div class="segment rounded" style="background-color: @(isFilled ? filledColor : "#00000066")"></div>
-            }
-        </div>
-    </div>
+	<div style="flex-direction: column;">
+		<text class="name" style="color: @player.Color.Hex" text=@player.BystanderName />
+		@if (player.Role != Role.None)
+		{
+			<div><text class="role" style="color: @player.Role.GetColor().Hex" text=@player.Role.GetTitle() /></div>
+		}
+	</div>
+	<div>
+		<div class="clue-icon">search</div>
+		<div>
+			@for (var i = 0; i < 5; ++i)
+			{
+				var isFilled = i < player.Clues % 5;
+				var filledColor = player.Role == Role.None ? player.Color.Hex : player.Role.GetColor().Hex;
+				<div class="segment rounded" style="background-color: @(isFilled ? filledColor : "#00000066")"></div>
+			}
+		</div>
+	</div>
 </root>
 
-@code 
+@code
 {
-    protected override int BuildHash()
-    {
-        var player = Hud.DisplayedPlayer;
-        return HashCode.Combine(player.IsAlive(), player.BystanderName?.GetHashCode(), player.Role.GetHashCode(), player.Health, player.CluesCollected);
-    }
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
+		return HashCode.Combine(player.IsAlive(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.Clues);
+	}
 }
-
-<style>
-    PlayerInfo {
-        position: absolute;
-        bottom: 50px;
-        left: 25px;
-        flex-direction: column;
-
-        .name {
-            font-size: 60px;
-            font-weight: 500;
-            top: 10px;
-        }
-
-        .role {
-            font-size: 30px;
-            top: -10px;
-        }
-
-        .health-icon {
-            font-family: MaterialIcons;
-            font-size: 60px;
-            top: -4px;
-        }
-
-        .clue-icon {
-            font-family: MaterialIcons;
-            font-size: 60px;
-            top: -4px;
-        }
-
-        .segment {
-            width: 26px;
-            height: 48px;
-            background-color: #00000066;
-            margin-right: 4px;
-            box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
-        }
-    }
-</style>

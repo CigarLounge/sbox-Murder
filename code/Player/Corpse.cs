@@ -92,10 +92,10 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 	{
 		var murderer = (Player)user;
 
-		if ( murderer.CluesCollected > 0 )
+		if ( murderer.Clues > 0 )
 		{
 			murderer.Components.GetOrCreate<Disguise>().SetPlayer( Player );
-			murderer.CluesCollected--;
+			murderer.Clues--;
 		}
 
 		return false;

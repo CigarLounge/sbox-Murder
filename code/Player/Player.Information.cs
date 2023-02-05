@@ -14,6 +14,7 @@ public partial class Player
 
 	[Net] public string BystanderName { get; set; }
 	[Net] public Color Color { get; set; }
+	[Net] public int Clues { get; set; }
 	[Net] public int CluesCollected { get; set; }
 	public Corpse Corpse { get; internal set; }
 	public bool IsIncognito => this.IsAlive() && GameState.Current is GameplayState;
@@ -41,6 +42,7 @@ public partial class Player
 	public void ResetInformation()
 	{
 		BystanderName = null;
+		Clues = 0;
 		CluesCollected = 0;
 		Color = default;
 		Corpse = null;

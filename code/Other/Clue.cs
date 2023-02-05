@@ -36,6 +36,7 @@ public class Clue : Prop, IUse
 	}
 
 	[Event.Entity.PostCleanup]
+	[GameEvent.Round.End]
 	internal void Hide()
 	{
 		EnableDrawing = false;
@@ -52,17 +53,16 @@ public class Clue : Prop, IUse
 	{
 		var player = (Player)user;
 
+		player.Clues++;
 		player.CluesCollected++;
 
-		if ( player.Role == Role.Bystander )
+		if ( player.Role == Role.Bystander && player.Clues % 5 == 0 )
 		{
-			if ( player.CluesCollected % 5 == 0 )
-				player.SetCarriable( new Revolver(), true );
+			player.SetCarriable( new Revolver(), true );
+			player.Clues = 0;
 		}
-		else if ( player.Role == Role.Murderer )
-		{
-			player.CluesCollected = Math.Min( player.CluesCollected, 5 );
-		}
+
+		player.Clues = Math.Min( player.Clues, 5 );
 
 		Sound.FromScreen( To.Single( player ), "clue_collected" );
 
