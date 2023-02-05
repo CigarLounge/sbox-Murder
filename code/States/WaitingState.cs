@@ -15,7 +15,7 @@ public class WaitingState : GameState
 			if ( Game.IsServer && TimeLeft )
 				GameManager.Instance.ForceStateChange( new GameplayState() );
 			else if ( Game.IsClient )
-				UI.TextChat.AddInfo( $"The round starts in {TimeLeftFormatted}." );
+				UI.TextChat.AddInfo( $"The round starts in {TimeLeftFormatted}" );
 		}
 		else
 			TimeLeft = Duration;
