@@ -42,7 +42,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		EnableDrawing = true;
 		TimeSinceDeployed = 0;
 
-		if ( IsLocalPawn )
+		if ( player == UI.Hud.DisplayedPlayer )
 		{
 			CreateViewModel();
 
@@ -89,9 +89,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		PreviousOwner = dropper;
 		EnableDrawing = true;
-
-		if ( Game.IsClient )
-			DestroyViewModel(); // need this for spectating
 
 		if ( !Game.IsServer )
 			return;

@@ -46,7 +46,7 @@ public partial class Player
 		DeleteFlashlight();
 
 		Event.Run( GameEvent.Player.Killed, this );
-		GameManager.Instance.State.OnPlayerKilled( this );
+		GameState.Current.OnPlayerKilled( this );
 
 		ClientOnKilled( this );
 	}
@@ -55,13 +55,11 @@ public partial class Player
 	{
 		Game.AssertClient();
 
-		if ( IsLocalPawn )
-		{
-			if ( Corpse.IsValid() )
-				CameraMode.Current = new DeathCamera();
-		}
+		if ( IsLocalPawn && Corpse.IsValid() )
+			CameraMode.Current = new DeathCamera();	
 
 		DeleteFlashlight();
+
 		Event.Run( GameEvent.Player.Killed, this );
 	}
 

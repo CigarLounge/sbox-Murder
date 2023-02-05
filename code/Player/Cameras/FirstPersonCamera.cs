@@ -4,8 +4,6 @@ namespace Murder;
 
 public class FirstPersonCamera : CameraMode
 {
-	private Player _previousPlayer;
-
 	public FirstPersonCamera( Player viewer = null )
 	{
 		Spectating.Player = viewer;
@@ -22,7 +20,6 @@ public class FirstPersonCamera : CameraMode
 
 		if ( !Spectating.Player.IsValid() || Input.Pressed( InputButton.Jump ) )
 		{
-			_previousPlayer?.Carriable?.DestroyViewModel();
 			Current = new FreeCamera();
 			return;
 		}
@@ -61,15 +58,5 @@ public class FirstPersonCamera : CameraMode
 		Camera.Position = player.EyePosition;
 		Camera.Rotation = !player.IsLocalPawn ? Rotation.Slerp( Camera.Rotation, player.EyeRotation, Time.Delta * 20f ) : player.EyeRotation;
 		Camera.FirstPersonViewer = player;
-
-		if ( player != _previousPlayer )
-			_previousPlayer?.Carriable?.DestroyViewModel();
-
-		if ( !player.IsHolstered && !player.Carriable.ViewModelEntity.IsValid() )
-			player.Carriable.CreateViewModel();
-		else if ( player.IsHolstered )
-			player.Carriable?.DestroyViewModel();
-
-		_previousPlayer = player;
 	}
 }

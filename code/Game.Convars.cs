@@ -19,7 +19,7 @@ public partial class GameManager
 
 	#region Map
 	[ConVar.Server( "mur_default_map", Help = "The default map to swap to if no maps are found.", Saved = true )]
-	public static string DefaultMap { get; set; } = "facepunch.flatgrass";
+	public static string DefaultMap { get; set; } = "thieves.ttt_cluedo";
 
 	[ConVar.Server( "mur_rtv_threshold", Help = "The percentage of players needed to RTV.", Saved = true )]
 	public static float RTVThreshold { get; set; } = 0.66f;

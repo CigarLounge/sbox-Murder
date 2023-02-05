@@ -67,7 +67,7 @@ public partial class Player : AnimatedEntity
 			DressPlayer();
 
 			Event.Run( GameEvent.Player.Spawned, this );
-			GameManager.Instance.State.OnPlayerSpawned( this );
+			GameState.Current.OnPlayerSpawned( this );
 		}
 		else
 		{
