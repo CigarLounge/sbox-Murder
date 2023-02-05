@@ -119,7 +119,6 @@ public partial class Player : AnimatedEntity
 		var controller = GetActiveController();
 		Controller?.SetActivePlayer( this );
 		controller?.Simulate();
-		SimulateAnimation( Controller );
 
 		if ( Carriable.IsValid() )
 		{
@@ -127,7 +126,9 @@ public partial class Player : AnimatedEntity
 				ActiveCarriable = ActiveCarriable is null ? Carriable : null;
 		}
 
+		SimulateAnimation( Controller );
 		SimulateActiveCarriable();
+
 
 		if ( !this.IsAlive() )
 			return;
@@ -220,12 +221,11 @@ public partial class Player : AnimatedEntity
 		if ( _timeSinceLastFootstep < 0.2f )
 			return;
 
+		_timeSinceLastFootstep = 0;
 		volume *= FootstepVolume();
 
 		if ( volume <= 1f )
 			return;
-
-		_timeSinceLastFootstep = 0;
 
 		DoFootstep( pos, foot, volume );
 	}
