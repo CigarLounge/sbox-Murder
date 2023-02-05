@@ -49,11 +49,4 @@ public static class Spectating
 
 		Player = alivePlayers[_spectatedPlayerIndex];
 	}
-
-	[GameEvent.Player.Killed]
-	private static void OnPlayerKilled( Player player )
-	{
-		if ( player == Player )
-			CameraMode.Current = new FreeCamera();
-	}
 }

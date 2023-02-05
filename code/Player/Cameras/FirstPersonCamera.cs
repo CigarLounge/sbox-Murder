@@ -59,4 +59,11 @@ public class FirstPersonCamera : CameraMode
 		Camera.Rotation = !player.IsLocalPawn ? Rotation.Slerp( Camera.Rotation, player.EyeRotation, Time.Delta * 20f ) : player.EyeRotation;
 		Camera.FirstPersonViewer = player;
 	}
+
+	[GameEvent.Player.Killed]
+	private static void OnPlayerKilled( Player player )
+	{
+		if ( player == Spectating.Player )
+			Current = new FreeCamera();
+	}
 }
