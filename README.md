@@ -8,3 +8,6 @@ A gamemode of deception and murder. One person is a murderer with a knife, who i
 
 # Discord
 Need to chat with the devs? Join our [discord](https://discord.gg/rrsrakF8N3).
+
+## Special Thanks
+[Thanks to Mechanical Mind for creating "Murder"](https://steamcommunity.com/sharedfiles/filedetails/?id=187073946) for [Garry's Mod](https://gmod.facepunch.com/) for which sbox-Murder takes inspiration from.
