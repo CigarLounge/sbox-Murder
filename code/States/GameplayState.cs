@@ -8,7 +8,7 @@ public sealed partial class GameplayState : GameState
 {
 	public override int Duration => 5;
 	private readonly List<Player> _alivePlayers = new();
-	private TimeUntil _timeUntilNextClue = GameManager.ClueSpawnRate + 5;
+	private TimeUntil _timeUntilNextClue = Clue.SpawnRate + 5;
 
 	public override void OnPlayerKilled( Player player )
 	{

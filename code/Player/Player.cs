@@ -204,7 +204,7 @@ public partial class Player : AnimatedEntity
 		}
 	}
 
-	public static DecalDefinition Footprint;
+	public static DecalDefinition Footprint { get; internal set; }
 
 	TimeSince _timeSinceLastFootstep;
 
@@ -245,14 +245,14 @@ public partial class Player : AnimatedEntity
 		if ( ((Player)Game.LocalPawn).Role != Role.Murderer )
 			return;
 
-		if ( Controller.Duck.IsActive )
-			return;
-
 		Decal.Place( Footprint, trace.Entity, trace.Bone, trace.EndPosition, Rotation.LookAt( trace.Normal, Rotation.Forward ), Color );
 	}
 
 	public float FootstepVolume()
 	{
+		if ( Controller.Duck.IsActive )
+			return 0;
+
 		return Velocity.WithZ( 0 ).Length.LerpInverse( 0.0f, 200.0f ) * 3.0f;
 	}
 	#endregion
