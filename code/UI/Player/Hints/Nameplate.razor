@@ -6,8 +6,8 @@
 
 <root class="text-shadow">
 	<text class="name">@_player.BystanderName</text>
-	@if (_player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
-	{
+    @if (Hud.DisplayedPlayer.IsLocalPawn && _player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
+    {
 		<div @ref="DisguiseHint" class="disguise-hint">
             <div style="align-items: center;">
                 <text>Press</text>
@@ -36,7 +36,7 @@
 
     protected override int BuildHash()
     {
-        return HashCode.Combine(_player.Corpse.IsValid(), Hud.DisplayedPlayer.CanUse(_player.Corpse));
+        return HashCode.Combine(Hud.DisplayedPlayer.IsLocalPawn, _player.Corpse.IsValid(), Hud.DisplayedPlayer.CanUse(_player.Corpse));
     }
 
 	public override void Delete(bool immediate = false)
