@@ -5,8 +5,9 @@ namespace Murder;
 
 public partial class Player
 {
-	[Net, Predicted] public bool IsHolstered { get; set; } = true;
-	[Net, Change] public Carriable Carriable { get; private set; }
+	[Net, Predicted] private Carriable ActiveCarriable { get; set; }
+	public bool IsHolstered => ActiveCarriable != Carriable;
+	public Carriable Carriable { get; private set; }
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
 	{
@@ -18,11 +19,9 @@ public partial class Player
 		DropCarriable();
 
 		carriable.SetParent( this, true );
-		carriable.OnCarryStart( this );
 
-		_wasHolstered = true;
-		IsHolstered = !makeActive;
-		Carriable = carriable;
+		if ( makeActive )
+			ActiveCarriable = carriable;
 	}
 
 	public Carriable DropCarriable()
@@ -30,54 +29,52 @@ public partial class Player
 		if ( Carriable is null )
 			return null;
 
-		if ( !IsHolstered )
-			Carriable.ActiveEnd( this, true );
-
-		Carriable.Parent = null;
-		Carriable.OnCarryDrop( this );
-
 		var dropped = Carriable;
-		IsHolstered = true;
-		Carriable = null;
+
+		dropped.Parent = null;
 
 		return dropped;
 	}
 
-	private bool _wasHolstered = true;
+	private Carriable _lastActiveCarriable;
 
-	public void SimulateCarriable()
+	public void SimulateActiveCarriable()
 	{
-		if ( !Carriable.IsValid() || !Carriable.IsAuthority )
+		if ( _lastActiveCarriable != ActiveCarriable )
+		{
+			OnActiveCarriableChanged( _lastActiveCarriable, ActiveCarriable );
+			_lastActiveCarriable = ActiveCarriable;
+		}
+
+		if ( !ActiveCarriable.IsValid() || !ActiveCarriable.IsAuthority )
 			return;
 
-		if ( _wasHolstered != IsHolstered )
-		{
-			if ( _wasHolstered )
-				Carriable.ActiveStart( this );
-			else
-				Carriable.ActiveEnd( this, false );
-
-			_wasHolstered = IsHolstered;
-		}
-
-		if ( !IsHolstered && Carriable.TimeSinceDeployed > Carriable.DeployTime )
-			Carriable.Simulate( Client );
+		if ( ActiveCarriable.TimeSinceDeployed > ActiveCarriable.DeployTime )
+			ActiveCarriable.Simulate( Client );
 	}
 
-	private void OnCarriableChanged( Carriable oldVal, Carriable newVal )
+	public void OnActiveCarriableChanged( Carriable previous, Carriable next )
 	{
-		if ( oldVal.IsValid() )
-		{
-			if ( !_wasHolstered )
-				oldVal.ActiveEnd( this, true );
+		previous?.ActiveEnd( this, previous.Owner != this );
+		next?.ActiveStart( this );
+	}
 
-			oldVal.OnCarryDrop( this );
-		}
+	public override void OnChildAdded( Entity child )
+	{
+		if ( child is not Carriable carriable )
+			return;
 
-		if ( newVal.IsValid() )
-		{
-			_wasHolstered = true;
-			newVal.OnCarryStart( this );
-		}
+		carriable.OnCarryStart( this );
+		Carriable = carriable;
+	}
+
+	public override void OnChildRemoved( Entity child )
+	{
+		if ( child is not Carriable carriable )
+			return;
+
+		carriable.OnCarryDrop( this );
+		ActiveCarriable = null;
+		Carriable = null;
 	}
 }

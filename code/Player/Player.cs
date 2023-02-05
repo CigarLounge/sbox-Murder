@@ -41,9 +41,7 @@ public partial class Player : AnimatedEntity
 
 		LifeState = LifeState.Respawnable;
 
-		IsHolstered = true;
-		Carriable?.Delete();
-		Carriable = null;
+		DropCarriable()?.Delete();
 		DeleteFlashlight();
 		ResetDamageData();
 		ResetInformation();
@@ -123,14 +121,17 @@ public partial class Player : AnimatedEntity
 		controller?.Simulate();
 		SimulateAnimation( Controller );
 
+		if ( Carriable.IsValid() )
+		{
+			if ( Input.Pressed( InputButton.Menu ) || Input.Pressed( InputButton.Slot1 ) )
+				ActiveCarriable = ActiveCarriable is null ? Carriable : null;
+		}
+
+		SimulateActiveCarriable();
+
 		if ( !this.IsAlive() )
 			return;
 
-		if ( Carriable.IsValid() )
-			if ( Input.Pressed( InputButton.Menu ) || Input.Pressed( InputButton.Slot1 ) )
-				IsHolstered = !IsHolstered;
-
-		SimulateCarriable();
 		SimulateFlashlight();
 
 		if ( Game.IsServer )
@@ -192,11 +193,11 @@ public partial class Player : AnimatedEntity
 		if ( controller.HasEvent( "jump" ) )
 			animHelper.TriggerJump();
 
-		if ( IsHolstered != _wasHolstered )
+		if ( ActiveCarriable != _lastActiveCarriable )
 			animHelper.TriggerDeploy();
 
-		if ( !IsHolstered )
-			Carriable.SimulateAnimator( animHelper );
+		if ( ActiveCarriable is not null )
+			ActiveCarriable.SimulateAnimator( animHelper );
 		else
 		{
 			animHelper.HoldType = CitizenAnimationHelper.HoldTypes.None;

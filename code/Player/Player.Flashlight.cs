@@ -24,18 +24,17 @@ public partial class Player
 		if ( _worldLight.IsValid() )
 		{
 			var transform = GetAttachment( "eyes" ) ?? default;
-			transform.Position += EyeRotation.Forward * 5f;
 			_worldLight.Transform = transform;
 
-			if ( !IsHolstered )
-				_worldLight.Transform = Carriable.GetAttachment( "muzzle" ) ?? transform;
+			if ( ActiveCarriable.IsValid() )
+				_worldLight.Transform = ActiveCarriable.GetAttachment( "muzzle" ) ?? transform;
 		}
 
 		if ( TimeSinceLightToggled > 0.25f && toggle )
 		{
 			FlashlightEnabled = !FlashlightEnabled;
 
-			PlaySound( FlashlightEnabled ? "flashlight_on" : "flashlight_off" );
+			PlaySound( FlashlightEnabled ? "flashlight-on" : "flashlight-off" );
 
 			if ( _worldLight.IsValid() )
 				_worldLight.Enabled = FlashlightEnabled;
@@ -74,7 +73,7 @@ public partial class Player
 		if ( !_viewLight.IsValid() )
 			return;
 
-		_viewLight.Enabled = FlashlightEnabled & IsFirstPersonMode;
+		_viewLight.Enabled = FlashlightEnabled && IsLocalPawn;
 
 		if ( !_viewLight.Enabled )
 			return;
@@ -82,10 +81,10 @@ public partial class Player
 		var eyeTransform = new Transform( EyePosition, EyeRotation );
 		_viewLight.Transform = eyeTransform;
 
-		if ( IsHolstered )
+		if ( !ActiveCarriable.IsValid() )
 			return;
 
-		var muzzleTransform = Carriable.ViewModelEntity?.GetAttachment( "muzzle" );
+		var muzzleTransform = ActiveCarriable.ViewModelEntity?.GetAttachment( "muzzle" );
 
 		if ( !muzzleTransform.HasValue )
 			return;
@@ -96,7 +95,7 @@ public partial class Player
 		var muzzleTrace = Trace.Ray( mz.Position, EyePosition )
 			.Size( 2 )
 			.Ignore( this )
-			.Ignore( Carriable )
+			.Ignore( ActiveCarriable )
 			.Run();
 
 		var downOffset = Vector3.Down * 2f;
@@ -112,7 +111,7 @@ public partial class Player
 
 		var fwdTrace = Trace.Box( Vector3.One * 2, origin, destination )
 			.Ignore( this )
-			.Ignore( Carriable )
+			.Ignore( ActiveCarriable )
 			.Run();
 
 		var pullbackAmount = 0.0f;
