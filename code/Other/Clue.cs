@@ -1,6 +1,7 @@
 using Sandbox;
 using Sandbox.Component;
 using Editor;
+using System;
 
 namespace Murder;
 
@@ -53,10 +54,14 @@ public class Clue : Prop, IUse
 
 		player.CluesCollected++;
 
-		if ( player.Role != Role.Murderer )
+		if ( player.Role == Role.Bystander )
 		{
 			if ( player.CluesCollected % 5 == 0 )
 				player.SetCarriable( new Revolver(), true );
+		}
+		else if ( player.Role == Role.Murderer )
+		{
+			player.CluesCollected = Math.Min( player.CluesCollected, 5 );
 		}
 
 		Sound.FromScreen( To.Single( player ), "clue_collected" );

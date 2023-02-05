@@ -17,7 +17,8 @@
         <div>
             @for (var i = 0; i < 5; ++i) 
             {
-                <div class="segment rounded" style="background-color: @(i < Hud.DisplayedPlayer.CluesCollected % 5 ? @Hud.DisplayedPlayer.Role.GetColor().Hex : "#00000066")"></div>
+                var isFilled = Hud.DisplayedPlayer.Role == Role.Bystander ? i < Hud.DisplayedPlayer.CluesCollected % 5 : i < Hud.DisplayedPlayer.CluesCollected;
+                <div class="segment rounded" style="background-color: @(isFilled ? @Hud.DisplayedPlayer.Role.GetColor().Hex : "#00000066")"></div>
             }
         </div>
     </div>
