@@ -12,7 +12,7 @@ namespace Murder;
 public class Clue : Prop, IUse
 {
 	[ConVar.Server( "mur_clue_spawnrate", Help = "Time (in seconds) it takes for a clue to spawn.", Saved = true )]
-	public static int SpawnRate { get; set; } = 17;
+	public static int SpawnRate { get; set; } = 7;
 
 	public override void Spawn()
 	{

@@ -87,14 +87,14 @@ public partial class GameManager : Sandbox.GameManager
 
 		State.OnPlayerJoin( player );
 
-		//UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has joined" );
+		UI.TextChat.AddInfo( $"{client.Name} has joined" );
 	}
 
 	public override void ClientDisconnect( IClient client, NetworkDisconnectionReason reason )
 	{
 		State.OnPlayerLeave( client.Pawn as Player );
 
-		//UI.TextChat.AddInfo( To.Everyone, $"{client.Name} has left ({reason})" );
+		UI.TextChat.AddInfo( $"{client.Name} has left ({reason})" );
 
 		var player = (Player)client.Pawn;
 

@@ -25,7 +25,7 @@ public partial class GameManager
 	public static float RTVThreshold { get; set; } = 0.66f;
 
 	[ConVar.Replicated( "mur_round_limit", Help = "The maximum amount of rounds that can be played.", Saved = true )]
-	public static int RoundLimit { get; set; } = 6;
+	public static int RoundLimit { get; set; } = 10;
 	#endregion
 
 	#region Minimum Players
