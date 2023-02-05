@@ -125,7 +125,7 @@
       "SoftBodySubsteps": 1
     },
     "Summary": "",
-    "Description": "A gamemode of deception and murder. One person is a murderer with a knife, who is trying to secretly kill off the other players. The other players must use their wits to find out who it is and kill them first. Unfortunately they only have the one gun between them.",
+    "Description": "A gamemode of deception and murder. One person is a murderer with a knife, who is trying to secretly kill off the other players. The other players must use their wits to find out who it is and kill them first. Unfortunately they only have the one gun between them.\n\n\uD83D\uDCE3 Socials\nhttps://discord.gg/rrsrakF8N3\nhttps://cigarlounge.github.io/\n\n\uD83D\uDCBB Open-source\nWe are open-source! Feel free to check out the source code at https://github.com/CigarLounge/sbox-Murder\nIf you encounter any issues, feel free to report them at https://github.com/CigarLounge/sbox-Murder/issues",
     "Public": true,
     "Compiler": {
       "RootNamespace": "Murder",
