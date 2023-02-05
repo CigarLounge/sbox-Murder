@@ -1,14 +1,25 @@
 @using System;
-@using System.Linq;
 
 @namespace Murder.UI
 
 <root class="text-shadow header rounded-top background-color-primary">
-    <text class="name">Players</text>
-    <text class="stat">Name</text>
-    <text class="stat">Clues</text>
-    <text class="stat">Ping</text>
+    <text class="name" text="Players"/>
+	@if (GameState.Current is PostRound)
+	{
+		<div>
+			<text class="stat" text="Name"/>
+    		<text class="stat" text="Clues"/>
+		</div>
+	}
+    <text class="stat" text="Ping"/>
 </root>
+
+@code {
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(GameState.Current is PostRound);
+	}
+}
 
 <style>
     ScoreboardGroup 
@@ -34,7 +45,7 @@
 		{
 			width: 125px;
 			font-weight: 700;
-			justify-content: center;
+			text-align: center;
 		}
 
         &:first-child 
