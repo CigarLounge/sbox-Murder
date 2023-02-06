@@ -34,7 +34,7 @@ public partial class Player
 		foreach ( var entry in entries )
 		{
 			var clothing = ResourceLibrary.Get<Clothing>( entry.Id );
-			if ( clothing == null )
+			if ( clothing is null )
 				continue;
 
 			if ( clothing.Category != Clothing.ClothingCategory.Tops )
