@@ -13,6 +13,8 @@ public partial class Player : AnimatedEntity
 	public Player( IClient client ) : this()
 	{
 		client.Pawn = this;
+
+		SetupPlayerClothing();
 	}
 
 	public override void Spawn()
