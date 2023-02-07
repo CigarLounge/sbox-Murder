@@ -7,21 +7,23 @@ namespace Murder;
 public partial class Player
 {
 	public AnimatedEntity ColoredClothing { get; private set; }
+	public List<Clothing> Clothes { get; private set; } = new();
 
 	private readonly ClothingContainer _clothingContainer = new();
-	private readonly List<Clothing> _playerClothing = new();
 
-	public void DressPlayer()
+	public void DressPlayerWith( List<Clothing> clothing )
 	{
-		_clothingContainer.Clothing = _playerClothing;
+		_clothingContainer.Clothing = clothing;
 		_clothingContainer.DressEntity( this );
 
 		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault( x => x is AnimatedEntity m && m.Model.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
 	}
 
-	private void SetupPlayerClothing()
+	private void SetupPlayerClothes()
 	{
-		_playerClothing.Add( ResourceLibrary.Get<Clothing>( "models/longsleeve/longsleeve.clothing" ) );
+		Clothes.Add( ResourceLibrary.Get<Clothing>( "models/longsleeve/longsleeve.clothing" ) );
+		Clothes.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/trousers/jeans/jeans_black.clothing" ) );
+		Clothes.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shoes/trainers/trainers.clothing" ) );
 
 		var data = Client.GetClientData( "avatar" );
 		if ( string.IsNullOrEmpty( data ) )
@@ -37,8 +39,11 @@ public partial class Player
 			if ( clothing is null )
 				continue;
 
-			if ( clothing.Category != Clothing.ClothingCategory.Tops )
-				_playerClothing.Add( clothing );
+			if ( clothing.Category == Clothing.ClothingCategory.Hat ||
+				 clothing.Category == Clothing.ClothingCategory.Hair ||
+				 clothing.Category == Clothing.ClothingCategory.Facial ||
+				 clothing.Category == Clothing.ClothingCategory.Skin )
+				Clothes.Add( clothing );
 		}
 	}
 }

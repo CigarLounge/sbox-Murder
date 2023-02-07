@@ -16,6 +16,17 @@ public partial class GameManager
 		player.TakeDamage( new DamageInfo { Damage = damage } );
 	}
 
+	[ConCmd.Admin( Name = "mur_giveclues" )]
+	public static void GiveClues( int clues )
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+
+		if ( !player.IsValid() )
+			return;
+
+		player.Clues += clues;
+	}
+
 	[ConCmd.Admin( Name = "mur_giveitem" )]
 	public static void GiveItem( string itemName )
 	{
