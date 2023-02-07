@@ -16,7 +16,7 @@ public partial class Player
 		_clothingContainer.Clothing = clothing;
 		_clothingContainer.DressEntity( this );
 
-		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault( x => x is AnimatedEntity m && m.Model.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
+		ColoredClothing = (AnimatedEntity)Children.FirstOrDefault( x => x is AnimatedEntity m && m?.Model?.ResourcePath == "models/longsleeve/longsleeve.vmdl" );
 	}
 
 	private void SetupPlayerClothes()
