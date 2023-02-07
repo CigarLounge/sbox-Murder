@@ -1,6 +1,21 @@
-﻿@namespace Murder.UI
+﻿@using System;
+
+@namespace Murder.UI
+
+@if (!Hud.DisplayedPlayer.IsAlive())
+{
+    return;
+}
 
 <root />
+
+@code
+{
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(Hud.DisplayedPlayer.IsAlive());
+    }
+}
 
 <style>
     Crosshair 
