@@ -21,10 +21,7 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 		Model = player.Model;
 
 		if ( Player.Components.RemoveAny<Disguise>() )
-		{
 			Player.ClothingContainer.DressEntity( Player );
-			Player.Color = Player.Color;
-		}
 
 		this.CopyBonesFrom( player );
 		this.SetRagdollVelocityFrom( player );

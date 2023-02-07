@@ -298,7 +298,12 @@ public partial class Player : AnimatedEntity
 		else if ( child is AnimatedEntity anim )
 		{
 			if ( ColorableModels.Contains( anim.Model ) )
+			{
+				if ( Game.IsServer )
+					anim.RenderColor = Color;
+
 				ColoredClothing.Add( anim );
+			}
 		}
 	}
 
