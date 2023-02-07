@@ -3,7 +3,7 @@
 @namespace Murder.UI
 
 <root class="text-shadow header rounded-top background-color-primary">
-    <text class="name" text="Players"/>
+    <text class="name" text="Players" />
 	@if (GameState.Current is PostRound)
 	{
 		<div>
@@ -47,10 +47,5 @@
 			font-weight: 700;
 			text-align: center;
 		}
-
-        &:first-child 
-        {
-            margin-top: 0;
-        }
     }
 </style>

@@ -11,16 +11,17 @@ namespace Murder;
 public partial class Knife : Carriable
 {
 	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
+	public override float DeployTime => 0.7f;
 	public override string IconPath { get; } = "/ui/knife.png";
 	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
 	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
 
 	private Particles _fog;
 	private bool _isThrown;
-	
+
 	public override void Simulate( IClient client )
 	{
-		if ( TimeSinceStab < 1.5f )
+		if ( TimeSinceStab < 1f )
 			return;
 
 		if ( Input.Down( InputButton.PrimaryAttack ) )
