@@ -1,4 +1,5 @@
 using Sandbox;
+using Sandbox.Effects;
 
 namespace Murder;
 
@@ -20,7 +21,9 @@ public class FirstPersonCamera : CameraMode
 
 		if ( !Spectating.Player.IsValid() || Input.Pressed( InputButton.Jump ) )
 		{
+			Camera.Main.RemoveAllHooks<ScreenEffects>();
 			Current = new FreeCamera();
+
 			return;
 		}
 
@@ -37,7 +40,7 @@ public class FirstPersonCamera : CameraMode
 
 		if ( player.TimeUntilClean )
 		{
-			var postProcess = Camera.Main.FindOrCreateHook<Sandbox.Effects.ScreenEffects>();
+			var postProcess = Camera.Main.FindOrCreateHook<ScreenEffects>();
 
 			postProcess.Saturation = postProcess.Saturation.LerpTo( 1f, 0.02f );
 			postProcess.Vignette.Intensity = postProcess.Vignette.Intensity.LerpTo( 0f, 0.05f );
@@ -45,7 +48,7 @@ public class FirstPersonCamera : CameraMode
 		}
 		else
 		{
-			var postProcess = Camera.Main.FindOrCreateHook<Sandbox.Effects.ScreenEffects>();
+			var postProcess = Camera.Main.FindOrCreateHook<ScreenEffects>();
 
 			postProcess.Saturation = postProcess.Saturation.LerpTo( 0f, 0.02f );
 			postProcess.Vignette.Color = Color.Black;

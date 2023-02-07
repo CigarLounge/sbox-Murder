@@ -6,8 +6,8 @@ namespace Murder;
 public partial class Player
 {
 	[Net, Predicted] private Carriable ActiveCarriable { get; set; }
-	public bool IsHolstered => ActiveCarriable != Carriable;
 	public Carriable Carriable { get; private set; }
+	public bool IsHolstered => ActiveCarriable != Carriable;
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
 	{
