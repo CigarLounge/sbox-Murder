@@ -8,7 +8,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	[Net, Local, Predicted] public TimeSince TimeSinceDeployed { get; private set; }
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual float DeployTime => 0;
-	public BaseViewModel HandsModelEntity { get; private set; }
 	public Player PreviousOwner { get; private set; }
 	public ModelEntity EffectEntity => (ViewModelEntity.IsValid() && IsFirstPersonMode) ? ViewModelEntity : this;
 	public BaseViewModel ViewModelEntity { get; protected set; }
@@ -93,7 +92,7 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		if ( !Game.IsServer )
 			return;
 
-		Owner = null;	
+		Owner = null;
 		EnableAllCollisions = true;
 		TimeSinceDropped = 0;
 	}
@@ -125,16 +124,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 		};
 
 		ViewModelEntity.SetModel( ViewModelPath );
-
-		HandsModelEntity = new BaseViewModel
-		{
-			EnableViewmodelRendering = true,
-			Owner = Owner,
-			Position = Position
-		};
-
-		HandsModelEntity.SetModel( "models/weapons/v_arms_ter.vmdl" );
-		HandsModelEntity.SetParent( ViewModelEntity, true );
 	}
 
 	/// <summary>
@@ -144,8 +133,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	{
 		ViewModelEntity?.Delete();
 		ViewModelEntity = null;
-		HandsModelEntity?.Delete();
-		HandsModelEntity = null;
 	}
 
 	protected override void OnDestroy()

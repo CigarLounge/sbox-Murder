@@ -14,10 +14,10 @@ public partial class Revolver : Carriable
 	[Net, Local, Predicted] public TimeSince TimeSincePrimaryAttack { get; private set; }
 	[Net, Local, Predicted] public bool IsReloading { get; private set; }
 	[Net, Local, Predicted] public TimeSince TimeSinceReload { get; private set; }
-	public override float DeployTime => 1.2f;
+	public override float DeployTime => 0.3f;
 	public override string IconPath { get; } = "/ui/revolver.png";
-	public override string ViewModelPath { get; } = "models/weapons/v_mr96.vmdl";
-	public override string WorldModelPath { get; } = "models/weapons/w_mr96.vmdl";
+	public override string ViewModelPath { get; } = "models/revolver/vm_revolver.vmdl";
+	public override string WorldModelPath { get; } = "models/revolver/wm_revolver.vmdl";
 
 	public override void ActiveStart( Player player )
 	{
@@ -47,7 +47,7 @@ public partial class Revolver : Carriable
 				}
 			}
 		}
-		else if ( TimeSinceReload > 2.4f )
+		else if ( TimeSinceReload > 1.8f )
 		{
 			IsReloading = false;
 			BulletInClip = true;
@@ -172,10 +172,9 @@ public partial class Revolver : Carriable
 	[ClientRpc]
 	protected void ShootEffects()
 	{
-		Particles.Create( "particles/muzzle/flash_small.vpcf", EffectEntity, "muzzle" );
+		Particles.Create( "particles/muzzle/flash_large.vpcf", EffectEntity, "muzzle" );
 
 		ViewModelEntity?.SetAnimParameter( "fire", true );
-		// CurrentRecoil += RecoilOnShoot;
 	}
 
 	[ClientRpc]
