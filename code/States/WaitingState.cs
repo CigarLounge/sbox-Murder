@@ -2,15 +2,19 @@ using Sandbox;
 
 namespace Murder;
 
-public class WaitingState : GameState
+public partial class WaitingState : GameState
 {
+	[Net]
+	private bool HasMinimumPlayers { get; set; }
+
 	public override int Duration => 10;
 
 	public override void OnSecond()
 	{
-		var hasMinimumPlayers = GameManager.HasMinimumPlayers();
+		if ( Game.IsServer )
+			HasMinimumPlayers = GameManager.HasMinimumPlayers();
 
-		if ( hasMinimumPlayers )
+		if ( HasMinimumPlayers )
 		{
 			if ( Game.IsServer && TimeLeft )
 				GameManager.Instance.ForceStateChange( new GameplayState() );
@@ -18,7 +22,9 @@ public class WaitingState : GameState
 				UI.TextChat.AddInfo( $"The round starts in {TimeLeftFormatted}" );
 		}
 		else
+		{
 			TimeLeft = Duration;
+		}
 	}
 
 	protected override void OnStart()

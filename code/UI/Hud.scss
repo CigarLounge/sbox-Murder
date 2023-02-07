@@ -1,9 +1,4 @@
-$primary: #303030;
-$secondary: #1a1a1a;
-$info: #55d4ff;
-
-
-$dead: #fcdb38;
+$primary: #1a1a1a;
 
 Hud {
     font-family: Poppins;
@@ -94,18 +89,6 @@ Hud {
     backdrop-filter-blur: 5px;
 }
 
-.text-color-info {
-    color: $info;
-}
-
-.background-color-gradient {
-    background: linear-gradient($primary, $secondary);
-}
-
 .background-color-primary {
-    background-color: $secondary;
-}
-
-.background-color-secondary {
-    background-color: $secondary;
+    background-color: $primary;
 }

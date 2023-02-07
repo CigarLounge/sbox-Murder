@@ -32,6 +32,9 @@ public sealed partial class GameplayState : GameState
 	{
 		Map.Cleanup();
 
+		if ( Game.IsClient && Spectating.IsForced )
+			UI.TextChat.AddInfo( "You are currently spectating, disable spectating using the scoreboard." );
+
 		if ( !Game.IsServer )
 			return;
 
