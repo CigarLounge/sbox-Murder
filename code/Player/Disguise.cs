@@ -26,6 +26,7 @@ public sealed class Disguise : EntityComponent<Player>
 	{
 		Enabled = true;
 
+		_murderer.DressPlayerWith( player.Clothes );
 		_murderer.BystanderName = player.BystanderName;
 		_murderer.Color = player.Color;
 		_murderer.ColoredClothing.RenderColor = player.Color;
@@ -37,13 +38,16 @@ public sealed class Disguise : EntityComponent<Player>
 			return;
 
 		_murderer = Entity;
-
 		_bystanderName = _murderer.BystanderName;
 		_color = _murderer.Color;
 	}
 
 	protected override void OnDeactivate()
 	{
+		if ( !Game.IsServer )
+			return;
+
+		_murderer.DressPlayerWith( _murderer.Clothes );
 		_murderer.BystanderName = _bystanderName;
 		_murderer.Color = _color;
 		_murderer.ColoredClothing.RenderColor = _color;

@@ -13,6 +13,8 @@ public partial class Player : AnimatedEntity
 	public Player( IClient client ) : this()
 	{
 		client.Pawn = this;
+
+		SetupPlayerClothes();
 	}
 
 	public override void Spawn()
@@ -62,7 +64,7 @@ public partial class Player : AnimatedEntity
 			CreateHull();
 			CreateFlashlight();
 			ResetInterpolation();
-			DressPlayer();
+			DressPlayerWith( Clothes );
 
 			Event.Run( GameEvent.Player.Spawned, this );
 			GameState.Current.OnPlayerSpawned( this );

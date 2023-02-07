@@ -146,11 +146,6 @@ public partial class GameManager : Sandbox.GameManager
 
 	private static void LoadResources()
 	{
-		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/hair/eyebrows/eyebrows_black.clothing" ) );
-		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/longsleeve/longsleeve.clothing" ) );
-		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/trousers/jeans/jeans_black.clothing" ) );
-		Player.ClothingPreset.Add( ResourceLibrary.Get<Clothing>( "models/citizen_clothes/shoes/trainers/trainers.clothing" ) );
-
 		Player.Footprint = ResourceLibrary.Get<DecalDefinition>( "decals/footprint.decal" );
 	}
 
