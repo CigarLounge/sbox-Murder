@@ -16,9 +16,7 @@ public partial class Player
 	/// </summary>
 	private void CheckAFK()
 	{
-		return; // Need to be able to toggle forced spectating
-
-		if ( Client.IsBot || Spectating.IsForced )
+		if ( Client.IsBot || IsForcedSpectator )
 			return;
 
 		if ( !this.IsAlive() )
@@ -38,8 +36,8 @@ public partial class Player
 
 		if ( _timeSinceLastAction > GameManager.AFKTimer )
 		{
-			Spectating.IsForced = true;
 			Input.StopProcessing = true;
+			ToggleForceSpectator();
 		}
 	}
 }
