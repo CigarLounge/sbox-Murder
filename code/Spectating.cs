@@ -1,7 +1,27 @@
+using Sandbox;
+
 namespace Murder;
 
 public static class Spectating
 {
+	[ConVar.ClientData] private static bool forced_spectator { get; set; }
+	/// <summary>
+	/// Whether or not the local player is force spectating.
+	/// </summary>	
+	public static bool IsForced
+	{
+		get => forced_spectator;
+		internal set
+		{
+			forced_spectator = value;
+
+			if ( !value || Game.LocalPawn is Player player && !player.IsAlive() )
+				return;
+
+			GameManager.Kill();
+		}
+	}
+
 	/// <summary>
 	/// The player we're currently spectating.
 	/// </summary>

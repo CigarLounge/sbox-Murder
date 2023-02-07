@@ -13,31 +13,10 @@
 	<div class="container rounded background-color-primary">
 		<ScoreboardInfo />
 		<div class="groups">
-			@* Whatever, it's murder... *@
-			@{
-				var players = Utils.GetPlayersWhere(p => !p.IsForcedSpectator);
-				var spectators = Utils.GetPlayersWhere(p => p.IsForcedSpectator);
-				var isGroupCreated = new List<bool>(){ false, false };
-
-				@foreach (var player in players)
-				{
-					if (!isGroupCreated[0]) {
-						<ScoreboardGroup Name="Players" />
-						isGroupCreated[0] = true;
-					}
-
-					<ScoreboardEntry Client=@player.Client />
-				}
-
-				@foreach (var spectator in spectators)
-				{
-					if (!isGroupCreated[1]) {
-						<ScoreboardGroup Name="Spectators" />
-						isGroupCreated[1] = true;
-					}
-
-					<ScoreboardEntry Client=@spectator.Client />
-				}
+			<ScoreboardGroup />
+			@foreach (var client in Game.Clients)
+			{
+				<ScoreboardEntry Client=@client />
 			}
 		</div>
 	</div>
@@ -52,11 +31,7 @@
 {
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(
-			Input.Down(InputButton.Score), 
-			(Game.LocalPawn as Murder.Player)?.IsForcedSpectator,
-			Game.Clients.HashCombine(client => HashCode.Combine(client.SteamId, (client.Pawn as Murder.Player)?.IsForcedSpectator))
-		);
+		return HashCode.Combine(Input.Down(InputButton.Score), Game.Clients.HashCombine(c => HashCode.Combine(c.SteamId)));
 	}
 }
 
@@ -66,15 +41,15 @@
 		pointer-events: all;
 		width: 100%;
 		height: 100%;
-        opacity: 0;
-        z-index: 1;
+		opacity: 0;
+		z-index: 1;
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
 
 		&.show {
-            opacity: 0.98;
-        }
+			opacity: 0.98;
+		}
 
 		.container 
 		{

@@ -5,6 +5,7 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
+	public bool IsForcedSpectator => Client.GetClientData<bool>( "forced_spectator" );
 	public bool IsFrozen => (GameState.Current is GameplayState or MapSelectionState) && !GameState.Current.TimeLeft;
 
 	public Player() { }
