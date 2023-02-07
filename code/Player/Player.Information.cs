@@ -13,11 +13,25 @@ public partial class Player
 	};
 
 	[Net] public string BystanderName { get; set; }
-	[Net] public Color Color { get; set; }
-	[Net] public int Clues { get; set; }
-	[Net] public int CluesCollected { get; set; }
+	[Net] private Color _color { get; set; }
+	[Net] public int Clues { get; internal set; }
+	[Net] public int CluesCollected { get; internal set; }
 	public Corpse Corpse { get; internal set; }
 	public bool IsIncognito => this.IsAlive() && GameState.Current is GameplayState;
+
+	public Color Color
+	{
+		get => _color;
+		set
+		{
+			Game.AssertServer();
+
+			_color = value;
+
+			foreach ( var anim in ColoredClothing )
+				anim.RenderColor = value;
+		}
+	}
 
 	private Role _role;
 	public Role Role

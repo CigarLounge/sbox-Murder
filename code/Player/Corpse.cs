@@ -3,7 +3,7 @@ using Sandbox.UI;
 
 namespace Murder;
 
-[ClassName( "mur_ent_corpse" )]
+[ClassName( "mur_corpse" )]
 [HideInEditor]
 [Title( "Player corpse" )]
 public partial class Corpse : ModelEntity, IEntityHint, IUse
@@ -19,6 +19,12 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 		Player = player;
 		Transform = player.Transform;
 		Model = player.Model;
+
+		if ( Player.Components.RemoveAny<Disguise>() )
+		{
+			Player.ClothingContainer.DressEntity( Player );
+			Player.Color = Player.Color;
+		}
 
 		this.CopyBonesFrom( player );
 		this.SetRagdollVelocityFrom( player );
@@ -46,6 +52,8 @@ public partial class Corpse : ModelEntity, IEntityHint, IUse
 			clothing.SetParent( this, true );
 			clothing.Tags.Add( "corpse" );
 		}
+
+		Player.ClothingContainer.ClearEntities();
 	}
 
 	public override void Spawn()

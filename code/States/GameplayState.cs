@@ -99,9 +99,9 @@ public sealed partial class GameplayState : GameState
 		for ( var i = 0; i < _alivePlayers.Count; i++ )
 		{
 			var player = _alivePlayers[i];
+
 			player.BystanderName = Player.Names[i];
 			player.Color = Color.FromBytes( Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ) );
-			player.ColoredClothing.RenderColor = player.Color;
 		}
 	}
 
