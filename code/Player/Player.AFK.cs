@@ -16,8 +16,6 @@ public partial class Player
 	/// </summary>
 	private void CheckAFK()
 	{
-		return; // Need to be able to toggle forced spectating
-
 		if ( Client.IsBot || Spectating.IsForced )
 			return;
 
