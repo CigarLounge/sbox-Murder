@@ -58,23 +58,4 @@ public partial class Player
 		previous?.ActiveEnd( this, previous.Owner != this );
 		next?.ActiveStart( this );
 	}
-
-	public override void OnChildAdded( Entity child )
-	{
-		if ( child is not Carriable carriable )
-			return;
-
-		carriable.OnCarryStart( this );
-		Carriable = carriable;
-	}
-
-	public override void OnChildRemoved( Entity child )
-	{
-		if ( child is not Carriable carriable )
-			return;
-
-		carriable.OnCarryDrop( this );
-		ActiveCarriable = null;
-		Carriable = null;
-	}
 }

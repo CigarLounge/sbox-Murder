@@ -4,9 +4,7 @@ namespace Murder;
 
 public partial class WaitingState : GameState
 {
-	[Net]
-	public bool HasMinimumPlayers { get; private set; }
-
+	[Net] public bool HasMinimumPlayers { get; private set; }
 	public override int Duration => 10;
 
 	public override void OnSecond()

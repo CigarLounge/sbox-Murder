@@ -1,4 +1,5 @@
 using Sandbox;
+using System.Collections.Generic;
 
 namespace Murder;
 
@@ -7,6 +8,7 @@ public sealed class Disguise : EntityComponent<Player>
 	// Murderer's original information.
 	private string _bystanderName;
 	private Color _color;
+	private List<Clothing> _clothing;
 	private Player _murderer;
 
 	public Disguise()
@@ -26,10 +28,11 @@ public sealed class Disguise : EntityComponent<Player>
 	{
 		Enabled = true;
 
-		_murderer.DressPlayerWith( player.Clothes );
+		_murderer.ClothingContainer.Clothing = player.ClothingContainer.Clothing;
+		_murderer.ClothingContainer.DressEntity( _murderer );
+
 		_murderer.BystanderName = player.BystanderName;
 		_murderer.Color = player.Color;
-		_murderer.ColoredClothing.RenderColor = player.Color;
 	}
 
 	protected override void OnActivate()
@@ -40,17 +43,18 @@ public sealed class Disguise : EntityComponent<Player>
 		_murderer = Entity;
 		_bystanderName = _murderer.BystanderName;
 		_color = _murderer.Color;
+		_clothing = _murderer.ClothingContainer.Clothing;
 	}
 
 	protected override void OnDeactivate()
 	{
-		if ( !Game.IsServer )
-			return;
+		_murderer.ClothingContainer.Clothing = _clothing;
 
-		_murderer.DressPlayerWith( _murderer.Clothes );
+		if ( _murderer.IsAlive() )
+			_murderer.ClothingContainer.DressEntity( _murderer );
+
 		_murderer.BystanderName = _bystanderName;
 		_murderer.Color = _color;
-		_murderer.ColoredClothing.RenderColor = _color;
 	}
 
 	[GameEvent.Player.Killed]

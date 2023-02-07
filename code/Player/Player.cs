@@ -14,7 +14,7 @@ public partial class Player : AnimatedEntity
 	{
 		client.Pawn = this;
 
-		SetupPlayerClothes();
+		SetupClothing();
 	}
 
 	public override void Spawn()
@@ -64,7 +64,7 @@ public partial class Player : AnimatedEntity
 			CreateHull();
 			CreateFlashlight();
 			ResetInterpolation();
-			DressPlayerWith( Clothes );
+			ClothingContainer.DressEntity( this );
 
 			Event.Run( GameEvent.Player.Spawned, this );
 			GameState.Current.OnPlayerSpawned( this );
@@ -286,6 +286,34 @@ public partial class Player : AnimatedEntity
 
 		if ( other is Carriable carriable && !Carriable.IsValid() )
 			SetCarriable( carriable );
+	}
+
+	public override void OnChildAdded( Entity child )
+	{
+		if ( child is Carriable carriable )
+		{
+			carriable.OnCarryStart( this );
+			Carriable = carriable;
+		}
+		else if ( child is AnimatedEntity anim )
+		{
+			if ( ColorableModels.Contains( anim.Model ) )
+				ColoredClothing.Add( anim );
+		}
+	}
+
+	public override void OnChildRemoved( Entity child )
+	{
+		if ( child is Carriable carriable )
+		{
+			carriable.OnCarryDrop( this );
+			ActiveCarriable = null;
+			Carriable = null;
+		}
+		else if ( child is AnimatedEntity anim )
+		{
+			ColoredClothing.Remove( anim );
+		}
 	}
 
 	protected override void OnDestroy()
