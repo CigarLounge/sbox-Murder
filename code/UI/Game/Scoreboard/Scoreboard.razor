@@ -4,11 +4,6 @@
 
 @namespace Murder.UI
 
-@if (Game.LocalPawn is not Murder.Player localPlayer)
-{
-	return;
-}
-
 <root class="@(Input.Down(InputButton.Score) ? "show" : "")">
 	<div class="container rounded background-color-primary">
 		<ScoreboardInfo />
@@ -21,17 +16,22 @@
 		</div>
 	</div>
 	<div style="width: 45%;">
-		<button class="spectate-button text-shadow" @onclick=@Murder.Player.ToggleForceSpectator icon=@(localPlayer.IsForcedSpectator ? "videocam_off" : "videocam")>
-			@(localPlayer.IsForcedSpectator ? "Disable Forced Spectating" : "Enable Forced Spectating")
+		<button class="spectate-button text-shadow" @onclick=@ToggleSpectating icon=@(Spectating.IsForced ? "videocam_off" : "videocam")>
+			@(Spectating.IsForced ? "Disable Forced Spectating" : "Enable Forced Spectating")
 		</button>
 	</div>
 </root>
 
 @code
 {
+	private void ToggleSpectating()
+	{
+		Spectating.IsForced = !Spectating.IsForced;
+	}
+
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(Input.Down(InputButton.Score), Game.Clients.HashCombine(c => HashCode.Combine(c.SteamId)));
+		return HashCode.Combine(Input.Down(InputButton.Score), Spectating.IsForced, Game.Clients.HashCombine(c => HashCode.Combine(c.SteamId)));
 	}
 }
 
