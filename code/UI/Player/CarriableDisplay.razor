@@ -26,6 +26,6 @@
     {
         var player = Hud.DisplayedPlayer;
 
-        return HashCode.Combine(player.Carriable.IsValid(), player.IsHolstered, player.Role.GetHashCode());
+        return HashCode.Combine(player.Carriable?.GetHashCode(), player.IsHolstered, player.Role.GetHashCode());
     }
 }
