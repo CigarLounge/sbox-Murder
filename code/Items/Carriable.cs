@@ -14,7 +14,6 @@ public abstract partial class Carriable : AnimatedEntity, IEntityHint, IUse
 	public virtual string IconPath { get; }
 	public virtual string ViewModelPath { get; }
 	public virtual string WorldModelPath { get; }
-	public bool IsActive => !Owner?.IsHolstered ?? false;
 
 	public new Player Owner
 	{
