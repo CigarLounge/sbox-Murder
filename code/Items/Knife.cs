@@ -11,10 +11,10 @@ namespace Murder;
 public partial class Knife : Carriable
 {
 	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
-	public override float DeployTime => 0.7f;
+	public override float DeployTime => 0.6f;
 	public override string IconPath { get; } = "/ui/knife.png";
-	public override string ViewModelPath { get; } = "models/weapons/v_knife.vmdl";
-	public override string WorldModelPath { get; } = "models/weapons/w_knife.vmdl";
+	public override string ViewModelPath { get; } = "models/knife/vm_knife.vmdl";
+	public override string WorldModelPath { get; } = "models/knife/wm_knife.vmdl";
 
 	private Particles _fog;
 	private bool _isThrown;
@@ -28,7 +28,7 @@ public partial class Knife : Carriable
 		{
 			using ( LagCompensation() )
 			{
-				MeleeAttack( 120f, 100f, 8f );
+				MeleeAttack( 120f, 60f, 8f );
 			}
 		}
 		else if ( Input.Released( InputButton.SecondaryAttack ) )
