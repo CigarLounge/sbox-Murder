@@ -10,4 +10,7 @@ A gamemode of deception and murder. One person is a murderer with a knife, who i
 Need to chat with the devs? Join our [discord](https://discord.gg/rrsrakF8N3).
 
 ## Special Thanks
+- [Kabubu2](https://github.com/Kabubu2/tc_weapons) - Weapon Models
+- [Objectionist](https://github.com/objectionist) - Jacket Texture
+
 [Thanks to Mechanical Mind for creating "Murder"](https://steamcommunity.com/sharedfiles/filedetails/?id=187073946) for [Garry's Mod](https://gmod.facepunch.com/) for which sbox-Murder takes inspiration from.

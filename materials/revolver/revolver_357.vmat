@@ -1,0 +1,13 @@
+
+Layer0
+{
+	shader "complex.vfx"
+
+	TextureColor "materials/revolver/revolver_357_color.png"
+	TextureAmbientOcclusion "materials/revolver/revolver_357_ao.png"
+	TextureNormal "materials/revolver/revolver_357_normal.png"
+	TextureRoughness "materials/revolver/revolver_357_rough.png"
+	F_SELF_ILLUM 1
+	TextureSelfIllumMask "materials/revolver/revolver_357_selfillum.png"
+
+}

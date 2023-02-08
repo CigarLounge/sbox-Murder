@@ -1,0 +1,12 @@
+{
+  "UI": false,
+  "Volume": "1.00,1.00,0",
+  "Pitch": "1.00,1.00,0",
+  "Decibels": 165,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "sounds/revolver/fire.vsnd"
+  ],
+  "MaximumDistance": 6210.039,
+  "MinimumDistance": 310.50195
+}
