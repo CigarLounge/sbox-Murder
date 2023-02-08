@@ -25,7 +25,7 @@ internal sealed class MurdererFog : EntityComponent<Player>
 
 	protected override void OnActivate()
 	{
-		_fog ??= Particles.Create( "particles/black_smoke.vpcf", Entity, "arm_lower_L" );
+		_fog ??= Particles.Create( "particles/black_smoke.vpcf", Entity, "forward_reference_modelspace" );
 
 		if ( Game.IsClient )
 			UI.TextChat.AddInfo( "Your evil presence is showing! Kill someone to hide." );
