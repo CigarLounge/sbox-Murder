@@ -47,7 +47,7 @@ public partial class Revolver : Carriable
 				}
 			}
 		}
-		else if ( TimeSinceReload > 1.5f )
+		else if ( TimeSinceReload > 2.1f )
 		{
 			IsReloading = false;
 			BulletInClip = true;
