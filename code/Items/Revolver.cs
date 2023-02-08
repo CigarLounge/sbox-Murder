@@ -68,7 +68,7 @@ public partial class Revolver : Carriable
 
 		Owner.SetAnimParameter( "b_attack", true );
 		ShootEffects();
-		PlaySound( "sounds/weapons/mr96/mr96_fire-1.sound" );
+		PlaySound( "fire" );
 
 		ShootBullet();
 	}

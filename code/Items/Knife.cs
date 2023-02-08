@@ -81,7 +81,7 @@ public partial class Knife : Carriable
 
 		Owner.SetAnimParameter( "b_attack", true );
 		SwingEffects();
-		PlaySound( "knife_swing-1" );
+		PlaySound( "swing" );
 
 		var trace = Trace.Ray( Owner.AimRay, range )
 			.UseHitboxes( true )
@@ -106,7 +106,7 @@ public partial class Knife : Carriable
 			.WithTag( "slash" );
 
 		if ( trace.Entity is Player )
-			PlaySound( "knife_flesh_hit-1" );
+			PlaySound( "flesh_hit" );
 
 		trace.Entity.TakeDamage( damageInfo );
 	}
