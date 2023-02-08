@@ -28,7 +28,7 @@ public partial class Knife : Carriable
 		{
 			using ( LagCompensation() )
 			{
-				MeleeAttack( 120f, 60f, 8f );
+				MeleeAttack();
 			}
 		}
 		else if ( Input.Released( InputButton.SecondaryAttack ) )
@@ -75,7 +75,7 @@ public partial class Knife : Carriable
 		base.OnCarryDrop( dropper );
 	}
 
-	private void MeleeAttack( float damage, float range, float radius )
+	private void MeleeAttack()
 	{
 		TimeSinceStab = 0;
 
@@ -83,10 +83,10 @@ public partial class Knife : Carriable
 		SwingEffects();
 		PlaySound( "swing" );
 
-		var trace = Trace.Ray( Owner.AimRay, range )
+		var trace = Trace.Ray( Owner.AimRay, 60f )
 			.UseHitboxes( true )
 			.Ignore( Owner )
-			.Radius( radius )
+			.Radius( 8f )
 			.Run();
 
 		if ( !trace.Hit )
@@ -97,7 +97,7 @@ public partial class Knife : Carriable
 		if ( !Game.IsServer )
 			return;
 
-		var damageInfo = DamageInfo.Generic( damage )
+		var damageInfo = DamageInfo.Generic( 200f )
 			.WithPosition( trace.EndPosition )
 			.UsingTraceResult( trace )
 			.WithForce( trace.Direction * 200f )
