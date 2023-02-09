@@ -25,7 +25,9 @@
 
 	public override void Tick()
 	{
-		if (GameState.Current.TimeLeft)
+		var current = GameState.Current;
+
+		if (current is not GameplayState || current.TimeLeft)
 			Delete();
 	}
 
