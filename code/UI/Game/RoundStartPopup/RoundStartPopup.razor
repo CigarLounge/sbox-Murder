@@ -1,13 +1,16 @@
 ﻿@using Sandbox;
+@using Sandbox.UI;
 
 @namespace Murder.UI
+
+@attribute [StyleSheet("UI/Game/RoundStartPopup/RoundStartPopup.scss")]
 
 @if (Game.LocalPawn is not Murder.Player player)
 {
 	return;
 }
 
-<root>
+<root style="color: @player.Role.GetColor().Hex">
 	<text class="title">You are a @player.Role.GetTitle()</text>
 	@if (player.Carriable is Revolver)
 	{
@@ -35,10 +38,10 @@
 	{
 		var player = (Murder.Player)Game.LocalPawn;
 
-		return player.Role  switch
+		return player.Role switch
 		{
 			Role.Murderer => "Kill everyone and don't get caught.",
-			Role.Bystander => $"There is a murderer on the loose. {(player.Carriable is Revolver ?  "Find and kill him" : "Dont get killed")}!",
+			Role.Bystander => $"There is a murderer on the loose. {(player.Carriable is Revolver ? "Find and kill him" : "Dont get killed")}!",
 			Role.None => string.Empty,
 			_ => string.Empty
 		};
@@ -61,34 +64,3 @@
 		Game.RootPanel.AddChild<RoundStartPopup>();
 	}
 }
-
-<style>
-	RoundStartPopup 
-	{
-		position: absolute;
-		color: @(((Murder.Player)Game.LocalPawn).Role.GetColor().Hex);
-		background-color: black;
-		width: 100%;
-		height: 100%;
-		font-size: 30px;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		transition: opacity 0.5s linear;
-
-		&:outro
-		{
-			opacity: 0;
-		}
-
-		.title 
-		{
-			font-weight: bold;
-		}
-
-		.subtitle 
-		{
-			color: #7846F5;
-		}
-	}
-</style>

@@ -1,49 +1,52 @@
 @using Sandbox;
+@using Sandbox.UI;
 @using System.Linq;
 
 @namespace Murder.UI
 
-<root class="text-shadow">
-    <div class="container">
-        <text class="header" style="color: @WinningRole.GetColor().Hex">
-            @(WinningRole == Role.Murderer ? "The Murderer wins!" : "The Bystanders win!")
-        </text>
-        <div class="content">
-            @{
-                var murderer = Role.Murderer.GetPlayers().First();
-                var killer = murderer.Killer;
+@attribute [StyleSheet("UI/Game/PostRoundPopup/PostRoundPopup.scss")]
 
-                if (WinningRole == Role.Bystander)
-                {
-                    if (killer.IsValid())
-                    {
-                        <label style="color: @killer.Color.Hex">@killer.BystanderName</label>
-                        <label>@(" killed the murderer.")</label>
-                    }
-                }
-                else
-                {
-                    <label>The murderer was </label>
-                    <label style="color: @murderer.Color.Hex">@murderer.BystanderName</label>
-                    <label>.</label>
-                }
-            }
-        </div>
-    </div>
+<root class="text-shadow">
+	<div class="container">
+		<text class="header" style="color: @WinningRole.GetColor().Hex">
+			@(WinningRole == Role.Murderer ? "The Murderer wins!" : "The Bystanders win!")
+		</text>
+		<div class="content">
+			@{
+				var murderer = Utils.GetPlayersWhere(p => p.Role == Role.Murderer).First();
+				var killer = murderer.Killer;
+
+				if (WinningRole == Role.Bystander)
+				{
+					if (killer.IsValid())
+					{
+						<label style="color: @killer.Color.Hex">@killer.BystanderName</label>
+						<label>@(" killed the murderer.")</label>
+					}
+				}
+				else
+				{
+					<label>The murderer was </label>
+					<label style="color: @murderer.Color.Hex">@murderer.BystanderName</label>
+					<label>.</label>
+				}
+			}
+		</div>
+	</div>
 </root>
 
 @code
 {
-    private static PostRoundPopup Instance { get; set; }
-    private Role WinningRole { get; init; }
+	private static PostRoundPopup Instance { get; set; }
+	private Role WinningRole { get; init; }
 
-    public PostRoundPopup(Role winningRole)
-    {
-        WinningRole = winningRole;
-        Instance = this;
+	public PostRoundPopup(Role winningRole)
+	{
+		WinningRole = winningRole;
+		Instance = this;
 
-        PlaySound("round_end");
-    }
+		PlaySound("round_end");
+	}
 
 	[GameEvent.Round.End]
 	private static void DisplayWinner(Role winningRole)
@@ -61,54 +64,3 @@
 		Instance = null;
 	}
 }
-
-<style>
-    PostRoundPopup 
-    {
-        position: absolute;
-        width: 100%;
-        height: 150px;
-        transition: opacity 1s ease-in-out;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        pointer-events: none;
-        opacity: 1;
-        z-index: 7;
-        top: 50px;
-
-        .container
-        {
-            max-height: 250px;
-            flex-direction: column;
-            transition: transform 2s ease-in-out;
-            transform: scale(1);
-        }
-
-        .header
-        {
-            text-transform: uppercase;
-            font-weight: bolder;
-            font-size: 50px;
-            width: 100%;
-        }
-
-        .content 
-        {
-            font-size: 30px;
-            font-weight: 600;
-            justify-content: center;
-            align-items: center;
-        }
-
-        &:intro 
-        {
-            opacity: 0;
-
-            .container
-            {
-                transform: scale(0.75);
-            }
-        }
-    }
-</style>
