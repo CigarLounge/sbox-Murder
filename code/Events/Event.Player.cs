@@ -18,19 +18,6 @@ public static partial class GameEvent
 			public KilledAttribute() : base( Killed ) { }
 		}
 
-		public const string RoleChanged = "murder.player.role-changed";
-
-		/// <summary>
-		/// Occurs when a player's role has changed.
-		/// <para><strong>Parameters:</strong></para>
-		/// <para>The <see cref="Murder.Player"/> whose role has changed. </para>
-		/// <para><see cref="Role"/> their old role. </para>
-		/// </summary>
-		public class RoleChangedAttribute : EventAttribute
-		{
-			public RoleChangedAttribute() : base( RoleChanged ) { }
-		}
-
 		public const string Spawned = "murder.player.spawned";
 
 		/// <summary>

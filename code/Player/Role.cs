@@ -11,16 +11,6 @@ public enum Role
 
 public static class RoleExtensions
 {
-	internal static readonly HashSet<Player>[] _players;
-
-	static RoleExtensions()
-	{
-		_players = new HashSet<Player>[3];
-		_players[0] = new();
-		_players[1] = new();
-		_players[2] = new();
-	}
-
 	public static Color GetColor( this Role role )
 	{
 		return role switch
@@ -32,11 +22,6 @@ public static class RoleExtensions
 		};
 	}
 
-	public static IEnumerable<Player> GetPlayers( this Role role )
-	{
-		return _players[(int)role];
-	}
-
 	public static string GetTitle( this Role role )
 	{
 		return role switch
@@ -46,12 +31,5 @@ public static class RoleExtensions
 			Role.Murderer => "Murderer",
 			_ => string.Empty
 		};
-	}
-
-	[GameEvent.Player.RoleChanged]
-	private static void OnPlayerRoleChanged( Player player, Role oldRole )
-	{
-		_players[(int)oldRole].Remove( player );
-		_players[(int)player.Role].Add( player );
 	}
 }
