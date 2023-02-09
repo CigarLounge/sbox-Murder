@@ -49,4 +49,25 @@ public static class Spectating
 
 		Player = alivePlayers[_spectatedPlayerIndex];
 	}
+
+	private static Carriable _carriable;
+
+	[Event.Tick.Client]
+	private static void SpectatingViewModels()
+	{
+		if ( !Player.IsValid() || !Player.IsFirstPersonMode )
+		{
+			_carriable?.DestroyViewModel();
+			_carriable = null;
+
+			return;
+		}
+
+		if ( _carriable != Player.ActiveCarriable )
+		{
+			_carriable?.DestroyViewModel();
+			_carriable = Player.ActiveCarriable;
+			_carriable?.CreateViewModel();
+		}
+	}
 }
