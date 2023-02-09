@@ -6,26 +6,28 @@
 
 @attribute [StyleSheet("UI/Player/CarriableDisplay.scss")]
 
-@if (!UI.Hud.DisplayedPlayer.Carriable.IsValid() || UI.Hud.DisplayedPlayer.Role == Role.None)
-{
-    return;
+@{
+	var player = Hud.DisplayedPlayer;
+
+	if (!player.Carriable.IsValid())
+		return;
 }
 
 <root class="text-shadow">
-    <div class="slot @(UI.Hud.DisplayedPlayer.IsHolstered ? "inactive" : "")">
-        <div class="bar rounded">
-            <img class="icon" src="@UI.Hud.DisplayedPlayer.Carriable.IconPath" />
-        </div>
-        <InputGlyph button="Slot1" style="light" style="margin-left: 5px;" />
-    </div>
+	<div class="slot @(player.IsHolstered ? "inactive" : "")">
+		<div class="bar rounded">
+			<img class="icon" src="@player.Carriable.IconPath" />
+		</div>
+		<InputGlyph button="Slot1" style="light" style="margin-left: 5px;" />
+	</div>
 </root>
 
-@code 
+@code
 {
-    protected override int BuildHash()
-    {
-        var player = Hud.DisplayedPlayer;
+	protected override int BuildHash()
+	{
+		var player = Hud.DisplayedPlayer;
 
-        return HashCode.Combine(player.Carriable?.GetHashCode(), player.IsHolstered, player.Role.GetHashCode());
-    }
+		return HashCode.Combine(player.Carriable, player.IsHolstered, player.Role);
+	}
 }

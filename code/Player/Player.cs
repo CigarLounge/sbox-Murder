@@ -1,12 +1,41 @@
 using Sandbox;
+using System.Collections.Generic;
 
 namespace Murder;
 
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
+	public static readonly List<string> Names = new()
+	{
+		"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
+		"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
+		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
+	};
+
+	[Net] public string BystanderName { get; set; }
+	[Net] private Color _color { get; set; }
+	[Net] public int Clues { get; internal set; }
+	[Net] public int CluesCollected { get; internal set; }
+	[Net] public Role Role { get; set; }
+	public Corpse Corpse { get; internal set; }
 	public bool IsForcedSpectator => Client.GetClientData<bool>( "forced_spectator" );
 	public bool IsFrozen => (GameState.Current is GameplayState or MapSelectionState) && !GameState.Current.TimeLeft;
+	public bool IsIncognito => this.IsAlive() && GameState.Current is GameplayState;
+
+	public Color Color
+	{
+		get => _color;
+		set
+		{
+			Game.AssertServer();
+
+			_color = value;
+
+			foreach ( var anim in ColoredClothing )
+				anim.RenderColor = value;
+		}
+	}
 
 	public Player() { }
 
@@ -89,6 +118,16 @@ public partial class Player : AnimatedEntity
 		LifeState = LifeState.Dead;
 	}
 
+	public void ResetInformation()
+	{
+		BystanderName = null;
+		Clues = 0;
+		CluesCollected = 0;
+		Color = default;
+		Corpse = null;
+		Role = Role.None;
+	}
+
 	internal bool temp;
 	private void ClientRespawn()
 	{
@@ -130,7 +169,6 @@ public partial class Player : AnimatedEntity
 
 		SimulateAnimation( Controller );
 		SimulateActiveCarriable();
-
 
 		if ( !this.IsAlive() )
 			return;
@@ -309,7 +347,7 @@ public partial class Player : AnimatedEntity
 
 	public override void OnChildRemoved( Entity child )
 	{
-		if ( child is Carriable carriable )
+		if ( child is Carriable carriable && carriable == Carriable )
 		{
 			carriable.OnCarryDrop( this );
 			ActiveCarriable = null;
@@ -329,7 +367,6 @@ public partial class Player : AnimatedEntity
 			Corpse = null;
 		}
 
-		RoleExtensions._players[(int)Role].Remove( this );
 		DeleteFlashlight();
 
 		base.OnDestroy();
