@@ -24,13 +24,6 @@ public sealed partial class PostRound : GameState
 
 		Event.Run( GameEvent.Round.End, WinningRole );
 
-		foreach ( var client in Game.Clients )
-		{
-			var player = (Player)client.Pawn;
-
-			player.SendRole( To.Everyone );
-		}
-
 		RunEvent( WinningRole );
 	}
 
