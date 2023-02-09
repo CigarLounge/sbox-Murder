@@ -14,7 +14,6 @@
 		@if (Spectating.Player.IsValid())
 		{
 			<div class="swap-panel">
-				<text class="name">@Spectating.Player.Client.Name</text>
 				<div style="align-items: center;">
 					<text>Press</text>
 					<inputglyph button="PrimaryAttack" />
@@ -42,7 +41,7 @@
 {
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(Hud.DisplayedPlayer.Client.SteamId, Hud.DisplayedPlayer.IsAlive(), (Murder.GameManager.Instance.State as WaitingState)?.HasMinimumPlayers);
+		return HashCode.Combine(Hud.DisplayedPlayer.Client.SteamId, Hud.DisplayedPlayer.IsAlive(), (GameState.Current as WaitingState)?.HasMinimumPlayers);
 	}
 }
 
