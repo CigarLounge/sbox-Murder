@@ -8,6 +8,7 @@ public class DeathCamera : CameraMode
 
 	public DeathCamera()
 	{
+		Camera.Main.RemoveAllHooks<Sandbox.Effects.ScreenEffects>();
 		Camera.FirstPersonViewer = null;
 
 		BlackOut();
