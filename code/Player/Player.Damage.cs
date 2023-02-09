@@ -20,7 +20,7 @@ public partial class Player
 		LifeState = LifeState.Dead;
 		TimeSinceDeath = 0;
 
-		if ( LastAttacker is Player killer )
+		if ( GameState.Current is GameplayState && LastAttacker is Player killer )
 		{
 			Killer = killer;
 

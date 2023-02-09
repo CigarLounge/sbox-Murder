@@ -70,7 +70,7 @@ public partial class Player
 
 	protected Entity FindHovered()
 	{
-		var trace = Trace.Ray( EyePosition, EyePosition + EyeRotation.Forward * MaxHintDistance )
+		var trace = Trace.Ray( AimRay, MaxHintDistance )
 			.Ignore( this )
 			.WithAnyTags( "solid", "interactable" )
 			.Run();

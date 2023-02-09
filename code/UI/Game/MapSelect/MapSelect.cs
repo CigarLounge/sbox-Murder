@@ -15,7 +15,7 @@ public partial class MapSelect : Panel
 		foreach ( var panel in Game.RootPanel.Children.ToList() )
 		{
 			if ( panel is not TextChat and not VoiceChat )
-				panel.Delete( true );
+				panel.Enabled( false );
 		}
 	}
 

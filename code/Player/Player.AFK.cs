@@ -24,8 +24,10 @@ public partial class Player
 			_timeSinceLastAction = 0;
 			return;
 		}
+
 		var isAnyKeyPressed = _buttons.Any( Input.Down );
 		var isMouseMoving = Input.MouseDelta != Vector2.Zero;
+
 		if ( isAnyKeyPressed || isMouseMoving )
 		{
 			_timeSinceLastAction = 0f;

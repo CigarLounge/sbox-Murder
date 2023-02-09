@@ -5,6 +5,7 @@ namespace Murder;
 public static class Spectating
 {
 	[ConVar.ClientData] private static bool forced_spectator { get; set; }
+
 	/// <summary>
 	/// Whether or not the local player is force spectating.
 	/// </summary>	

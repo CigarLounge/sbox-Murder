@@ -53,7 +53,7 @@ public partial class Player
 
 	private IEntityHint FindHintableEntity()
 	{
-		var tr = Trace.Ray( Camera.Position, Camera.Position + Camera.Rotation.Forward * MaxHintDistance )
+		var tr = Trace.Ray( new Ray( Camera.Position, Camera.Rotation.Forward ), MaxHintDistance )
 			.Ignore( UI.Hud.DisplayedPlayer )
 			.WithAnyTags( "solid", "interactable" )
 			.UseHitboxes()
