@@ -5,6 +5,8 @@ namespace Murder;
 
 public class FirstPersonCamera : CameraMode
 {
+	private readonly ScreenEffects _screenEffects = Camera.Main.FindOrCreateHook<ScreenEffects>();
+
 	public FirstPersonCamera( Player viewer = null )
 	{
 		Spectating.Player = viewer;
@@ -21,7 +23,7 @@ public class FirstPersonCamera : CameraMode
 
 		if ( !Spectating.Player.IsValid() || Input.Pressed( InputButton.Jump ) )
 		{
-			Camera.Main.RemoveAllHooks<ScreenEffects>();
+			Camera.Main.RemoveHook( _screenEffects );
 			Current = new FreeCamera();
 
 			return;
@@ -40,22 +42,18 @@ public class FirstPersonCamera : CameraMode
 
 		if ( player.TimeUntilClean )
 		{
-			var postProcess = Camera.Main.FindOrCreateHook<ScreenEffects>();
-
-			postProcess.Saturation = postProcess.Saturation.LerpTo( 1f, 0.02f );
-			postProcess.Vignette.Intensity = postProcess.Vignette.Intensity.LerpTo( 0f, 0.05f );
-			postProcess.FilmGrain.Intensity = postProcess.FilmGrain.Intensity.LerpTo( 0f, 0.05f ); ;
+			_screenEffects.Saturation = _screenEffects.Saturation.LerpTo( 1f, 0.02f );
+			_screenEffects.Vignette.Intensity = _screenEffects.Vignette.Intensity.LerpTo( 0f, 0.05f );
+			_screenEffects.FilmGrain.Intensity = _screenEffects.FilmGrain.Intensity.LerpTo( 0f, 0.05f ); ;
 		}
 		else
 		{
-			var postProcess = Camera.Main.FindOrCreateHook<ScreenEffects>();
-
-			postProcess.Saturation = postProcess.Saturation.LerpTo( 0f, 0.02f );
-			postProcess.Vignette.Color = Color.Black;
-			postProcess.Vignette.Roundness = 1f;
-			postProcess.Vignette.Smoothness = 1f;
-			postProcess.Vignette.Intensity = postProcess.Vignette.Intensity.LerpTo( 1.5f, 0.05f );
-			postProcess.FilmGrain.Intensity = postProcess.FilmGrain.Intensity.LerpTo( 0.3f, 0.05f );
+			_screenEffects.Saturation = _screenEffects.Saturation.LerpTo( 0f, 0.02f );
+			_screenEffects.Vignette.Color = Color.Black;
+			_screenEffects.Vignette.Roundness = 1f;
+			_screenEffects.Vignette.Smoothness = 1f;
+			_screenEffects.Vignette.Intensity = _screenEffects.Vignette.Intensity.LerpTo( 1.5f, 0.05f );
+			_screenEffects.FilmGrain.Intensity = _screenEffects.FilmGrain.Intensity.LerpTo( 0.3f, 0.05f );
 		}
 
 		Camera.Position = player.EyePosition;

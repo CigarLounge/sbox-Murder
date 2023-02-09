@@ -26,7 +26,6 @@ public class Clue : Prop, IUse
 
 		glow.Color = Color.Green;
 		glow.ObscuredColor = Color.Transparent;
-		glow.Enabled = true;
 
 		Hide();
 	}
