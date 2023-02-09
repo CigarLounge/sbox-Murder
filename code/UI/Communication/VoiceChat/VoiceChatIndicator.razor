@@ -1,30 +1,19 @@
 @using Sandbox;
 @using Sandbox.UI;
 
-@inherits WorldPanel;
 @namespace Murder.UI
 
+@attribute [StyleSheet("UI/Communication/VoiceChat/VoiceChatIndicator.scss")]
+@inherits WorldPanel
+
 <root>
-    <img src="ui/voicechat.png" class="voice-icon" />
+	<img src="ui/voicechat.png" class="voice-icon" />
 </root>
 
-@code {
-    public VoiceChatIndicator(IClient client)
-    {
-        this.Enabled(UI.Hud.DisplayedPlayer.Client != client);
-    }
+@code
+{
+	public VoiceChatIndicator(IClient client)
+	{
+		this.Enabled(UI.Hud.DisplayedPlayer.Client != client);
+	}
 }
-
-<style>
-    VoiceChatIndicator {
-        justify-content: center;
-        align-items: center;
-
-        .voice-icon {
-            background-size: contain;
-            width: 64px;
-            height: 64px;
-            font-size: 500px;
-        }
-    }
-</style>

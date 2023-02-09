@@ -1,6 +1,9 @@
+@using Sandbox.UI;
 @using System;
 
 @namespace Murder.UI
+
+@attribute [StyleSheet("UI/Game/Scoreboard/ScoreboardGroup.scss")]
 
 <root class="text-shadow header rounded-top background-color-primary">
     <text class="name" text="Players" />
@@ -20,32 +23,3 @@
 		return HashCode.Combine(GameState.Current is PostRound);
 	}
 }
-
-<style>
-    ScoreboardGroup 
-    {
-		flex-direction: row;
-		flex-shrink: 0;
-		width: 100%;
-		align-items: center;
-		justify-content: space-between;
-		font-size: 14px;
-		font-weight: 600;
-		height: 25px;
-        
-        .name 
-		{
-			margin-left: 16px;
-			font-size: 16px;
-			font-weight: 600;
-			flex-grow: 1;
-		}
-
-		.stat 
-		{
-			width: 125px;
-			font-weight: 700;
-			text-align: center;
-		}
-    }
-</style>

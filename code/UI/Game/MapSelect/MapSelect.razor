@@ -1,67 +1,66 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using System;
+@using System.Linq;
+
 @namespace Murder.UI
 
+@attribute [StyleSheet("UI/Game/MapSelect/MapSelect.scss")]
+
 <root class="fullscreen-dark-background">
-    <div class="inner text-shadow">
-        <div class="header">
-            <div class="left">
-                <text class="title">Map Vote</text>
-                <text class="subtitle">Choose your next map</text>
-            </div>
-            <div class="right">
-                <text class="countdown">@GameState.Current.TimeLeftFormatted</text>
-            </div>
-        </div>
-        <div @ref="Maps" class="body">
-            @foreach (var map in GameManager.Instance.MapVoteIdents)
-            {
-                <MapIcon Ident=@map />
-            }
-        </div>
-    </div>
+	<div class="inner text-shadow">
+		<div class="header">
+			<div class="left">
+				<text class="title">Map Vote</text>
+				<text class="subtitle">Choose your next map</text>
+			</div>
+			<div class="right">
+				<text class="countdown">@GameState.Current.TimeLeftFormatted</text>
+			</div>
+		</div>
+		<div @ref="Maps" class="body">
+			@foreach (var map in Murder.GameManager.Instance.MapVoteIdents)
+			{
+				<MapIcon Ident=@map />
+			}
+		</div>
+	</div>
 </root>
 
-<style>
-    MapSelect {
-        pointer-events: all;
-        transition: all 0.15s ease-out;
-        z-index: 2;
+@code
+{
+	private Panel Maps { get; set; }
 
-        .inner {
-            margin: 150px 20%;
-            flex-direction: column;
-            flex-grow: 1;
+	public MapSelect()
+	{
+		// Delete unneeded UI elements.
+		foreach (var panel in Game.RootPanel.Children.ToList())
+		{
+			if (panel is not TextChat and not VoiceChat)
+				panel.Enabled(false);
+		}
+	}
 
-            .header {
-                flex-direction: row;
+	public override void Tick()
+	{
+		if (GameState.Current is not MapSelectionState mapSelectionState)
+			return;
 
-                .left {
-                    flex-grow: 1;
-                    flex-direction: column;
+		// We are looping quite a lot in this code. Maybe we can use razor to make this less painful?
+		var maps = Maps.ChildrenOfType<MapIcon>();
 
-                    .title {
-                        font-size: 50px;
-                        font-weight: bold;
-                    }
+		foreach (var icon in maps)
+			icon.Votes = 0;
 
-                    .subtitle {
-                        font-size: 24px;
-                        font-weight: bold;
-                    }
-                }
+		foreach (var group in mapSelectionState.Votes.GroupBy(x => x.Value).OrderByDescending(x => x.Count()))
+		{
+			foreach (var map in maps)
+			{
+				if (group.Key == map.Ident)
+					map.Votes = group.Count();
+			}
+		}
+	}
 
-                .right {
-                    .countdown {
-                        font-size: 50px;
-                        font-weight: bold;
-                    }
-                }
-            }
-
-            .body {
-                margin: 50px;
-                flex-wrap: wrap;
-                overflow: scroll;
-            }
-        }
-    }
-</style>
+	protected override int BuildHash() => HashCode.Combine(GameState.Current.TimeLeftFormatted);
+}

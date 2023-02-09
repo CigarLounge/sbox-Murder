@@ -136,16 +136,12 @@ public partial class Player : AnimatedEntity
 		DeleteFlashlight();
 		ResetDamageData();
 
-		if ( !IsLocalPawn )
-			Role = Role.None;
-		else
-		{
-			MuteFilter = MuteFilter.None;
-		}
-
 		temp = true;
 		if ( IsLocalPawn )
+		{
 			CameraMode.Current = new FirstPersonCamera();
+			MuteFilter = MuteFilter.None;
+		}
 
 		if ( !this.IsAlive() )
 			return;
@@ -331,6 +327,7 @@ public partial class Player : AnimatedEntity
 		if ( child is Carriable carriable )
 		{
 			carriable.OnCarryStart( this );
+
 			Carriable = carriable;
 		}
 		else if ( child is AnimatedEntity anim )
@@ -347,9 +344,10 @@ public partial class Player : AnimatedEntity
 
 	public override void OnChildRemoved( Entity child )
 	{
-		if ( child is Carriable carriable && carriable == Carriable )
+		if ( child == Carriable )
 		{
-			carriable.OnCarryDrop( this );
+			Carriable.OnCarryDrop( this );
+
 			ActiveCarriable = null;
 			Carriable = null;
 		}

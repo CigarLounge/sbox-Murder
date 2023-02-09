@@ -1,8 +1,10 @@
-@using System;
 @using Sandbox;
-@using Murder;
+@using Sandbox.UI;
+@using System;
 
 @namespace Murder.UI
+
+@attribute [StyleSheet("UI/Player/SpectatingPrompts.scss")]
 
 @if (Game.LocalPawn is not Murder.Player player || player.IsAlive())
 {
@@ -24,10 +26,10 @@
 			</div>
 		}
 
-        @if (Murder.GameManager.Instance.State is WaitingState state && !state.HasMinimumPlayers )
-        {
-            <text><text style="font-size: 45px;">Waiting for players...</text></text>
-        }
+		@if (Murder.GameManager.Instance.State is WaitingState state && !state.HasMinimumPlayers)
+		{
+			<text><text style="font-size: 45px;">Waiting for players...</text></text>
+		}
 
 		<div style="align-items: center;">
 			<text>Press</text>
@@ -44,30 +46,3 @@
 		return HashCode.Combine(Hud.DisplayedPlayer.Client.SteamId, Hud.DisplayedPlayer.IsAlive(), (GameState.Current as WaitingState)?.HasMinimumPlayers);
 	}
 }
-
-<style>
-	SpectatingPrompts {
-		position: absolute;
-		left: 50%;
-		bottom: 50px;
-		transform: translateX(-50%);
-		flex-direction: column;
-		font-size: 17px;
-		font-weight: 500;
-		align-items: center;
-
-		.name {
-		    font-size: 30px;
-		    font-weight: 600;
-        }
-
-        .swap-panel {
-            align-items: center;
-            flex-direction: column;
-        }
-
-        inputglyph {
-            margin: 5px;
-        }
-	}
-</style>

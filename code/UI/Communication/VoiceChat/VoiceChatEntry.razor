@@ -4,6 +4,8 @@
 
 @namespace Murder.UI
 
+@attribute [StyleSheet("UI/Communication/VoiceChat/VoiceChatEntry.scss")]
+
 @if (_client.Pawn is not Murder.Player player)
 {
 	return;
@@ -109,39 +111,3 @@
 		return player.Color.Hex;
 	}
 }
-
-<style>
-	VoiceChatEntry 
-	{
-		flex-direction: row;
-		padding: 8px;
-        margin-bottom: 5px;
-		align-items: center;
-		transition: all 0.05s ease-out;
-
-		.avatar 
-		{
-			width: 25px;
-			height: 25px;
-			border-radius: 4px;
-		}
-
-		.name 
-		{
-			margin-left: 5px;
-			font-size: 18px;
-		}
-
-		&:intro 
-		{
-			opacity: 0;
-			left: 10px;
-		}
-
-		&:outro 
-		{
-			opacity: 0;
-			left: 10px;
-		}
-	}
-</style>

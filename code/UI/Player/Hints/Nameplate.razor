@@ -4,40 +4,42 @@
 
 @namespace Murder.UI
 
+@attribute [StyleSheet("UI/Player/Hints/Nameplate.scss")]
+
 <root class="text-shadow">
-	<text class="name">@_player.BystanderName</text>
-    @if (Hud.DisplayedPlayer.IsLocalPawn && _player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
-    {
+	<text class="name" style="color: @_player.Color.Hex">@_player.BystanderName</text>
+	@if (Hud.DisplayedPlayer.IsLocalPawn && _player.Corpse.IsValid() && Hud.DisplayedPlayer.CanUse(_player.Corpse))
+	{
 		<div @ref="DisguiseHint" class="disguise-hint">
-            <div style="align-items: center;">
-                <text>Press</text>
-                <InputGlyph button="Use" />
-                <text>to disguise as this player</text>
-            </div>
-            <text style="top: -5px; font-size: 16px; font-weight: 600; font-color: #fcdb38;">1 clue required</text>
+			<div style="align-items: center;">
+				<text>Press</text>
+				<InputGlyph button="Use" />
+				<text>to disguise as this player</text>
+			</div>
+			<text style="top: -5px; font-size: 16px; font-weight: 600; font-color: #fcdb38;">1 clue required</text>
 		</div>
 	}
 </root>
 
 @code
 {
-    private static Nameplate _previous;
-    private readonly Murder.Player _player;
+	private static Nameplate _previous;
+	private readonly Murder.Player _player;
 
-    private Panel DisguiseHint { get; set; }
+	private Panel DisguiseHint { get; set; }
 
-    public Nameplate(Murder.Player player)
-    {
-        _previous?.Delete(true);
+	public Nameplate(Murder.Player player)
+	{
+		_previous?.Delete(true);
 
-        _player = player;
-        _previous = this;
-    }
+		_player = player;
+		_previous = this;
+	}
 
-    protected override int BuildHash()
-    {
-        return HashCode.Combine(Hud.DisplayedPlayer.IsLocalPawn, _player.Corpse.IsValid(), Hud.DisplayedPlayer.CanUse(_player.Corpse));
-    }
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(Hud.DisplayedPlayer.IsLocalPawn, _player.Corpse.IsValid(), Hud.DisplayedPlayer.CanUse(_player.Corpse));
+	}
 
 	public override void Delete(bool immediate = false)
 	{
@@ -46,47 +48,3 @@
 		base.Delete(immediate);
 	}
 }
-
-<style>
-    Nameplate 
-    {
-        position: absolute;
-        left: 50%;
-        top: 55%;
-        transform: translateX(-50%) translateY(-50%);
-        transition: opacity 0.15s ease-out;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
-        width: 1000px;
-
-        .name 
-        {
-            color: @_player.Color.Hex;
-            font-size: 40px;
-            font-weight: 700;
-        }
-
-        .disguise-hint 
-        {
-            position: absolute;
-            align-items: center;
-            font-size: 20px;
-            font-weight: 400;
-            bottom: -60px;
-            flex-direction: column;
-
-            inputglyph 
-            {
-                margin: 5px;
-            }
-        }
-
-        &:outro 
-        {
-            transition: opacity 2s linear;
-            opacity: 0;
-        }
-    }
-</style>

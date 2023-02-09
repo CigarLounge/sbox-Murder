@@ -1,29 +1,34 @@
 @using Sandbox;
+@using Sandbox.UI;
 @using System;
 
 @namespace Murder.UI
 
+@attribute [StyleSheet("UI/Game/Scoreboard/ScoreboardInfo.scss")]
+
 <root class="rounded-top text-shadow">
-    <img src="/ui/cigarlounge-logo.png" class="logo rounded" />
-    <div class="server-information">
-        <text class="title">Murder</text>
-        <text class="url">github.com/CigarLounge/sbox-Murder</text>
-    </div>
-    <div class="server-data">
-        <text style="font-weight: bold;">@Game.Server.MapIdent</text>
-        <text>@($"{Game.Clients.Count} / {Game.Server.MaxPlayers} Players")</text>
+	<img src="/ui/cigarlounge-logo.png" class="logo rounded" />
+	<div class="server-information">
+		<text class="title">Murder</text>
+		<text class="url">github.com/CigarLounge/sbox-Murder</text>
+	</div>
+	<div class="server-data">
+		<text style="font-weight: bold;">@Game.Server.MapIdent</text>
+		<text>@($"{Game.Clients.Count} / {Game.Server.MaxPlayers} Players")</text>
 		@{
 			var roundsRemaining = Murder.GameManager.RoundLimit - Murder.GameManager.Instance.TotalRoundsPlayed;
 			var suffix = roundsRemaining == 1 ? "round" : "rounds";
-			<text>
+
+			<label>
 				@($"Map will change in {roundsRemaining} {suffix}")
-			</text>
+			</label>
 		}
-    </div>
+	</div>
 </root>
 
-@code {
-    protected override int BuildHash()
+@code
+{
+	protected override int BuildHash()
 	{
 		return HashCode.Combine
 		(
@@ -34,45 +39,3 @@
 		);
 	}
 }
-
-<style>
-    ScoreboardInfo {
-        flex-direction: row;
-        max-height: 100px;
-        justify-content: space-between;
-        padding: 15;
-        flex-shrink: 0;
-        align-items: center;
-
-        .logo {
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 75px;
-            height: 75px;
-        }
-
-        .server-information {
-            flex-grow: 1;
-            flex-direction: column;
-            padding: 5px;
-
-            .title {
-                font-size: 30px;
-                font-weight: bolder;
-                bottom: -10px;
-            }
-
-            .url {
-                font-weight: 300;
-                font-size: 15px;
-            }
-        }
-
-        .server-data {
-            flex-direction: column;
-            align-items: flex-end;
-            font-weight: 300;
-            font-size: 15px;
-        }
-    }
-</style>

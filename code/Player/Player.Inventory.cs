@@ -8,6 +8,7 @@ public partial class Player
 	[Net, Predicted] internal Carriable ActiveCarriable { get; set; }
 	public Carriable Carriable { get; private set; }
 	public bool IsHolstered => ActiveCarriable != Carriable;
+	private Carriable _lastActiveCarriable;
 
 	public void SetCarriable( Carriable carriable, bool makeActive = false )
 	{
@@ -35,8 +36,6 @@ public partial class Player
 
 		return dropped;
 	}
-
-	private Carriable _lastActiveCarriable;
 
 	public void SimulateActiveCarriable()
 	{

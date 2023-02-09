@@ -1,0 +1,52 @@
+﻿MapSelect
+{
+    pointer-events: all;
+    transition: all 0.15s ease-out;
+    z-index: 2;
+
+    .inner
+    {
+        margin: 150px 20%;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .header
+        {
+            flex-direction: row;
+
+            .left
+            {
+                flex-grow: 1;
+                flex-direction: column;
+
+                .title
+                {
+                    font-size: 50px;
+                    font-weight: bold;
+                }
+
+                .subtitle
+                {
+                    font-size: 24px;
+                    font-weight: bold;
+                }
+            }
+
+            .right
+            {
+                .countdown
+                {
+                    font-size: 50px;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .body
+        {
+            margin: 50px;
+            flex-wrap: wrap;
+            overflow: scroll;
+        }
+    }
+}
