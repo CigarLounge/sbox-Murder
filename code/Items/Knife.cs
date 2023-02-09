@@ -6,11 +6,11 @@ namespace Murder;
 
 [Category( "Weapons" )]
 [ClassName( "mur_weapon_knife" )]
-[EditorModel( "models/weapons/w_knife.vmdl" )]
+[EditorModel( "models/knife/wm_knife.vmdl" )]
 [Title( "Knife" )]
 public partial class Knife : Carriable
 {
-	[Net, Local, Predicted] public TimeSince TimeSinceStab { get; private set; }
+	[Net, Local, Predicted] public TimeSince TimeSinceSwing { get; private set; }
 	public override float DeployTime => 0.6f;
 	public override string IconPath { get; } = "/ui/knife.png";
 	public override string ViewModelPath { get; } = "models/knife/vm_knife.vmdl";
@@ -21,14 +21,14 @@ public partial class Knife : Carriable
 
 	public override void Simulate( IClient client )
 	{
-		if ( TimeSinceStab < 1f )
+		if ( TimeSinceSwing < 1f )
 			return;
 
 		if ( Input.Down( InputButton.PrimaryAttack ) )
 		{
 			using ( LagCompensation() )
 			{
-				MeleeAttack();
+				Swing();
 			}
 		}
 		else if ( Input.Released( InputButton.SecondaryAttack ) )
@@ -49,7 +49,13 @@ public partial class Knife : Carriable
 
 	public override bool CanCarry( Player carrier )
 	{
-		return !_isThrown && carrier.Role == Role.Murderer && base.CanCarry( carrier );
+		if ( carrier.Role != Role.Murderer )
+			return false;
+
+		if ( _isThrown )
+			return false;
+
+		return base.CanCarry( carrier );
 	}
 
 	public override void OnCarryStart( Player carrier )
@@ -75,13 +81,13 @@ public partial class Knife : Carriable
 		base.OnCarryDrop( dropper );
 	}
 
-	private void MeleeAttack()
+	private void Swing()
 	{
-		TimeSinceStab = 0;
-
+		TimeSinceSwing = 0;
 		Owner.SetAnimParameter( "b_attack", true );
-		SwingEffects();
+
 		PlaySound( "swing" );
+		SwingEffects();
 
 		var trace = Trace.Ray( Owner.AimRay, 60f )
 			.UseHitboxes( true )
@@ -167,9 +173,14 @@ public partial class Knife : Carriable
 		if ( dot < MathF.Cos( MathF.PI / 4f ) )
 			return;
 
-		eventData.Other.Surface.DoBulletImpact( Trace.Ray( Position, eventData.Position ).Ignore( this ).Run() );
 		Position = eventData.Position;
 		PhysicsEnabled = false;
+
+		var tr = Trace.Ray( Position, eventData.Position )
+			.Ignore( this )
+			.Run();
+
+		eventData.Other.Surface.DoBulletImpact( tr );
 
 		Unstuck();
 	}

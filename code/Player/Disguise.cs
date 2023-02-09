@@ -78,7 +78,7 @@ public sealed class Disguise : EntityComponent<Player>
 		if ( !Game.IsServer )
 			return;
 
-		foreach ( var murderer in Role.Murderer.GetPlayers() )
+		foreach ( var murderer in Utils.GetPlayersWhere( p => p.Role == Role.Murderer ) )
 			murderer.Components.RemoveAny<Disguise>();
 	}
 }

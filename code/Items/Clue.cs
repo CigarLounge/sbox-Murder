@@ -1,9 +1,9 @@
+using Editor;
 using Sandbox;
 using Sandbox.Component;
-using Editor;
 using System;
 
-namespace Murder;
+namespace Murder.Items;
 
 [ClassName( "mur_ent_clue" )]
 [Description( "A clue that will randomly spawn during gameplay." )]

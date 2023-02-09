@@ -6,7 +6,7 @@ namespace Murder;
 
 [Category( "Weapons" )]
 [ClassName( "mur_weapon_revolver" )]
-[EditorModel( "models/weapons/w_mr96.vmdl" )]
+[EditorModel( "models/revolver/wm_revolver.vmdl" )]
 [Title( "Revolver" )]
 public partial class Revolver : Carriable
 {
@@ -65,11 +65,10 @@ public partial class Revolver : Carriable
 	{
 		BulletInClip = false;
 		TimeSincePrimaryAttack = 0;
-
 		Owner.SetAnimParameter( "b_attack", true );
-		ShootEffects();
-		PlaySound( "fire" );
 
+		PlaySound( "fire" );
+		ShootEffects();
 		ShootBullet();
 	}
 
@@ -77,14 +76,20 @@ public partial class Revolver : Carriable
 	{
 		TimeSinceReload = 0;
 		IsReloading = true;
-
 		Owner.SetAnimParameter( "b_reload", true );
+
 		ReloadEffects();
 	}
 
 	public override bool CanCarry( Player carrier )
 	{
-		return carrier.Role == Role.Bystander && carrier.TimeUntilClean && base.CanCarry( carrier );
+		if ( carrier.Role != Role.Bystander )
+			return false;
+
+		if ( !carrier.TimeUntilClean )
+			return false;
+
+		return base.CanCarry( carrier );
 	}
 
 	public override void OnCarryStart( Player carrier )
@@ -118,8 +123,6 @@ public partial class Revolver : Carriable
 		foreach ( var trace in TraceBullet( Owner.AimRay ) )
 		{
 			trace.Surface.DoBulletImpact( trace );
-
-			var fullEndPosition = trace.EndPosition + trace.Direction * 3.0f;
 
 			if ( !Game.IsServer )
 				continue;

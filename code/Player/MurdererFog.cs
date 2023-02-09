@@ -53,7 +53,7 @@ internal sealed class MurdererFog : EntityComponent<Player>
 			return;
 		}
 
-		foreach ( var murderer in Role.Murderer.GetPlayers() )
+		foreach ( var murderer in Utils.GetPlayersWhere( p => p.Role == Role.Murderer ) )
 		{
 			if ( murderer != player.Killer )
 				return;
