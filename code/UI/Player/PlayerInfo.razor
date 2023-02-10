@@ -38,6 +38,7 @@
 	protected override int BuildHash()
 	{
 		var player = Hud.DisplayedPlayer;
-		return HashCode.Combine(player.IsAlive(), player.Color.GetHashCode(), player.Role.GetHashCode(), player.Clues);
+
+		return HashCode.Combine(player.IsAlive(), player.Color, player.Role, player.Clues);
 	}
 }

@@ -6,18 +6,17 @@
 @attribute [StyleSheet("UI/Game/Scoreboard/ScoreboardGroup.scss")]
 
 <root class="text-shadow header rounded-top background-color-primary">
-	<label class="name">Players</label>
+	<label class="name">#Scoreboard.Players</label>
 	@if (GameState.Current is PostRound)
 	{
-		<div>
-			<label class="stat">#Name</label>
-			<label class="stat">#Clues</label>
-		</div>
+		<label class="stat">#Scoreboard.Name</label>
+		<label class="stat">#Scoreboard.Clues</label>
 	}
-	<label class="stat">#Ping</label>
+	<label class="stat">#Scoreboard.Ping</label>
 </root>
 
-@code {
+@code
+{
 	protected override int BuildHash()
 	{
 		return HashCode.Combine(GameState.Current is PostRound);
