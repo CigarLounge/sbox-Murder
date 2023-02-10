@@ -29,10 +29,7 @@ public partial class Player
 		}
 
 		if ( hint == _currentHint )
-		{
-			hint.Tick( player );
-			return;
-		}
+			return;	
 
 		DeleteHint();
 

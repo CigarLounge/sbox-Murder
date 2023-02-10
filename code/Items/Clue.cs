@@ -3,7 +3,7 @@ using Sandbox;
 using Sandbox.Component;
 using System;
 
-namespace Murder.Items;
+namespace Murder;
 
 [ClassName( "mur_ent_clue" )]
 [Description( "A clue that will randomly spawn during gameplay." )]

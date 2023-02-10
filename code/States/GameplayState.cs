@@ -1,4 +1,3 @@
-using Murder.Items;
 using Sandbox;
 using Sandbox.Diagnostics;
 using System.Collections.Generic;

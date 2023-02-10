@@ -22,9 +22,4 @@ public interface IEntityHint
 	{
 		return new UI.Hint() { HintText = DisplayInfo.For( (Entity)this ).Name };
 	}
-
-	/// <summary>
-	/// Occurs on each tick if the hint is active.
-	/// </summary>
-	void Tick( Player player ) { }
 }
