@@ -17,7 +17,7 @@
 		<text class="name" style="color: @player.Color.Hex" text=@player.BystanderName />
 		@if (player.Role != Role.None)
 		{
-			<div><text class="role" style="color: @player.Role.GetColor().Hex" text=@player.Role.GetTitle() /></div>
+			<label class="role" style="color: @player.Role.GetColor().Hex">#@player.Role.GetTitle()</label>
 		}
 	</div>
 	<div>
