@@ -1,12 +1,16 @@
 using Sandbox;
 using Sandbox.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Murder;
 
 public partial class GameManager : Sandbox.GameManager
 {
 	public static GameManager Instance { get; private set; }
+
+	[Net]
+	public IList<string> PlayerNames { get; private set; }
 
 	[Net, Change]
 	public GameState State { get; private set; }
@@ -131,6 +135,22 @@ public partial class GameManager : Sandbox.GameManager
 	public override void PostLevelLoaded()
 	{
 		ForceStateChange( new WaitingState() );
+
+		var customNames = FileSystem.Data.ReadAllText( "names.txt" );
+
+		if ( string.IsNullOrWhiteSpace( customNames ) )
+		{
+			PlayerNames = new List<string>
+			{
+				"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
+				"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
+				"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
+			};
+
+			return;
+		}
+		
+		PlayerNames = customNames.Split( '\n' );
 	}
 
 	[Event.Tick]

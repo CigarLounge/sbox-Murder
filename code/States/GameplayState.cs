@@ -1,6 +1,8 @@
 using Sandbox;
 using Sandbox.Diagnostics;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Murder;
 
@@ -95,12 +97,17 @@ public sealed partial class GameplayState : GameState
 		for ( var i = 2; i < _alivePlayers.Count; i++ )
 			_alivePlayers[i].Role = Role.Bystander;
 
-		Player.Names.Shuffle();
-		for ( var i = 0; i < _alivePlayers.Count; i++ )
+		var indices = Enumerable.Range( 0, GameManager.Instance.PlayerNames.Count ).ToArray();
+		indices.Shuffle();
+
+		for ( int i = 0, j = 0; i < _alivePlayers.Count; i++, j++ )
 		{
+			if ( j >= GameManager.Instance.PlayerNames.Count )
+				j = 0;
+
 			var player = _alivePlayers[i];
 
-			player.BystanderName = Player.Names[i];
+			player.BystanderNameIndex = indices[j];
 			player.Color = Color.FromBytes( Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ) );
 		}
 	}
