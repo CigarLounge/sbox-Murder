@@ -5,14 +5,14 @@
 
 @namespace Murder.UI
 
-@attribute [StyleSheet("UI/Game/MapSelect/MapSelect.scss")]
+@attribute [StyleSheet("UI/Game/MapVote/MapVote.scss")]
 
 <root class="fullscreen-dark-background">
 	<div class="inner text-shadow">
 		<div class="header">
 			<div class="left">
-				<text class="title">Map Vote</text>
-				<text class="subtitle">Choose your next map</text>
+				<text class="title">#MapVote.Title</text>
+				<text class="subtitle">#MapVote.Subtitle</text>
 			</div>
 			<div class="right">
 				<text class="countdown">@GameState.Current.TimeLeftFormatted</text>
@@ -31,7 +31,7 @@
 {
 	private Panel Maps { get; set; }
 
-	public MapSelect()
+	public MapVote()
 	{
 		// Delete unneeded UI elements.
 		foreach (var panel in Game.RootPanel.Children.ToList())
