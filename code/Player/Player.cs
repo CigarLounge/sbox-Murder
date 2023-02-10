@@ -6,19 +6,15 @@ namespace Murder;
 [Title( "Player" ), Icon( "emoji_people" )]
 public partial class Player : AnimatedEntity
 {
-	public static readonly List<string> Names = new()
-	{
-		"Alfa", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India",
-		"Juliett", "Kilo", "Lima", "Miko", "November", "Oscar", "Papa", "Quebec", "Romeo",
-		"Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu"
-	};
+	public static IList<string> Names => GameManager.Instance.PlayerNames;
 
-	[Net] public string BystanderName { get; set; }
+	[Net] internal int BystanderNameIndex { get; set; }
 	[Net] private Color _color { get; set; }
 	[Net] public int Clues { get; internal set; }
 	[Net] public int CluesCollected { get; internal set; }
 	[Net] public Role Role { get; set; }
 	public Corpse Corpse { get; internal set; }
+	public string BystanderName => Names[BystanderNameIndex];
 	public bool IsForcedSpectator => Client.GetClientData<bool>( "forced_spectator" );
 	public bool IsFrozen => (GameState.Current is GameplayState or MapSelectionState) && !GameState.Current.TimeLeft;
 	public bool IsIncognito => this.IsAlive() && GameState.Current is GameplayState;
@@ -74,10 +70,13 @@ public partial class Player : AnimatedEntity
 
 		DropCarriable()?.Delete();
 		DeleteFlashlight();
-		ResetDamageData();
-		ResetInformation();
+		ResetDamageData();	
 
 		Velocity = Vector3.Zero;
+		Clues = 0;
+		CluesCollected = 0;
+		Corpse = null;
+		Role = Role.None;
 
 		if ( !IsForcedSpectator )
 		{
@@ -116,16 +115,6 @@ public partial class Player : AnimatedEntity
 		Controller = null;
 		Health = 0f;
 		LifeState = LifeState.Dead;
-	}
-
-	public void ResetInformation()
-	{
-		BystanderName = null;
-		Clues = 0;
-		CluesCollected = 0;
-		Color = default;
-		Corpse = null;
-		Role = Role.None;
 	}
 
 	internal bool temp;
