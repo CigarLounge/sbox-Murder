@@ -41,7 +41,7 @@
 		return player.Role switch
 		{
 			Role.Murderer => "#Murderer.Help",
-			Role.Bystander => player.Carriable is Revolver ? "#Bystander.Help.2" : "Bystander.Help.1",
+			Role.Bystander => player.Carriable is Revolver ? "#Bystander.Help.2" : "#Bystander.Help.1",
 			Role.None => string.Empty,
 			_ => string.Empty
 		};
