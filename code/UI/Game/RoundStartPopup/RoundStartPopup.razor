@@ -14,7 +14,7 @@
 	<text class="title">You are a @player.Role.GetTitle()</text>
 	@if (player.Carriable is Revolver)
 	{
-		<label class="subtitle">with a secret weapon.</label>
+		<label class="subtitle">#Bystander.Weapon</label>
 	}
 	<text>@HelpText()</text>
 </root>
@@ -40,8 +40,8 @@
 
 		return player.Role switch
 		{
-			Role.Murderer => "Kill everyone and don't get caught.",
-			Role.Bystander => $"There is a murderer on the loose. {(player.Carriable is Revolver ? "Find and kill him" : "Dont get killed")}!",
+			Role.Murderer => "#Murderer.Help",
+			Role.Bystander => player.Carriable is Revolver ? "#Bystander.Help.2" : "#Bystander.Help.1",
 			Role.None => string.Empty,
 			_ => string.Empty
 		};

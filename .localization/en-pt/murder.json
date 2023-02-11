@@ -1,0 +1,18 @@
+{
+	"Bystander": "Scallywag",
+	"Bystander.Help.1": "Thar be a butcher on the loose. Don't get scuttled!",
+	"Bystander.Help.2": "Thar be a butcher on the loose. Find 'n scuttle 'im!",
+	"Bystander.Weapon": "wit' a secret weapon",
+	"Bystander.Win": "The Scallywags win!",
+	"Murderer": "Butcher",
+	"Murderer.Help": "Scuttle everyone 'n don't get caught.",
+	"Murderer.Win": "The Butcher wins!",
+	"Revolver": "Flintlock pistol",
+	"Knife": "Cutlass",
+	"Scoreboard.Players": "Pirates",
+	"Scoreboard.Name": "Name",
+	"Scoreboard.Clues": "Booty",
+	"Scoreboard.Ping": "Ping",
+	"MapVote.Title": "Map vote",
+	"MapVote.Subtitle": "Choose yer next map"
+}

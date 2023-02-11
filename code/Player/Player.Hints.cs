@@ -16,7 +16,7 @@ public partial class Player
 
 		if ( !player.IsFirstPersonMode || !player.TimeUntilClean )
 		{
-			DeleteHint();
+			DeleteHint( true );
 			return;
 		}
 
@@ -29,7 +29,7 @@ public partial class Player
 		}
 
 		if ( hint == _currentHint )
-			return;	
+			return;
 
 		DeleteHint();
 
@@ -40,9 +40,9 @@ public partial class Player
 		_currentHint = hint;
 	}
 
-	private static void DeleteHint()
+	private static void DeleteHint( bool immediate = false )
 	{
-		_currentHintPanel?.Delete();
+		_currentHintPanel?.Delete( immediate );
 		_currentHintPanel = null;
 
 		_currentHint = null;

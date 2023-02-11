@@ -20,6 +20,6 @@ public interface IEntityHint
 	/// </summary>
 	Panel DisplayHint( Player player )
 	{
-		return new UI.Hint() { HintText = DisplayInfo.For( (Entity)this ).Name };
+		return new UI.Hint() { HintText = $"#{DisplayInfo.For( (Entity)this ).Name}" };
 	}
 }

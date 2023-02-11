@@ -1,0 +1,18 @@
+{
+	"Bystander": "Bystander",
+	"Bystander.Help.1": "There is a murderer on the loose. Don't get killed!",
+	"Bystander.Help.2": "There is a murderer on the loose. Find and kill him!",
+	"Bystander.Weapon": "with a secret weapon", 
+	"Bystander.Win": "The Bystanders win!",
+	"Murderer": "Murderer",
+	"Murderer.Help": "Kill everyone and don't get caught.",
+	"Murderer.Win": "The Murderer wins!",
+	"Revolver": "Revolver",
+	"Knife": "Knife",
+	"Scoreboard.Players": "Players",
+	"Scoreboard.Name": "Name",
+	"Scoreboard.Clues": "Clues",
+	"Scoreboard.Ping": "Ping",
+	"MapVote.Title": "Map vote",
+	"MapVote.Subtitle": "Choose your next map"
+}

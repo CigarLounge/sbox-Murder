@@ -29,7 +29,7 @@ public sealed partial class MapSelectionState : GameState
 
 	protected override void OnStart()
 	{
-		Game.RootPanel?.AddChild<UI.MapSelect>();
+		Game.RootPanel?.AddChild<UI.MapVote>();
 	}
 
 	[ConCmd.Server]
