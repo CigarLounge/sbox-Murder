@@ -5,7 +5,7 @@ using System;
 
 namespace Murder;
 
-[ClassName( "mur_ent_clue" )]
+[ClassName( "mur_clue" )]
 [Description( "A clue that will randomly spawn during gameplay." )]
 [HammerEntity]
 [Title( "Clue" )]
