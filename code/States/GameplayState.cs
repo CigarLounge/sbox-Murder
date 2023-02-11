@@ -107,7 +107,7 @@ public sealed partial class GameplayState : GameState
 
 			var player = _alivePlayers[i];
 
-			player.BystanderNameIndex = indices[j];
+			player.NameIndex = indices[j];
 			player.Color = Color.FromBytes( Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ), Game.Random.Int( 0, 255 ) );
 		}
 	}

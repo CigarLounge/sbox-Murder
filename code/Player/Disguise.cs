@@ -6,7 +6,7 @@ namespace Murder;
 public sealed class Disguise : EntityComponent<Player>
 {
 	// Murderer's original information.
-	private int _bystanderNameIndex;
+	private int _nameIndex;
 	private Color _color;
 	private List<Clothing> _clothing;
 	private Player _murderer;
@@ -31,7 +31,7 @@ public sealed class Disguise : EntityComponent<Player>
 		_murderer.ClothingContainer.Clothing = player.ClothingContainer.Clothing;
 		_murderer.ClothingContainer.DressEntity( _murderer );
 
-		_murderer.BystanderNameIndex = player.BystanderNameIndex;
+		_murderer.NameIndex = player.NameIndex;
 		_murderer.Color = player.Color;
 	}
 
@@ -41,7 +41,7 @@ public sealed class Disguise : EntityComponent<Player>
 			return;
 
 		_murderer = Entity;
-		_bystanderNameIndex = _murderer.BystanderNameIndex;
+		_nameIndex = _murderer.NameIndex;
 		_color = _murderer.Color;
 		_clothing = _murderer.ClothingContainer.Clothing;
 	}
@@ -53,7 +53,7 @@ public sealed class Disguise : EntityComponent<Player>
 		if ( _murderer.IsAlive() )
 			_murderer.ClothingContainer.DressEntity( _murderer );
 
-		_murderer.BystanderNameIndex = _bystanderNameIndex;
+		_murderer.NameIndex = _nameIndex;
 		_murderer.Color = _color;
 	}
 

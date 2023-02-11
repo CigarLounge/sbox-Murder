@@ -8,13 +8,13 @@ public partial class Player : AnimatedEntity
 {
 	public static IList<string> Names => GameManager.Instance.PlayerNames;
 
-	[Net] internal int BystanderNameIndex { get; set; }
+	[Net] internal int NameIndex { get; set; }
 	[Net] private Color _color { get; set; }
 	[Net] public int Clues { get; internal set; }
 	[Net] public int CluesCollected { get; internal set; }
 	[Net] public Role Role { get; set; }
 	public Corpse Corpse { get; internal set; }
-	public string BystanderName => Names[BystanderNameIndex];
+	public string BystanderName => Names[NameIndex];
 	public bool IsForcedSpectator => Client.GetClientData<bool>( "forced_spectator" );
 	public bool IsFrozen => (GameState.Current is GameplayState or MapSelectionState) && !GameState.Current.TimeLeft;
 	public bool IsIncognito => this.IsAlive() && GameState.Current is GameplayState;
@@ -70,7 +70,7 @@ public partial class Player : AnimatedEntity
 
 		DropCarriable()?.Delete();
 		DeleteFlashlight();
-		ResetDamageData();	
+		ResetDamageData();
 
 		Velocity = Vector3.Zero;
 		Clues = 0;
