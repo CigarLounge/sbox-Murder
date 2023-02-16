@@ -134,7 +134,8 @@
     },
     "CsProjName": "",
     "ControlModes": {
-      "Keyboard": true
+      "Keyboard": true,
+      "Gamepad": true
     },
     "ReplaceTags": "murder social"
   }
