@@ -11,7 +11,7 @@
 				[
 					{
 						_class = "ModelModifier_Translate"
-						translation = [ -20.0, 0.0, 0.0 ]
+						translation = [ -25.0, 0.0, -2.0 ]
 					},
 				]
 			},
@@ -118,8 +118,8 @@
 						anim_markup_ordered = false
 						disable_compression = false
 						source_filename = "models/revolver/vm_revolver.fbx"
-						start_frame = 11
-						end_frame = 12
+						start_frame = 13
+						end_frame = 13
 						framerate = -1.0
 						take = 2
 						reverse = false
