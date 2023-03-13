@@ -12,28 +12,26 @@ public partial class Player
 
 	private void DisplayEntityHints()
 	{
-		var player = UI.Hud.DisplayedPlayer;
-
-		if ( !player.IsFirstPersonMode || !player.TimeUntilClean )
+		if ( !UI.Hud.DisplayedPlayer.IsFirstPersonMode || !UI.Hud.DisplayedPlayer.TimeUntilClean )
 		{
 			DeleteHint();
 			return;
 		}
 
-		var hint = FindHintableEntity();
+		HoveredEntity = FindHovered();
 
-		if ( hint is null || !hint.CanHint( player ) )
+		if ( HoveredEntity is not IEntityHint hint || _traceDistance > hint.HintDistance || !hint.CanHint( UI.Hud.DisplayedPlayer ) )
 		{
 			DeleteHint();
 			return;
 		}
 
 		if ( hint == _currentHint )
-			return;	
+			return;
 
 		DeleteHint();
 
-		_currentHintPanel = hint.DisplayHint( player );
+		_currentHintPanel = hint.DisplayHint( UI.Hud.DisplayedPlayer );
 		_currentHintPanel.Parent = UI.HintDisplay.Instance;
 		_currentHintPanel.Enabled( true );
 
@@ -46,22 +44,5 @@ public partial class Player
 		_currentHintPanel = null;
 
 		_currentHint = null;
-	}
-
-	private IEntityHint FindHintableEntity()
-	{
-		var tr = Trace.Ray( new Ray( Camera.Position, Camera.Rotation.Forward ), MaxHintDistance )
-			.Ignore( UI.Hud.DisplayedPlayer )
-			.WithAnyTags( "solid", "interactable" )
-			.UseHitboxes()
-			.Run();
-
-		_traceDistance = tr.Distance;
-		HoveredEntity = tr.Entity;
-
-		if ( HoveredEntity is IEntityHint hint && tr.Distance <= hint.HintDistance )
-			return hint;
-
-		return null;
 	}
 }
